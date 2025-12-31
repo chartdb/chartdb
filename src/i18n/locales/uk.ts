@@ -213,31 +213,31 @@ export const uk: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Області',
+                add_area: 'Додати область',
+                filter: 'Фільтр',
+                clear: 'Очистити фільтр',
+                no_results:
+                    'Області не знайдені, які відповідають вашому фільтру.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Дії з областю',
+                        edit_name: 'Редагувати назву',
+                        delete_area: 'Видалити область',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Немає областей',
+                    description: 'Створіть область, щоб почати',
                 },
             },
 
             visuals_section: {
                 visuals: 'Візуальні елементи',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'Області',
                     notes: 'Нотатки',
                 },
             },
@@ -262,34 +262,36 @@ export const uk: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Користувацькі типи',
+                filter: 'Фільтр',
+                clear: 'Очистити фільтр',
+                no_results:
+                    'Не знайдено користувацьких типів, що відповідають фільтру.',
+                new_type: 'Новий тип',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Немає користувацьких типів',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        "Користувацькі типи з'являться тут, коли вони будуть доступні у вашій базі даних",
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Вид',
+                    enum_values: 'Значення переліку',
+                    composite_fields: 'Поля',
+                    no_fields: 'Поля не визначені',
                     no_values: 'Значення переліку не визначені',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Назва поля',
+                    field_type_placeholder: 'Виберіть тип',
+                    add_field: 'Додати поле',
+                    no_fields_tooltip:
+                        'Для цього користувацького типу поля не визначені',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Дії',
+                        highlight_fields: 'Виділити поля',
+                        delete_custom_type: 'Видалити',
+                        clear_field_highlight: 'Зняти виділення',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Видалити тип',
                 },
             },
         },
@@ -307,8 +309,7 @@ export const uk: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Показати таблиці, що перекриваються',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Фільтрувати таблиці',
         },
 
         new_diagram_dialog: {
@@ -511,7 +512,7 @@ export const uk: LanguageTranslation = {
             new_view: 'Нове представлення',
             new_relationship: 'Новий звʼязок',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'Нова область',
             new_note: 'Нова Нотатка',
         },
 

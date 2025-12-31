@@ -243,7 +243,10 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                         className="flex items-center"
                         key={option.value}
                         value={option.label}
-                        keywords={option.regex ? [option.regex] : undefined}
+                        keywords={[
+                            ...(option.regex ? [option.regex] : []),
+                            ...(option.description ? [option.description] : []),
+                        ]}
                         onSelect={() =>
                             handleSelect(
                                 option.value,
@@ -388,18 +391,22 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
                 >
                     <Command
                         filter={(value, search, keywords) => {
+                            const searchLower = search.toLowerCase();
+
                             if (
                                 keywords?.length &&
-                                keywords.some((keyword) =>
-                                    new RegExp(keyword).test(search)
+                                keywords.some(
+                                    (keyword) =>
+                                        keyword
+                                            .toLowerCase()
+                                            .includes(searchLower) ||
+                                        new RegExp(keyword).test(search)
                                 )
                             ) {
                                 return 1;
                             }
 
-                            return value
-                                .toLowerCase()
-                                .includes(search.toLowerCase())
+                            return value.toLowerCase().includes(searchLower)
                                 ? 1
                                 : 0;
                         }}

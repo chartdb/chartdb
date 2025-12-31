@@ -58,7 +58,7 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
                         onClick={handleCreateCustomType}
                     >
                         <Plus className="mr-1 size-4" />
-                        New Type
+                        {t('side_panel.custom_types_section.new_type')}
                     </Button>
                 ) : null}
             </div>
@@ -76,7 +76,9 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
                             secondaryAction={
                                 !readonly
                                     ? {
-                                          label: 'New Type',
+                                          label: t(
+                                              'side_panel.custom_types_section.new_type'
+                                          ),
                                           onClick: handleCreateCustomType,
                                       }
                                     : undefined

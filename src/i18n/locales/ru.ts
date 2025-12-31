@@ -261,34 +261,36 @@ export const ru: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Пользовательские типы',
+                filter: 'Фильтр',
+                clear: 'Очистить фильтр',
+                no_results:
+                    'Не найдено пользовательских типов, соответствующих фильтру.',
+                new_type: 'Новый тип',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Нет пользовательских типов',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Пользовательские типы появятся здесь, когда будут доступны в вашей базе данных',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Вид',
+                    enum_values: 'Значения перечисления',
+                    composite_fields: 'Поля',
+                    no_fields: 'Поля не определены',
                     no_values: 'Значения перечисления не определены',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Имя поля',
+                    field_type_placeholder: 'Выберите тип',
+                    add_field: 'Добавить поле',
+                    no_fields_tooltip:
+                        'Для этого пользовательского типа поля не определены',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Действия',
+                        highlight_fields: 'Выделить поля',
+                        delete_custom_type: 'Удалить',
+                        clear_field_highlight: 'Снять выделение',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Удалить тип',
                 },
             },
         },
@@ -306,8 +308,7 @@ export const ru: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Фильтровать таблицы',
         },
 
         new_diagram_dialog: {

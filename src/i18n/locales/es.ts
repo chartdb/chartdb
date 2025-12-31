@@ -214,31 +214,31 @@ export const es: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Áreas',
+                add_area: 'Agregar Área',
+                filter: 'Filtrar',
+                clear: 'Limpiar Filtro',
+                no_results:
+                    'No se encontraron áreas que coincidan con tu filtro.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Acciones del Área',
+                        edit_name: 'Editar Nombre',
+                        delete_area: 'Eliminar Área',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Sin áreas',
+                    description: 'Crea un área para comenzar',
                 },
             },
 
             visuals_section: {
                 visuals: 'Visuales',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'Áreas',
                     notes: 'Notas',
                 },
             },
@@ -263,34 +263,36 @@ export const es: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Tipos Personalizados',
+                filter: 'Filtrar',
+                clear: 'Limpiar Filtro',
+                no_results:
+                    'No se encontraron tipos personalizados que coincidan con tu filtro.',
+                new_type: 'Nuevo Tipo',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Sin tipos personalizados',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Los tipos personalizados aparecerán aquí cuando estén disponibles en tu base de datos',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Tipo',
+                    enum_values: 'Valores Enum',
+                    composite_fields: 'Campos',
+                    no_fields: 'Sin campos definidos',
                     no_values: 'No hay valores de enum definidos',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Nombre del campo',
+                    field_type_placeholder: 'Seleccionar tipo',
+                    add_field: 'Agregar Campo',
+                    no_fields_tooltip:
+                        'Sin campos definidos para este tipo personalizado',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Acciones',
+                        highlight_fields: 'Resaltar Campos',
+                        delete_custom_type: 'Eliminar',
+                        clear_field_highlight: 'Quitar Resaltado',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Eliminar Tipo',
                 },
             },
         },
@@ -308,8 +310,7 @@ export const es: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Resaltar tablas superpuestas',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Filtrar Tablas',
         },
 
         new_diagram_dialog: {
@@ -515,8 +516,7 @@ export const es: LanguageTranslation = {
             new_table: 'Nueva Tabla',
             new_view: 'Nueva Vista',
             new_relationship: 'Nueva Relación',
-            // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'Nueva Área',
             new_note: 'Nueva Nota',
         },
 

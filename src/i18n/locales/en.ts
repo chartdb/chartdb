@@ -262,6 +262,7 @@ export const en = {
                 filter: 'Filter',
                 clear: 'Clear Filter',
                 no_results: 'No custom types found matching your filter.',
+                new_type: 'New Type',
                 empty_state: {
                     title: 'No custom types',
                     description:
