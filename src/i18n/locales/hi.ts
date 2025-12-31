@@ -357,6 +357,7 @@ export const hi: LanguageTranslation = {
             },
             cancel: 'रद्द करें',
             open: 'खोलें',
+            new_database: 'नया डेटाबेस',
 
             diagram_actions: {
                 open: 'खोलें',

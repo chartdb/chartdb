@@ -355,6 +355,7 @@ export const gu: LanguageTranslation = {
             },
             cancel: 'રદ કરો',
             open: 'ખોલો',
+            new_database: 'નવું ડેટાબેસ',
 
             diagram_actions: {
                 open: 'ખોલો',

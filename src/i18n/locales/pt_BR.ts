@@ -356,6 +356,7 @@ export const pt_BR: LanguageTranslation = {
             },
             cancel: 'Cancelar',
             open: 'Abrir',
+            new_database: 'Novo Banco de Dados',
 
             diagram_actions: {
                 open: 'Abrir',

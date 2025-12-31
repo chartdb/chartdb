@@ -358,6 +358,7 @@ export const de: LanguageTranslation = {
             },
             cancel: 'Abbrechen',
             open: 'Öffnen',
+            new_database: 'Neue Datenbank',
 
             diagram_actions: {
                 open: 'Öffnen',

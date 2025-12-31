@@ -352,6 +352,7 @@ export const tr: LanguageTranslation = {
             },
             cancel: 'İptal',
             open: 'Aç',
+            new_database: 'Yeni Veritabanı',
 
             diagram_actions: {
                 open: 'Aç',

@@ -356,6 +356,7 @@ export const es: LanguageTranslation = {
             },
             cancel: 'Cancelar',
             open: 'Abrir',
+            new_database: 'Nueva Base de Datos',
 
             diagram_actions: {
                 open: 'Abrir',

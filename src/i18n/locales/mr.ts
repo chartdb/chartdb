@@ -360,6 +360,7 @@ export const mr: LanguageTranslation = {
             },
             cancel: 'रद्द करा',
             open: 'उघडा',
+            new_database: 'नवीन डेटाबेस',
 
             diagram_actions: {
                 open: 'उघडा',

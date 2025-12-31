@@ -357,6 +357,7 @@ export const ne: LanguageTranslation = {
             },
             cancel: 'रद्द गर्नुहोस्',
             open: 'खोल्नुहोस्',
+            new_database: 'नयाँ डाटाबेस',
 
             diagram_actions: {
                 open: 'खोल्नुहोस्',

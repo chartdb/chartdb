@@ -354,6 +354,7 @@ export const id_ID: LanguageTranslation = {
             },
             cancel: 'Batal',
             open: 'Buka',
+            new_database: 'Database Baru',
 
             diagram_actions: {
                 open: 'Buka',

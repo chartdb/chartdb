@@ -353,6 +353,7 @@ export const fr: LanguageTranslation = {
             },
             cancel: 'Annuler',
             open: 'Ouvrir',
+            new_database: 'Nouvelle Base de Données',
 
             diagram_actions: {
                 open: 'Ouvrir',

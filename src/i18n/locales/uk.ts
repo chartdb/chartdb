@@ -354,6 +354,7 @@ export const uk: LanguageTranslation = {
             },
             cancel: 'Скасувати',
             open: 'Відкрити',
+            new_database: 'Нова база даних',
 
             diagram_actions: {
                 open: 'Відкрити',

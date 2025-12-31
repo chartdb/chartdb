@@ -349,6 +349,7 @@ export const zh_TW: LanguageTranslation = {
             },
             cancel: '取消',
             open: '開啟',
+            new_database: '新建資料庫',
 
             diagram_actions: {
                 open: '開啟',

@@ -354,6 +354,7 @@ export const vi: LanguageTranslation = {
             },
             cancel: 'Hủy',
             open: 'Mở',
+            new_database: 'Cơ sở dữ liệu mới',
 
             diagram_actions: {
                 open: 'Mở',

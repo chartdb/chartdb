@@ -351,6 +351,7 @@ export const ar: LanguageTranslation = {
             },
             cancel: 'إلغاء',
             open: 'فتح',
+            new_database: 'قاعدة بيانات جديدة',
 
             diagram_actions: {
                 open: 'فتح',

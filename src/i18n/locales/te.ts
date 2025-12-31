@@ -357,6 +357,7 @@ export const te: LanguageTranslation = {
             },
             cancel: 'రద్దు',
             open: 'తెరవు',
+            new_database: 'కొత్త డేటాబేస్',
 
             diagram_actions: {
                 open: 'తెరవు',

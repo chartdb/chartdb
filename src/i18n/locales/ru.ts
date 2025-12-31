@@ -353,6 +353,7 @@ export const ru: LanguageTranslation = {
             },
             cancel: 'Отмена',
             open: 'Открыть',
+            new_database: 'Новая база данных',
 
             diagram_actions: {
                 open: 'Открыть',

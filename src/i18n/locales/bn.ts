@@ -355,6 +355,7 @@ export const bn: LanguageTranslation = {
             },
             cancel: 'বাতিল করুন',
             open: 'খুলুন',
+            new_database: 'নতুন ডেটাবেস',
 
             diagram_actions: {
                 open: 'খুলুন',

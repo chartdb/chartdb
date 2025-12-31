@@ -359,6 +359,7 @@ export const ja: LanguageTranslation = {
             },
             cancel: 'キャンセル',
             open: '開く',
+            new_database: '新しいデータベース',
 
             diagram_actions: {
                 open: '開く',

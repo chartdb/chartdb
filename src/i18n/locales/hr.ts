@@ -349,6 +349,7 @@ export const hr: LanguageTranslation = {
             },
             cancel: 'Odustani',
             open: 'Otvori',
+            new_database: 'Nova baza podataka',
 
             diagram_actions: {
                 open: 'Otvori',

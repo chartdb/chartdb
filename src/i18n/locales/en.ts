@@ -345,6 +345,7 @@ export const en = {
             },
             cancel: 'Cancel',
             open: 'Open',
+            new_database: 'New Database',
 
             diagram_actions: {
                 open: 'Open',

@@ -350,6 +350,7 @@ export const zh_CN: LanguageTranslation = {
             },
             cancel: '取消',
             open: '打开',
+            new_database: '新建数据库',
 
             diagram_actions: {
                 open: '打开',

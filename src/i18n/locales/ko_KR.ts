@@ -354,6 +354,7 @@ export const ko_KR: LanguageTranslation = {
             },
             cancel: '취소',
             open: '열기',
+            new_database: '새 데이터베이스',
 
             diagram_actions: {
                 open: '열기',
