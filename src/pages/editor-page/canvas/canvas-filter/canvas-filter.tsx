@@ -5,7 +5,7 @@ import React, {
     useEffect,
     useRef,
 } from 'react';
-import { X, Search, Database, Table, Funnel, Box } from 'lucide-react';
+import { X, Search, Database, Table, Box, SearchX } from 'lucide-react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
@@ -154,6 +154,23 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
         return result;
     }, [treeData, searchQuery]);
 
+    // Check if there are no tables to show
+    const hasNoTables = useMemo(() => {
+        const totalTables = filteredTreeData.reduce(
+            (sum, node) => sum + (node.children?.length ?? 0),
+            0
+        );
+        return totalTables === 0;
+    }, [filteredTreeData]);
+
+    // Check if the diagram is completely empty (no tables at all)
+    const isDiagramEmpty = tables.length === 0;
+
+    // Clear search query only (preserves user's hide/show selections)
+    const handleClearFilter = useCallback(() => {
+        setSearchQuery('');
+    }, []);
+
     // Render actions with proper memoization for performance
     const renderActions = useCallback(
         (node: TreeNode<NodeType, NodeContext>) => (
@@ -269,7 +286,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
             {/* Header */}
             <div className="flex items-center justify-between rounded-t-lg border-b px-2 py-1">
                 <div className="flex items-center gap-2">
-                    <Funnel className="size-3.5 text-muted-foreground md:size-4" />
+                    <Search className="size-3.5 text-muted-foreground md:size-4" />
                     <h2 className="text-sm font-medium">
                         {t('canvas_filter.title', 'Filter Tables')}{' '}
                     </h2>
@@ -327,17 +344,57 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
 
             {/* Table Tree */}
             <ScrollArea className="flex-1 rounded-b-lg" type="auto">
-                <TreeView
-                    data={filteredTreeData}
-                    onNodeClick={handleNodeClick}
-                    renderActionsComponent={renderActions}
-                    defaultFolderIcon={groupingMode === 'area' ? Box : Database}
-                    defaultIcon={Table}
-                    expanded={expanded}
-                    setExpanded={setExpanded}
-                    className="py-2"
-                    disableCache={true}
-                />
+                {hasNoTables ? (
+                    <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
+                        <SearchX className="size-10 text-muted-foreground/50" />
+                        <div className="space-y-1">
+                            <p className="text-sm font-medium text-muted-foreground">
+                                {t(
+                                    'canvas_filter.no_tables_found',
+                                    'No tables found'
+                                )}
+                            </p>
+                            <p className="text-xs text-muted-foreground/70">
+                                {isDiagramEmpty
+                                    ? t(
+                                          'canvas_filter.empty_diagram_description',
+                                          'Create a table to get started'
+                                      )
+                                    : t(
+                                          'canvas_filter.no_tables_description',
+                                          'Try adjusting your search or filter'
+                                      )}
+                            </p>
+                        </div>
+                        {!isDiagramEmpty && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleClearFilter}
+                                className="mt-2"
+                            >
+                                {t(
+                                    'canvas_filter.clear_filter',
+                                    'Clear filter'
+                                )}
+                            </Button>
+                        )}
+                    </div>
+                ) : (
+                    <TreeView
+                        data={filteredTreeData}
+                        onNodeClick={handleNodeClick}
+                        renderActionsComponent={renderActions}
+                        defaultFolderIcon={
+                            groupingMode === 'area' ? Box : Database
+                        }
+                        defaultIcon={Table}
+                        expanded={expanded}
+                        setExpanded={setExpanded}
+                        className="py-2"
+                        disableCache={true}
+                    />
+                )}
             </ScrollArea>
         </div>
     );
