@@ -9,6 +9,7 @@ export interface ValidationResult {
     warnings: ValidationWarning[];
     fixedSQL?: string;
     tableCount?: number;
+    viewCount?: number;
     relationshipCount?: number;
 }
 
@@ -151,13 +152,7 @@ export function validatePostgreSQLDialect(sql: string): ValidationResult {
         });
     }
 
-    // 5. Check for views
-    if (/CREATE\s+(OR\s+REPLACE\s+)?VIEW/i.test(sql)) {
-        warnings.push({
-            message: `View definitions found. These will not be imported.`,
-            type: 'compatibility',
-        });
-    }
+    // 5. Views are now supported - we'll add a message with counts later
 
     // 6. Attempt to auto-fix common issues
     let hasAutoFixes = false;
@@ -217,9 +212,33 @@ export function validatePostgreSQLDialect(sql: string): ValidationResult {
     let tableCount = 0;
     const createTableRegex =
         /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?(?:\s+ONLY)?\s+(?:"?[^"\s.]+?"?\.)?["'`]?[^"'`\s.(]+["'`]?/gi;
-    const matches = sql.match(createTableRegex);
-    if (matches) {
-        tableCount = matches.length;
+    const tableMatches = sql.match(createTableRegex);
+    if (tableMatches) {
+        tableCount = tableMatches.length;
+    }
+
+    // 10. Count CREATE VIEW statements
+    let viewCount = 0;
+    const createViewRegex =
+        /CREATE\s+(?:OR\s+REPLACE\s+)?VIEW\s+(?:"?[^"\s.]+?"?\.)?["'`]?[^"'`\s.(]+["'`]?/gi;
+    const viewMatches = sql.match(createViewRegex);
+    if (viewMatches) {
+        viewCount = viewMatches.length;
+    }
+
+    // 11. Add import summary message
+    if (tableCount > 0 || viewCount > 0) {
+        const parts: string[] = [];
+        if (tableCount > 0) {
+            parts.push(`${tableCount} table${tableCount !== 1 ? 's' : ''}`);
+        }
+        if (viewCount > 0) {
+            parts.push(`${viewCount} view${viewCount !== 1 ? 's' : ''}`);
+        }
+        warnings.unshift({
+            message: `Found ${parts.join(' and ')} to import.`,
+            type: 'compatibility',
+        });
     }
 
     return {
@@ -228,6 +247,7 @@ export function validatePostgreSQLDialect(sql: string): ValidationResult {
         warnings,
         fixedSQL: hasAutoFixes && fixedSQL !== sql ? fixedSQL : undefined,
         tableCount,
+        viewCount,
     };
 }
 
