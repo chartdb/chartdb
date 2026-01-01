@@ -541,7 +541,8 @@ export const ne: LanguageTranslation = {
             group_by_area: 'क्षेत्र अनुसार समूह गर्नुहोस्',
             no_tables_found: 'कुनै तालिका भेटिएन',
             empty_diagram_description: 'सुरु गर्न तालिका बनाउनुहोस्',
-            no_tables_description: 'तपाईंको खोज वा फिल्टर समायोजन गर्ने प्रयास गर्नुहोस्',
+            no_tables_description:
+                'तपाईंको खोज वा फिल्टर समायोजन गर्ने प्रयास गर्नुहोस्',
             clear_filter: 'फिल्टर हटाउनुहोस्',
         },
 

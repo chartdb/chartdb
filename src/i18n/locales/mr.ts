@@ -547,7 +547,8 @@ export const mr: LanguageTranslation = {
             group_by_area: 'क्षेत्रानुसार गट करा',
             no_tables_found: 'कोणतेही टेबल सापडले नाही',
             empty_diagram_description: 'सुरू करण्यासाठी टेबल तयार करा',
-            no_tables_description: 'तुमची शोध किंवा फिल्टर समायोजित करण्याचा प्रयत्न करा',
+            no_tables_description:
+                'तुमची शोध किंवा फिल्टर समायोजित करण्याचा प्रयत्न करा',
             clear_filter: 'फिल्टर साफ करा',
         },
 

@@ -536,7 +536,8 @@ export const fr: LanguageTranslation = {
             group_by_area: 'Grouper par Zone',
             no_tables_found: 'Aucune table trouvée',
             empty_diagram_description: 'Créez une table pour commencer',
-            no_tables_description: 'Essayez de modifier votre recherche ou filtre',
+            no_tables_description:
+                'Essayez de modifier votre recherche ou filtre',
             clear_filter: 'Effacer le filtre',
         },
 

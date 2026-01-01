@@ -536,7 +536,8 @@ export const vi: LanguageTranslation = {
             group_by_area: 'Nhóm theo Khu vực',
             no_tables_found: 'Không tìm thấy bảng',
             empty_diagram_description: 'Tạo bảng để bắt đầu',
-            no_tables_description: 'Thử điều chỉnh tìm kiếm hoặc bộ lọc của bạn',
+            no_tables_description:
+                'Thử điều chỉnh tìm kiếm hoặc bộ lọc của bạn',
             clear_filter: 'Xóa bộ lọc',
         },
 

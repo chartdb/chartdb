@@ -544,7 +544,8 @@ export const te: LanguageTranslation = {
             group_by_area: 'ప్రాంతం ద్వారా గ్రూప్ చేయండి',
             no_tables_found: 'పట్టికలు కనుగొనబడలేదు',
             empty_diagram_description: 'ప్రారంభించడానికి పట్టికను సృష్టించండి',
-            no_tables_description: 'మీ శోధన లేదా ఫిల్టర్‌ను సర్దుబాటు చేయడానికి ప్రయత్నించండి',
+            no_tables_description:
+                'మీ శోధన లేదా ఫిల్టర్‌ను సర్దుబాటు చేయడానికి ప్రయత్నించండి',
             clear_filter: 'ఫిల్టర్ క్లియర్ చేయండి',
         },
 

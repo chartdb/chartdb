@@ -541,7 +541,8 @@ export const hi: LanguageTranslation = {
             group_by_area: 'क्षेत्र के अनुसार समूहित करें',
             no_tables_found: 'कोई तालिका नहीं मिली',
             empty_diagram_description: 'शुरू करने के लिए एक तालिका बनाएं',
-            no_tables_description: 'अपनी खोज या फ़िल्टर समायोजित करने का प्रयास करें',
+            no_tables_description:
+                'अपनी खोज या फ़िल्टर समायोजित करने का प्रयास करें',
             clear_filter: 'फ़िल्टर साफ़ करें',
         },
 

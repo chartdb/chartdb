@@ -539,7 +539,8 @@ export const gu: LanguageTranslation = {
             group_by_area: 'વિસ્તાર પ્રમાણે ગ્રુપ કરો',
             no_tables_found: 'કોઈ ટેબલ મળી નથી',
             empty_diagram_description: 'શરૂ કરવા માટે ટેબલ બનાવો',
-            no_tables_description: 'તમારી શોધ અથવા ફિલ્ટર સમાયોજિત કરવાનો પ્રયાસ કરો',
+            no_tables_description:
+                'તમારી શોધ અથવા ફિલ્ટર સમાયોજિત કરવાનો પ્રયાસ કરો',
             clear_filter: 'ફિલ્ટર સાફ કરો',
         },
 

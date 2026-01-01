@@ -540,8 +540,10 @@ export const de: LanguageTranslation = {
             group_by_schema: 'Nach Schema gruppieren',
             group_by_area: 'Nach Bereich gruppieren',
             no_tables_found: 'Keine Tabellen gefunden',
-            empty_diagram_description: 'Erstellen Sie eine Tabelle, um zu beginnen',
-            no_tables_description: 'Versuchen Sie, Ihre Suche oder Filter anzupassen',
+            empty_diagram_description:
+                'Erstellen Sie eine Tabelle, um zu beginnen',
+            no_tables_description:
+                'Versuchen Sie, Ihre Suche oder Filter anzupassen',
             clear_filter: 'Filter löschen',
         },
 

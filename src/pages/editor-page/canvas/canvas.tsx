@@ -50,7 +50,6 @@ import {
     Magnet,
     AlertTriangle,
     Highlighter,
-    ChevronLeft,
     EyeOff,
 } from 'lucide-react';
 import { Button } from '@/components/button/button';
@@ -1428,13 +1427,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     );
 
     // Check if all tables are hidden due to filtering
+    // Derived from filter state directly (not nodes) for better performance
     const allTablesHiddenByFilter = useMemo(() => {
         if (!hasActiveFilter || tables.length === 0 || filterLoading) {
             return false;
         }
-        const tableNodes = nodes.filter((node) => node.type === 'table');
-        return tableNodes.length > 0 && tableNodes.every((node) => node.hidden);
-    }, [hasActiveFilter, tables.length, nodes, filterLoading]);
+        // Check if any table passes the filter
+        const visibleTableCount = tables.filter((table) =>
+            filterTable({
+                table: { id: table.id, schema: table.schema },
+                filter,
+                options: { defaultSchema: defaultSchemas[databaseType] },
+            })
+        ).length;
+        return visibleTableCount === 0;
+    }, [hasActiveFilter, tables, filter, databaseType, filterLoading]);
 
     const pulseOverlappingTables = useCallback(() => {
         setHighlightOverlappingTables(true);
@@ -1843,16 +1850,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     {showFilter ? (
                         <CanvasFilter onClose={() => setShowFilter(false)} />
                     ) : null}
-                    {/* Toggle button to reopen filter when closed */}
-                    {hasActiveFilter && !showFilter && (
-                        <Button
-                            variant="outline"
-                            className="absolute right-2 top-2 z-10 size-10 rounded-lg border bg-background p-0 shadow-lg md:right-4 md:top-4"
-                            onClick={() => setShowFilter(true)}
-                        >
-                            <ChevronLeft className="size-5" />
-                        </Button>
-                    )}
                 </ReactFlow>
                 <MarkerDefinitions />
             </div>

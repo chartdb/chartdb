@@ -528,7 +528,8 @@ export const tr: LanguageTranslation = {
             group_by_area: 'Alana Göre Grupla',
             no_tables_found: 'Tablo bulunamadı',
             empty_diagram_description: 'Başlamak için bir tablo oluşturun',
-            no_tables_description: 'Aramanızı veya filtrenizi ayarlamayı deneyin',
+            no_tables_description:
+                'Aramanızı veya filtrenizi ayarlamayı deneyin',
             clear_filter: 'Filtreyi temizle',
         },
 
