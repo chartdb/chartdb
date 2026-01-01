@@ -15,7 +15,7 @@ export const en = {
             actions: {
                 actions: 'Actions',
                 new: 'New...',
-                browse: 'All databases...',
+                browse: 'All Databases...',
                 save: 'Save',
                 import: 'Import',
                 export_sql: 'Export SQL',
