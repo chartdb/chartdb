@@ -126,6 +126,8 @@ export const fr: LanguageTranslation = {
                     'Aucune table trouvée correspondant à votre filtre.',
                 show_list: 'Afficher la Liste des Tableaux',
                 show_dbml: "Afficher l'éditeur DBML",
+                all_hidden: 'Toutes les tables sont masquées',
+                show_all: 'Tout afficher',
 
                 table: {
                     fields: 'Champs',
@@ -520,6 +522,23 @@ export const fr: LanguageTranslation = {
             duplicate_table: 'Tableau Dupliqué',
             delete_table: 'Supprimer la Table',
             add_relationship: 'Ajouter une Relation',
+        },
+
+        canvas: {
+            all_tables_hidden: 'Toutes les tables sont masquées',
+            show_all_tables: 'Tout afficher',
+        },
+
+        canvas_filter: {
+            title: 'Filtrer les Tables',
+            search_placeholder: 'Rechercher des tables...',
+            group_by_schema: 'Grouper par Schéma',
+            group_by_area: 'Grouper par Zone',
+            no_tables_found: 'Aucune table trouvée',
+            empty_diagram_description: 'Créez une table pour commencer',
+            no_tables_description:
+                'Essayez de modifier votre recherche ou filtre',
+            clear_filter: 'Effacer le filtre',
         },
 
         snap_to_grid_tooltip:

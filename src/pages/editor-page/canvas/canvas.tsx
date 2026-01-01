@@ -45,7 +45,13 @@ import {
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import { Pencil, AlertTriangle, Magnet, Highlighter } from 'lucide-react';
+import {
+    Pencil,
+    Magnet,
+    AlertTriangle,
+    Highlighter,
+    EyeOff,
+} from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -314,7 +320,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         closeRelationshipPopover,
         events: canvasEvents,
     } = useCanvas();
-    const { filter, loading: filterLoading } = useDiagramFilter();
+    const {
+        filter,
+        loading: filterLoading,
+        hasActiveFilter,
+        resetFilter,
+    } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
 
     const shouldForceShowTable = useCallback(
@@ -1415,6 +1426,23 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         [overlapGraph]
     );
 
+    // Check if all tables are hidden due to filtering
+    // Derived from filter state directly (not nodes) for better performance
+    const allTablesHiddenByFilter = useMemo(() => {
+        if (!hasActiveFilter || tables.length === 0 || filterLoading) {
+            return false;
+        }
+        // Check if any table passes the filter
+        const visibleTableCount = tables.filter((table) =>
+            filterTable({
+                table: { id: table.id, schema: table.schema },
+                filter,
+                options: { defaultSchema: defaultSchemas[databaseType] },
+            })
+        ).length;
+        return visibleTableCount === 0;
+    }, [hasActiveFilter, tables, filter, databaseType, filterLoading]);
+
     const pulseOverlappingTables = useCallback(() => {
         setHighlightOverlappingTables(true);
         setTimeout(() => setHighlightOverlappingTables(false), 600);
@@ -1801,6 +1829,24 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         gap={16}
                         size={1}
                     />
+                    {/* Empty state when all tables are hidden by filter */}
+                    {allTablesHiddenByFilter && (
+                        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+                            <div className="pointer-events-auto flex items-center gap-3 rounded-lg border bg-background/90 px-4 py-3 shadow-sm backdrop-blur-sm">
+                                <EyeOff className="size-5 text-muted-foreground" />
+                                <span className="text-sm text-muted-foreground">
+                                    {t('canvas.all_tables_hidden')}
+                                </span>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => resetFilter()}
+                                >
+                                    {t('canvas.show_all_tables')}
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                     {showFilter ? (
                         <CanvasFilter onClose={() => setShowFilter(false)} />
                     ) : null}

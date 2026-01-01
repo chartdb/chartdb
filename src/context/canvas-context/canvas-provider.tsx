@@ -36,7 +36,11 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         areas,
         diagramId,
     } = useChartDB();
-    const { filter, loading: filterLoading } = useDiagramFilter();
+    const {
+        filter,
+        loading: filterLoading,
+        hasActiveFilter,
+    } = useDiagramFilter();
     const { showDBViews } = useLocalConfig();
     const { fitView, screenToFlowPosition, setNodes } = useReactFlow();
     const [overlapGraph, setOverlapGraph] =
@@ -73,8 +77,11 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
 
         diagramIdActiveFilterRef.current = diagramId;
 
-        setShowFilter(true);
-    }, [filterLoading, diagramId]);
+        // Only show filter if there's an active filter
+        if (hasActiveFilter) {
+            setShowFilter(true);
+        }
+    }, [filterLoading, diagramId, hasActiveFilter]);
 
     const reorderTables = useCallback(
         (

@@ -128,6 +128,8 @@ export const es: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'Todas las tablas están ocultas',
+                show_all: 'Mostrar todo',
 
                 table: {
                     fields: 'Campos',
@@ -524,6 +526,22 @@ export const es: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Eliminar Tabla',
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'Todas las tablas están ocultas',
+            show_all_tables: 'Mostrar todo',
+        },
+
+        canvas_filter: {
+            title: 'Filtrar Tablas',
+            search_placeholder: 'Buscar tablas...',
+            group_by_schema: 'Agrupar por Esquema',
+            group_by_area: 'Agrupar por Área',
+            no_tables_found: 'No se encontraron tablas',
+            empty_diagram_description: 'Crea una tabla para comenzar',
+            no_tables_description: 'Intenta ajustar tu búsqueda o filtro',
+            clear_filter: 'Limpiar filtro',
         },
 
         // TODO: Add translations

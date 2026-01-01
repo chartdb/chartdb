@@ -128,6 +128,8 @@ export const tr: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'Tüm tablolar gizli',
+                show_all: 'Tümünü göster',
 
                 table: {
                     fields: 'Alanlar',
@@ -512,6 +514,23 @@ export const tr: LanguageTranslation = {
             delete_table: 'Tabloyu Sil',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'Tüm tablolar gizli',
+            show_all_tables: 'Tümünü göster',
+        },
+
+        canvas_filter: {
+            title: 'Tabloları Filtrele',
+            search_placeholder: 'Tablo ara...',
+            group_by_schema: 'Şemaya Göre Grupla',
+            group_by_area: 'Alana Göre Grupla',
+            no_tables_found: 'Tablo bulunamadı',
+            empty_diagram_description: 'Başlamak için bir tablo oluşturun',
+            no_tables_description:
+                'Aramanızı veya filtrenizi ayarlamayı deneyin',
+            clear_filter: 'Filtreyi temizle',
         },
 
         // TODO: Translate

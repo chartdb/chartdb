@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/card/card';
 import {
     ZoomIn,
     ZoomOut,
-    Funnel,
+    Search,
     Redo,
     Undo,
     Scan,
@@ -104,7 +104,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                         }
                                     )}
                                 >
-                                    <Funnel />
+                                    <Search />
                                 </ToolbarButton>
                             </span>
                         </TooltipTrigger>

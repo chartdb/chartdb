@@ -128,6 +128,8 @@ export const id_ID: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'Semua tabel tersembunyi',
+                show_all: 'Tampilkan semua',
 
                 table: {
                     fields: 'Kolom',
@@ -522,6 +524,22 @@ export const id_ID: LanguageTranslation = {
             delete_table: 'Hapus Tabel',
             duplicate_table: 'Duplikat Tabel',
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'Semua tabel tersembunyi',
+            show_all_tables: 'Tampilkan semua',
+        },
+
+        canvas_filter: {
+            title: 'Filter Tabel',
+            search_placeholder: 'Cari tabel...',
+            group_by_schema: 'Kelompokkan berdasarkan Skema',
+            group_by_area: 'Kelompokkan berdasarkan Area',
+            no_tables_found: 'Tidak ada tabel ditemukan',
+            empty_diagram_description: 'Buat tabel untuk memulai',
+            no_tables_description: 'Coba sesuaikan pencarian atau filter Anda',
+            clear_filter: 'Hapus filter',
         },
 
         snap_to_grid_tooltip: 'Snap ke Kisi (Tahan {{key}})',
