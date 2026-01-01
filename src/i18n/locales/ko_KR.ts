@@ -214,31 +214,30 @@ export const ko_KR: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: '영역',
+                add_area: '영역 추가',
+                filter: '필터',
+                clear: '필터 지우기',
+                no_results: '필터와 일치하는 영역을 찾을 수 없습니다.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: '영역 작업',
+                        edit_name: '이름 편집',
+                        delete_area: '영역 삭제',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: '영역 없음',
+                    description: '영역을 만들어 시작하세요',
                 },
             },
 
             visuals_section: {
                 visuals: '시각화',
                 tabs: {
-                    areas: 'Areas',
+                    areas: '영역',
                     notes: '메모',
                 },
             },
@@ -263,34 +262,36 @@ export const ko_KR: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: '사용자 정의 타입',
+                filter: '필터',
+                clear: '필터 지우기',
+                no_results:
+                    '필터와 일치하는 사용자 정의 타입을 찾을 수 없습니다.',
+                new_type: '새 타입',
                 empty_state: {
-                    title: 'No custom types',
+                    title: '사용자 정의 타입 없음',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        '데이터베이스에서 사용 가능한 사용자 정의 타입이 여기에 표시됩니다',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: '종류',
+                    enum_values: '열거형 값',
+                    composite_fields: '필드',
+                    no_fields: '정의된 필드 없음',
                     no_values: '정의된 열거형 값이 없습니다',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: '필드 이름',
+                    field_type_placeholder: '타입 선택',
+                    add_field: '필드 추가',
+                    no_fields_tooltip:
+                        '이 사용자 정의 타입에 정의된 필드가 없습니다',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: '작업',
+                        highlight_fields: '필드 강조 표시',
+                        delete_custom_type: '삭제',
+                        clear_field_highlight: '강조 표시 지우기',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: '타입 삭제',
                 },
             },
         },
@@ -308,8 +309,7 @@ export const ko_KR: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: '겹치는 테이블 강조 표시',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: '테이블 필터',
         },
 
         new_diagram_dialog: {
@@ -510,8 +510,7 @@ export const ko_KR: LanguageTranslation = {
             new_table: '새 테이블',
             new_view: '새 뷰',
             new_relationship: '새 연관관계',
-            // TODO: Translate
-            new_area: 'New Area',
+            new_area: '새 영역',
             new_note: '새 메모',
         },
 

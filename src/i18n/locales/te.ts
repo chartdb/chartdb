@@ -216,31 +216,30 @@ export const te: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'ప్రాంతాలు',
+                add_area: 'ప్రాంతం జోడించండి',
+                filter: 'ఫిల్టర్',
+                clear: 'ఫిల్టర్‌ను క్లియర్ చేయండి',
+                no_results: 'మీ ఫిల్టర్‌కు సరిపోలే ప్రాంతాలు కనుగొనబడలేదు.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'ప్రాంత చర్యలు',
+                        edit_name: 'పేరు సవరించండి',
+                        delete_area: 'ప్రాంతాన్ని తొలగించండి',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'ప్రాంతాలు లేవు',
+                    description: 'ప్రారంభించడానికి ఒక ప్రాంతం సృష్టించండి',
                 },
             },
 
             visuals_section: {
                 visuals: 'Visuals',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'ప్రాంతాలు',
                     notes: 'గమనికలు',
                 },
             },
@@ -265,34 +264,35 @@ export const te: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'అనుకూల రకాలు',
+                filter: 'ఫిల్టర్',
+                clear: 'ఫిల్టర్‌ను క్లియర్ చేయండి',
+                no_results: 'మీ ఫిల్టర్‌కు సరిపోలే అనుకూల రకాలు కనుగొనబడలేదు.',
+                new_type: 'కొత్త రకం',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'అనుకూల రకాలు లేవు',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'మీ డేటాబేస్‌లో అందుబాటులో ఉన్నప్పుడు అనుకూల రకాలు ఇక్కడ కనిపిస్తాయి',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'రకం',
+                    enum_values: 'Enum విలువలు',
+                    composite_fields: 'ఫీల్డ్‌లు',
+                    no_fields: 'ఫీల్డ్‌లు నిర్వచించబడలేదు',
                     no_values: 'ఏ enum విలువలు నిర్వచించబడలేదు',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'ఫీల్డ్ పేరు',
+                    field_type_placeholder: 'రకాన్ని ఎంచుకోండి',
+                    add_field: 'ఫీల్డ్ జోడించండి',
+                    no_fields_tooltip:
+                        'ఈ అనుకూల రకానికి ఫీల్డ్‌లు నిర్వచించబడలేదు',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'చర్యలు',
+                        highlight_fields: 'ఫీల్డ్‌లను హైలైట్ చేయండి',
+                        delete_custom_type: 'తొలగించండి',
+                        clear_field_highlight: 'హైలైట్ తొలగించండి',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'రకాన్ని తొలగించండి',
                 },
             },
         },
@@ -310,8 +310,7 @@ export const te: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'అవకాశించు పట్టికలను హైలైట్ చేయండి',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'పట్టికలను ఫిల్టర్ చేయండి',
         },
 
         new_diagram_dialog: {
@@ -520,7 +519,7 @@ export const te: LanguageTranslation = {
             new_view: 'కొత్త వ్యూ',
             new_relationship: 'కొత్త సంబంధం',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'కొత్త ప్రాంతం',
             new_note: 'కొత్త నోట్',
         },
 

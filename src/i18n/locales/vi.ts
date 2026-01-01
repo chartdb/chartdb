@@ -214,31 +214,30 @@ export const vi: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Khu vực',
+                add_area: 'Thêm Khu vực',
+                filter: 'Lọc',
+                clear: 'Xóa Bộ Lọc',
+                no_results: 'Không tìm thấy khu vực nào phù hợp với bộ lọc.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Hành động Khu vực',
+                        edit_name: 'Sửa Tên',
+                        delete_area: 'Xóa Khu vực',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Không có khu vực',
+                    description: 'Tạo khu vực để bắt đầu',
                 },
             },
 
             visuals_section: {
                 visuals: 'Hình ảnh',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'Khu vực',
                     notes: 'Ghi chú',
                 },
             },
@@ -263,34 +262,36 @@ export const vi: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Loại Tùy Chỉnh',
+                filter: 'Lọc',
+                clear: 'Xóa Bộ Lọc',
+                no_results:
+                    'Không tìm thấy loại tùy chỉnh nào phù hợp với bộ lọc.',
+                new_type: 'Loại Mới',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Không có loại tùy chỉnh',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Các loại tùy chỉnh sẽ xuất hiện ở đây khi có sẵn trong cơ sở dữ liệu của bạn',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Loại',
+                    enum_values: 'Giá Trị Enum',
+                    composite_fields: 'Trường',
+                    no_fields: 'Chưa định nghĩa trường',
                     no_values: 'Không có giá trị enum được định nghĩa',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Tên trường',
+                    field_type_placeholder: 'Chọn loại',
+                    add_field: 'Thêm Trường',
+                    no_fields_tooltip:
+                        'Chưa định nghĩa trường cho loại tùy chỉnh này',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Hành động',
+                        highlight_fields: 'Làm Nổi Bật Trường',
+                        delete_custom_type: 'Xóa',
+                        clear_field_highlight: 'Xóa Làm Nổi Bật',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Xóa Loại',
                 },
             },
         },
@@ -308,8 +309,7 @@ export const vi: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Lọc Bảng',
         },
 
         new_diagram_dialog: {
@@ -512,7 +512,7 @@ export const vi: LanguageTranslation = {
             new_view: 'Chế độ xem Mới',
             new_relationship: 'Tạo quan hệ mới',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'Khu vực mới',
             new_note: 'Ghi Chú Mới',
         },
 

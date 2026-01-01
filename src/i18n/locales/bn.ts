@@ -215,31 +215,31 @@ export const bn: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'এলাকা',
+                add_area: 'এলাকা যোগ করুন',
+                filter: 'ফিল্টার',
+                clear: 'ফিল্টার সাফ করুন',
+                no_results:
+                    'আপনার ফিল্টারের সাথে মেলে এমন কোনো এলাকা পাওয়া যায়নি।',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'এলাকা ক্রিয়া',
+                        edit_name: 'নাম সম্পাদনা করুন',
+                        delete_area: 'এলাকা মুছুন',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'কোনো এলাকা নেই',
+                    description: 'শুরু করতে একটি এলাকা তৈরি করুন',
                 },
             },
 
             visuals_section: {
                 visuals: 'ভিজ্যুয়াল',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'এলাকা',
                     notes: 'নোট',
                 },
             },
@@ -264,34 +264,36 @@ export const bn: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'কাস্টম টাইপ',
+                filter: 'ফিল্টার',
+                clear: 'ফিল্টার সাফ করুন',
+                no_results:
+                    'আপনার ফিল্টারের সাথে মেলে এমন কোনো কাস্টম টাইপ পাওয়া যায়নি।',
+                new_type: 'নতুন টাইপ',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'কোনো কাস্টম টাইপ নেই',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'আপনার ডাটাবেসে উপলব্ধ হলে কাস্টম টাইপ এখানে দেখা যাবে',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'ধরন',
+                    enum_values: 'Enum মান',
+                    composite_fields: 'ফিল্ড',
+                    no_fields: 'কোনো ফিল্ড সংজ্ঞায়িত নেই',
                     no_values: 'কোন enum মান সংজ্ঞায়িত নেই',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'ফিল্ডের নাম',
+                    field_type_placeholder: 'টাইপ নির্বাচন করুন',
+                    add_field: 'ফিল্ড যোগ করুন',
+                    no_fields_tooltip:
+                        'এই কাস্টম টাইপের জন্য কোনো ফিল্ড সংজ্ঞায়িত নেই',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'ক্রিয়া',
+                        highlight_fields: 'ফিল্ড হাইলাইট করুন',
+                        delete_custom_type: 'মুছুন',
+                        clear_field_highlight: 'হাইলাইট সরান',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'টাইপ মুছুন',
                 },
             },
         },
@@ -310,7 +312,7 @@ export const bn: LanguageTranslation = {
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
-            filter: 'Filter Tables',
+            filter: 'টেবিল ফিল্টার করুন',
         },
 
         new_diagram_dialog: {
@@ -514,7 +516,7 @@ export const bn: LanguageTranslation = {
             new_view: 'নতুন ভিউ',
             new_relationship: 'নতুন সম্পর্ক',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'নতুন এলাকা',
             new_note: 'নতুন নোট',
         },
 

@@ -215,31 +215,30 @@ export const tr: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'Alanlar',
+                add_area: 'Alan Ekle',
+                filter: 'Filtrele',
+                clear: 'Filtreyi Temizle',
+                no_results: 'Filtrenizle eşleşen alan bulunamadı.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Alan İşlemleri',
+                        edit_name: 'Adı Düzenle',
+                        delete_area: 'Alanı Sil',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Alan yok',
+                    description: 'Başlamak için bir alan oluşturun',
                 },
             },
 
             visuals_section: {
                 visuals: 'Görseller',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'Alanlar',
                     notes: 'Notlar',
                 },
             },
@@ -264,34 +263,34 @@ export const tr: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'Özel Tipler',
+                filter: 'Filtrele',
+                clear: 'Filtreyi Temizle',
+                no_results: 'Filtrenizle eşleşen özel tip bulunamadı.',
+                new_type: 'Yeni Tip',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Özel tip yok',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Veritabanınızda mevcut olduğunda özel tipler burada görünecektir',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Tür',
+                    enum_values: 'Enum Değerleri',
+                    composite_fields: 'Alanlar',
+                    no_fields: 'Alan tanımlanmamış',
                     no_values: 'Tanımlanmış enum değeri yok',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Alan adı',
+                    field_type_placeholder: 'Tip seçin',
+                    add_field: 'Alan Ekle',
+                    no_fields_tooltip: 'Bu özel tip için alan tanımlanmamış',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'İşlemler',
+                        highlight_fields: 'Alanları Vurgula',
+                        delete_custom_type: 'Sil',
+                        clear_field_highlight: 'Vurguyu Kaldır',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Tipi Sil',
                 },
             },
         },
@@ -308,8 +307,7 @@ export const tr: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Çakışan Tabloları Vurgula',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Tabloları Filtrele',
         },
         new_diagram_dialog: {
             database_selection: {
@@ -505,7 +503,7 @@ export const tr: LanguageTranslation = {
             new_view: 'Yeni Görünüm',
             new_relationship: 'Yeni İlişki',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'Yeni Alan',
             new_note: 'Yeni Not',
         },
         table_node_context_menu: {

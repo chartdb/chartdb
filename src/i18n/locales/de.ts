@@ -45,11 +45,10 @@ export const de: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            // TODO: Translate
             backup: {
-                backup: 'Backup',
-                export_diagram: 'Export Diagram',
-                restore_diagram: 'Restore Diagram',
+                backup: 'Sicherung',
+                export_diagram: 'Diagramm exportieren',
+                restore_diagram: 'Diagramm wiederherstellen',
             },
             help: {
                 help: 'Hilfe',
@@ -216,31 +215,31 @@ export const de: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
+                areas: 'Bereiche',
+                add_area: 'Bereich hinzufügen',
                 filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                clear: 'Filter löschen',
+                no_results:
+                    'Keine Bereiche gefunden, die Ihrem Filter entsprechen.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Bereich-Aktionen',
+                        edit_name: 'Name bearbeiten',
+                        delete_area: 'Bereich löschen',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Keine Bereiche',
+                    description: 'Erstellen Sie einen Bereich, um zu beginnen',
                 },
             },
 
             visuals_section: {
                 visuals: 'Darstellungen',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'Bereiche',
                     notes: 'Notizen',
                 },
             },
@@ -265,34 +264,36 @@ export const de: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
+                custom_types: 'Benutzerdefinierte Typen',
                 filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                clear: 'Filter löschen',
+                no_results:
+                    'Keine benutzerdefinierten Typen gefunden, die Ihrem Filter entsprechen.',
+                new_type: 'Neuer Typ',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Keine benutzerdefinierten Typen',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Benutzerdefinierte Typen werden hier angezeigt, wenn sie in Ihrer Datenbank verfügbar sind',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Art',
+                    enum_values: 'Enum-Werte',
+                    composite_fields: 'Felder',
+                    no_fields: 'Keine Felder definiert',
                     no_values: 'Keine Enum-Werte definiert',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Feldname',
+                    field_type_placeholder: 'Typ auswählen',
+                    add_field: 'Feld hinzufügen',
+                    no_fields_tooltip:
+                        'Keine Felder für diesen benutzerdefinierten Typ definiert',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Aktionen',
+                        highlight_fields: 'Felder hervorheben',
+                        delete_custom_type: 'Löschen',
+                        clear_field_highlight: 'Hervorhebung entfernen',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Typ löschen',
                 },
             },
         },
@@ -311,8 +312,7 @@ export const de: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Tabellen filtern',
         },
 
         new_diagram_dialog: {
@@ -516,8 +516,7 @@ export const de: LanguageTranslation = {
             new_table: 'Neue Tabelle',
             new_view: 'Neue Ansicht',
             new_relationship: 'Neue Beziehung',
-            // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'Neuer Bereich',
             new_note: 'Neue Notiz',
         },
 

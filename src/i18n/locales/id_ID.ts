@@ -214,31 +214,30 @@ export const id_ID: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
+                areas: 'Area',
+                add_area: 'Tambah Area',
                 filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                clear: 'Hapus Filter',
+                no_results: 'Tidak ada area yang cocok dengan filter Anda.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'Aksi Area',
+                        edit_name: 'Edit Nama',
+                        delete_area: 'Hapus Area',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'Tidak ada area',
+                    description: 'Buat area untuk memulai',
                 },
             },
 
             visuals_section: {
                 visuals: 'Visual',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'Area',
                     notes: 'Catatan',
                 },
             },
@@ -263,34 +262,36 @@ export const id_ID: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
+                custom_types: 'Tipe Kustom',
                 filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                clear: 'Hapus Filter',
+                no_results:
+                    'Tidak ada tipe kustom yang cocok dengan filter Anda.',
+                new_type: 'Tipe Baru',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'Tidak ada tipe kustom',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'Tipe kustom akan muncul di sini ketika tersedia di database Anda',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'Jenis',
+                    enum_values: 'Nilai Enum',
+                    composite_fields: 'Field',
+                    no_fields: 'Tidak ada field yang ditentukan',
                     no_values: 'Tidak ada nilai enum yang ditentukan',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'Nama field',
+                    field_type_placeholder: 'Pilih tipe',
+                    add_field: 'Tambah Field',
+                    no_fields_tooltip:
+                        'Tidak ada field yang ditentukan untuk tipe kustom ini',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'Aksi',
+                        highlight_fields: 'Sorot Field',
+                        delete_custom_type: 'Hapus',
+                        clear_field_highlight: 'Hapus Sorotan',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'Hapus Tipe',
                 },
             },
         },
@@ -308,8 +309,7 @@ export const id_ID: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Sorot Tabel yang Tumpang Tindih',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'Filter Tabel',
         },
 
         new_diagram_dialog: {
@@ -514,7 +514,7 @@ export const id_ID: LanguageTranslation = {
             new_view: 'Tampilan Baru',
             new_relationship: 'Hubungan Baru',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'Area Baru',
             new_note: 'Catatan Baru',
         },
 

@@ -213,31 +213,30 @@ export const ar: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'المناطق',
+                add_area: 'إضافة منطقة',
+                filter: 'تصفية',
+                clear: 'مسح التصفية',
+                no_results: 'لم يتم العثور على مناطق مطابقة للتصفية.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'إجراءات المنطقة',
+                        edit_name: 'تحرير الاسم',
+                        delete_area: 'حذف المنطقة',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'لا توجد مناطق',
+                    description: 'أنشئ منطقة للبدء',
                 },
             },
 
             visuals_section: {
                 visuals: 'مرئيات',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'المناطق',
                     notes: 'ملاحظات',
                 },
             },
@@ -261,34 +260,34 @@ export const ar: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'الأنواع المخصصة',
+                filter: 'تصفية',
+                clear: 'مسح التصفية',
+                no_results: 'لم يتم العثور على أنواع مخصصة مطابقة للتصفية.',
+                new_type: 'نوع جديد',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'لا توجد أنواع مخصصة',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'ستظهر الأنواع المخصصة هنا عندما تكون متاحة في قاعدة البيانات الخاصة بك',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'النوع',
+                    enum_values: 'قيم التعداد',
+                    composite_fields: 'الحقول',
+                    no_fields: 'لم يتم تحديد حقول',
                     no_values: 'لم يتم تحديد قيم التعداد',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'اسم الحقل',
+                    field_type_placeholder: 'اختر النوع',
+                    add_field: 'إضافة حقل',
+                    no_fields_tooltip: 'لم يتم تحديد حقول لهذا النوع المخصص',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'إجراءات',
+                        highlight_fields: 'تمييز الحقول',
+                        delete_custom_type: 'حذف',
+                        clear_field_highlight: 'إزالة التمييز',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'حذف النوع',
                 },
             },
         },
@@ -302,8 +301,7 @@ export const ar: LanguageTranslation = {
             redo: 'إعادة',
             reorder_diagram: 'ترتيب تلقائي للرسم البياني',
             highlight_overlapping_tables: 'تمييز الجداول المتداخلة',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'تصفية الجداول',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
@@ -507,7 +505,7 @@ export const ar: LanguageTranslation = {
             new_view: 'عرض جديد',
             new_relationship: 'علاقة جديدة',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'منطقة جديدة',
             new_note: 'ملاحظة جديدة',
         },
 

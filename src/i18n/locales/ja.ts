@@ -46,11 +46,10 @@ export const ja: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            // TODO: Translate
             backup: {
-                backup: 'Backup',
-                export_diagram: 'Export Diagram',
-                restore_diagram: 'Restore Diagram',
+                backup: 'バックアップ',
+                export_diagram: 'ダイアグラムをエクスポート',
+                restore_diagram: 'ダイアグラムを復元',
             },
             help: {
                 help: 'ヘルプ',
@@ -219,31 +218,30 @@ export const ja: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'エリア',
+                add_area: 'エリアを追加',
+                filter: 'フィルタ',
+                clear: 'フィルタをクリア',
+                no_results: 'フィルタに一致するエリアが見つかりません。',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'エリア操作',
+                        edit_name: '名前を編集',
+                        delete_area: 'エリアを削除',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'エリアがありません',
+                    description: 'エリアを作成して開始してください',
                 },
             },
 
             visuals_section: {
                 visuals: 'ビジュアル',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'エリア',
                     notes: 'ノート',
                 },
             },
@@ -268,34 +266,35 @@ export const ja: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'カスタム型',
+                filter: 'フィルタ',
+                clear: 'フィルタをクリア',
+                no_results: 'フィルタに一致するカスタム型が見つかりません。',
+                new_type: '新しい型',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'カスタム型がありません',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'データベースで利用可能になると、カスタム型がここに表示されます',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: '種類',
+                    enum_values: '列挙値',
+                    composite_fields: 'フィールド',
+                    no_fields: 'フィールドが定義されていません',
                     no_values: '列挙値が定義されていません',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'フィールド名',
+                    field_type_placeholder: '型を選択',
+                    add_field: 'フィールドを追加',
+                    no_fields_tooltip:
+                        'このカスタム型にはフィールドが定義されていません',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: '操作',
+                        highlight_fields: 'フィールドをハイライト',
+                        delete_custom_type: '削除',
+                        clear_field_highlight: 'ハイライトを解除',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: '型を削除',
                 },
             },
         },
@@ -312,8 +311,8 @@ export const ja: LanguageTranslation = {
             highlight_overlapping_tables: 'Highlight Overlapping Tables',
             clear_custom_type_highlight: 'Clear highlight for "{{typeName}}"',
             custom_type_highlight_tooltip:
-                'Highlighting "{{typeName}}" - Click to clear', // TODO: Translate
-            filter: 'Filter Tables',
+                '「{{typeName}}」をハイライト中 - クリックで解除',
+            filter: 'テーブルをフィルタ',
         },
 
         new_diagram_dialog: {
@@ -518,8 +517,7 @@ export const ja: LanguageTranslation = {
             new_table: '新しいテーブル',
             new_view: '新しいビュー',
             new_relationship: '新しいリレーションシップ',
-            // TODO: Translate
-            new_area: 'New Area',
+            new_area: '新しいエリア',
             new_note: '新しいメモ',
         },
 

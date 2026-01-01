@@ -216,31 +216,30 @@ export const gu: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             areas_section: {
-                areas: 'Areas',
-                add_area: 'Add Area',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No areas found matching your filter.',
+                areas: 'વિસ્તારો',
+                add_area: 'વિસ્તાર ઉમેરો',
+                filter: 'ફિલ્ટર',
+                clear: 'ફિલ્ટર સાફ કરો',
+                no_results: 'તમારા ફિલ્ટરને અનુરૂપ કોઈ વિસ્તાર મળ્યો નથી.',
 
                 area: {
                     area_actions: {
-                        title: 'Area Actions',
-                        edit_name: 'Edit Name',
-                        delete_area: 'Delete Area',
+                        title: 'વિસ્તાર ક્રિયાઓ',
+                        edit_name: 'નામ સંપાદિત કરો',
+                        delete_area: 'વિસ્તાર કાઢી નાખો',
                     },
                 },
                 empty_state: {
-                    title: 'No areas',
-                    description: 'Create an area to get started',
+                    title: 'કોઈ વિસ્તાર નથી',
+                    description: 'શરૂ કરવા માટે વિસ્તાર બનાવો',
                 },
             },
 
             visuals_section: {
                 visuals: 'Visuals',
                 tabs: {
-                    areas: 'Areas',
+                    areas: 'વિસ્તારો',
                     notes: 'નોંધો',
                 },
             },
@@ -265,34 +264,35 @@ export const gu: LanguageTranslation = {
                 },
             },
 
-            // TODO: Translate
             custom_types_section: {
-                custom_types: 'Custom Types',
-                filter: 'Filter',
-                clear: 'Clear Filter',
-                no_results: 'No custom types found matching your filter.',
+                custom_types: 'કસ્ટમ પ્રકાર',
+                filter: 'ફિલ્ટર',
+                clear: 'ફિલ્ટર સાફ કરો',
+                no_results: 'તમારા ફિલ્ટરને અનુરૂપ કોઈ કસ્ટમ પ્રકાર મળ્યો નથી.',
+                new_type: 'નવો પ્રકાર',
                 empty_state: {
-                    title: 'No custom types',
+                    title: 'કોઈ કસ્ટમ પ્રકાર નથી',
                     description:
-                        'Custom types will appear here when they are available in your database',
+                        'જ્યારે તમારા ડેટાબેસમાં ઉપલબ્ધ હશે ત્યારે કસ્ટમ પ્રકાર અહીં દેખાશે',
                 },
                 custom_type: {
-                    kind: 'Kind',
-                    enum_values: 'Enum Values',
-                    composite_fields: 'Fields',
-                    no_fields: 'No fields defined',
+                    kind: 'પ્રકાર',
+                    enum_values: 'Enum મૂલ્યો',
+                    composite_fields: 'ફીલ્ડ્સ',
+                    no_fields: 'કોઈ ફીલ્ડ વ્યાખ્યાયિત નથી',
                     no_values: 'કોઈ enum મૂલ્યો વ્યાખ્યાયિત નથી',
-                    field_name_placeholder: 'Field name',
-                    field_type_placeholder: 'Select type',
-                    add_field: 'Add Field',
-                    no_fields_tooltip: 'No fields defined for this custom type',
+                    field_name_placeholder: 'ફીલ્ડનું નામ',
+                    field_type_placeholder: 'પ્રકાર પસંદ કરો',
+                    add_field: 'ફીલ્ડ ઉમેરો',
+                    no_fields_tooltip:
+                        'આ કસ્ટમ પ્રકાર માટે કોઈ ફીલ્ડ વ્યાખ્યાયિત નથી',
                     custom_type_actions: {
-                        title: 'Actions',
-                        highlight_fields: 'Highlight Fields',
-                        delete_custom_type: 'Delete',
-                        clear_field_highlight: 'Clear Highlight',
+                        title: 'ક્રિયાઓ',
+                        highlight_fields: 'ફીલ્ડ્સ હાઇલાઇટ કરો',
+                        delete_custom_type: 'કાઢી નાખો',
+                        clear_field_highlight: 'હાઇલાઇટ કાઢો',
                     },
-                    delete_custom_type: 'Delete Type',
+                    delete_custom_type: 'પ્રકાર કાઢી નાખો',
                 },
             },
         },
@@ -310,8 +310,7 @@ export const gu: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'ઓવરલેપ કરતો ટેબલ હાઇલાઇટ કરો',
-            // TODO: Translate
-            filter: 'Filter Tables',
+            filter: 'ટેબલ ફિલ્ટર કરો',
         },
 
         new_diagram_dialog: {
@@ -515,7 +514,7 @@ export const gu: LanguageTranslation = {
             new_view: 'નવું વ્યૂ',
             new_relationship: 'નવો સંબંધ',
             // TODO: Translate
-            new_area: 'New Area',
+            new_area: 'નવો વિસ્તાર',
             new_note: 'નવી નોંધ',
         },
 

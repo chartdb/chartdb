@@ -265,6 +265,7 @@ export const hr: LanguageTranslation = {
                 clear: 'Očisti filter',
                 no_results:
                     'Nema pronađenih prilagođenih tipova koji odgovaraju vašem filteru.',
+                new_type: 'Novi tip',
                 empty_state: {
                     title: 'Nema prilagođenih tipova',
                     description:
