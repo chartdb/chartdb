@@ -126,6 +126,8 @@ export const hr: LanguageTranslation = {
                     'Nema pronađenih tablica koje odgovaraju vašem filteru.',
                 show_list: 'Prikaži popis tablica',
                 show_dbml: 'Prikaži DBML uređivač',
+                all_hidden: 'Sve tablice su skrivene',
+                show_all: 'Prikaži sve',
 
                 table: {
                     fields: 'Polja',
@@ -515,6 +517,22 @@ export const hr: LanguageTranslation = {
             duplicate_table: 'Dupliciraj tablicu',
             delete_table: 'Izbriši tablicu',
             add_relationship: 'Dodaj vezu',
+        },
+
+        canvas: {
+            all_tables_hidden: 'Sve tablice su skrivene',
+            show_all_tables: 'Prikaži sve',
+        },
+
+        canvas_filter: {
+            title: 'Filtriraj tablice',
+            search_placeholder: 'Pretraži tablice...',
+            group_by_schema: 'Grupiraj po shemi',
+            group_by_area: 'Grupiraj po području',
+            no_tables_found: 'Nisu pronađene tablice',
+            empty_diagram_description: 'Kreirajte tablicu za početak',
+            no_tables_description: 'Pokušajte prilagoditi pretragu ili filter',
+            clear_filter: 'Očisti filter',
         },
 
         snap_to_grid_tooltip: 'Priljepljivanje na mrežu (Drži {{key}})',

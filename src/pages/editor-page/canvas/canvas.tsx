@@ -1828,17 +1828,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             <div className="pointer-events-auto flex items-center gap-3 rounded-lg border bg-background/90 px-4 py-3 shadow-sm backdrop-blur-sm">
                                 <EyeOff className="size-5 text-muted-foreground" />
                                 <span className="text-sm text-muted-foreground">
-                                    {t(
-                                        'canvas.all_tables_hidden',
-                                        'All tables are hidden'
-                                    )}
+                                    {t('canvas.all_tables_hidden')}
                                 </span>
                                 <Button
                                     variant="outline"
                                     size="sm"
                                     onClick={() => resetFilter()}
                                 >
-                                    {t('canvas.show_all_tables', 'Show all')}
+                                    {t('canvas.show_all_tables')}
                                 </Button>
                             </div>
                         </div>

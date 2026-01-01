@@ -126,6 +126,8 @@ export const ru: LanguageTranslation = {
                     'Таблицы не найдены, соответствующие вашему фильтру.',
                 show_list: 'Переключиться на список таблиц',
                 show_dbml: 'Переключиться на редактор DBML',
+                all_hidden: 'Все таблицы скрыты',
+                show_all: 'Показать все',
 
                 table: {
                     fields: 'Поля',
@@ -519,6 +521,22 @@ export const ru: LanguageTranslation = {
             duplicate_table: 'Создать копию',
             delete_table: 'Удалить таблицу',
             add_relationship: 'Добавить связь',
+        },
+
+        canvas: {
+            all_tables_hidden: 'Все таблицы скрыты',
+            show_all_tables: 'Показать все',
+        },
+
+        canvas_filter: {
+            title: 'Фильтр таблиц',
+            search_placeholder: 'Поиск таблиц...',
+            group_by_schema: 'Группировать по схеме',
+            group_by_area: 'Группировать по области',
+            no_tables_found: 'Таблицы не найдены',
+            empty_diagram_description: 'Создайте таблицу, чтобы начать',
+            no_tables_description: 'Попробуйте изменить поиск или фильтр',
+            clear_filter: 'Очистить фильтр',
         },
 
         copy_to_clipboard: 'Скопировать в буфер обмена',

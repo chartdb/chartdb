@@ -128,6 +128,8 @@ export const ar: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'جميع الجداول مخفية',
+                show_all: 'عرض الكل',
 
                 table: {
                     fields: 'الحقول',
@@ -515,6 +517,22 @@ export const ar: LanguageTranslation = {
             duplicate_table: 'نسخ الجدول',
             delete_table: 'حذف الجدول',
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'جميع الجداول مخفية',
+            show_all_tables: 'عرض الكل',
+        },
+
+        canvas_filter: {
+            title: 'تصفية الجداول',
+            search_placeholder: 'البحث في الجداول...',
+            group_by_schema: 'تجميع حسب المخطط',
+            group_by_area: 'تجميع حسب المنطقة',
+            no_tables_found: 'لم يتم العثور على جداول',
+            empty_diagram_description: 'أنشئ جدولاً للبدء',
+            no_tables_description: 'جرب تعديل البحث أو التصفية',
+            clear_filter: 'مسح التصفية',
         },
 
         snap_to_grid_tooltip: '({{key}} مغنظة الشبكة (اضغط مع الاستمرار على',

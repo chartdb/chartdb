@@ -127,6 +127,8 @@ export const uk: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'Всі таблиці приховані',
+                show_all: 'Показати все',
 
                 table: {
                     fields: 'Поля',
@@ -519,6 +521,22 @@ export const uk: LanguageTranslation = {
             duplicate_table: 'Дублювати таблицю',
             delete_table: 'Видалити таблицю',
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'Всі таблиці приховані',
+            show_all_tables: 'Показати все',
+        },
+
+        canvas_filter: {
+            title: 'Фільтрувати таблиці',
+            search_placeholder: 'Пошук таблиць...',
+            group_by_schema: 'Групувати за схемою',
+            group_by_area: 'Групувати за областю',
+            no_tables_found: 'Таблиці не знайдено',
+            empty_diagram_description: 'Створіть таблицю, щоб почати',
+            no_tables_description: 'Спробуйте налаштувати пошук або фільтр',
+            clear_filter: 'Очистити фільтр',
         },
 
         snap_to_grid_tooltip: 'Вирівнювати за сіткою (Отримуйте {{key}})',

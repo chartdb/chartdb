@@ -32,31 +32,41 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const { showDBViews } = useLocalConfig();
     const filterInputRef = React.useRef<HTMLInputElement>(null);
 
+    // First, filter tables by the diagram filter (schemas/tables visibility)
+    // This is computed once and reused for both filteredTables and allTablesHiddenByDiagramFilter
+    const tablesFilteredByDiagram = useMemo(
+        () =>
+            tables.filter((table) =>
+                filterTable({
+                    table: { id: table.id, schema: table.schema },
+                    filter,
+                    options: { defaultSchema: defaultSchemas[databaseType] },
+                })
+            ),
+        [tables, filter, databaseType]
+    );
+
+    // Check if all tables are hidden by the diagram filter (not the text search)
+    const allTablesHiddenByDiagramFilter = useMemo(() => {
+        if (!hasActiveFilter || tables.length === 0) {
+            return false;
+        }
+        return tablesFilteredByDiagram.length === 0;
+    }, [hasActiveFilter, tables.length, tablesFilteredByDiagram.length]);
+
+    // Apply additional filters (text search and views) on top of diagram-filtered tables
     const filteredTables = useMemo(() => {
         const filterTableName: (table: DBTable) => boolean = (table) =>
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
-        const filterTables: (table: DBTable) => boolean = (table) =>
-            filterTable({
-                table: {
-                    id: table.id,
-                    schema: table.schema,
-                },
-                filter,
-                options: {
-                    defaultSchema: defaultSchemas[databaseType],
-                },
-            });
-
         const filterViews: (table: DBTable) => boolean = (table) =>
             showDBViews ? true : !table.isView;
 
-        return tables
-            .filter(filterTables)
+        return tablesFilteredByDiagram
             .filter(filterTableName)
             .filter(filterViews);
-    }, [tables, filterText, filter, databaseType, showDBViews]);
+    }, [tablesFilteredByDiagram, filterText, showDBViews]);
 
     const getCenterLocation = useCallback(() => {
         const padding = 80;
@@ -130,22 +140,6 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         setFilterText('');
     }, []);
 
-    // Check if all tables are hidden by the diagram filter (not the text search)
-    const allTablesHiddenByDiagramFilter = useMemo(() => {
-        if (!hasActiveFilter || tables.length === 0) {
-            return false;
-        }
-        // Check if any table passes the diagram filter
-        const visibleByDiagramFilter = tables.filter((table) =>
-            filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: { defaultSchema: defaultSchemas[databaseType] },
-            })
-        );
-        return visibleByDiagramFilter.length === 0;
-    }, [hasActiveFilter, tables, filter, databaseType]);
-
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden px-2"
@@ -195,10 +189,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                 <div className="mb-2 flex items-center gap-2 rounded-md border bg-muted/50 px-3 py-2">
                     <EyeOff className="size-4 text-muted-foreground" />
                     <span className="flex-1 text-xs text-muted-foreground">
-                        {t(
-                            'side_panel.tables_section.all_hidden',
-                            'All tables are hidden'
-                        )}
+                        {t('side_panel.tables_section.all_hidden')}
                     </span>
                     <Button
                         variant="outline"
@@ -206,7 +197,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         className="h-6 px-2 text-xs"
                         onClick={() => resetFilter()}
                     >
-                        {t('side_panel.tables_section.show_all', 'Show all')}
+                        {t('side_panel.tables_section.show_all')}
                     </Button>
                 </div>
             )}

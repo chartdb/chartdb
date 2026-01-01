@@ -132,6 +132,8 @@ export const ja: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'すべてのテーブルが非表示です',
+                show_all: 'すべて表示',
 
                 table: {
                     fields: 'フィールド',
@@ -527,6 +529,22 @@ export const ja: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'テーブルを削除',
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'すべてのテーブルが非表示です',
+            show_all_tables: 'すべて表示',
+        },
+
+        canvas_filter: {
+            title: 'テーブルをフィルター',
+            search_placeholder: 'テーブルを検索...',
+            group_by_schema: 'スキーマでグループ化',
+            group_by_area: 'エリアでグループ化',
+            no_tables_found: 'テーブルが見つかりません',
+            empty_diagram_description: 'テーブルを作成して開始',
+            no_tables_description: '検索またはフィルターを調整してください',
+            clear_filter: 'フィルターをクリア',
         },
 
         // TODO: Add translations

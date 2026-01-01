@@ -129,6 +129,8 @@ export const ne: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'सबै तालिकाहरू लुकेका छन्',
+                show_all: 'सबै देखाउनुहोस्',
 
                 table: {
                     fields: 'क्षेत्रहरू',
@@ -525,6 +527,22 @@ export const ne: LanguageTranslation = {
             duplicate_table: 'तालिका नक्कली गर्नुहोस्',
             delete_table: 'तालिका हटाउनुहोस्',
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'सबै तालिकाहरू लुकेका छन्',
+            show_all_tables: 'सबै देखाउनुहोस्',
+        },
+
+        canvas_filter: {
+            title: 'तालिकाहरू फिल्टर गर्नुहोस्',
+            search_placeholder: 'तालिकाहरू खोज्नुहोस्...',
+            group_by_schema: 'स्कीमा अनुसार समूह गर्नुहोस्',
+            group_by_area: 'क्षेत्र अनुसार समूह गर्नुहोस्',
+            no_tables_found: 'कुनै तालिका भेटिएन',
+            empty_diagram_description: 'सुरु गर्न तालिका बनाउनुहोस्',
+            no_tables_description: 'तपाईंको खोज वा फिल्टर समायोजन गर्ने प्रयास गर्नुहोस्',
+            clear_filter: 'फिल्टर हटाउनुहोस्',
         },
 
         snap_to_grid_tooltip: 'ग्रिडमा स्न्याप गर्नुहोस् ({{key}} थिच्नुहोस)',

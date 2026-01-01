@@ -164,7 +164,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
     }, [filteredTreeData]);
 
     // Check if the diagram is completely empty (no tables at all)
-    const isDiagramEmpty = tables.length === 0;
+    const isDiagramEmpty = useMemo(() => tables.length === 0, [tables.length]);
 
     // Clear search query only (preserves user's hide/show selections)
     const handleClearFilter = useCallback(() => {
@@ -288,7 +288,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 <div className="flex items-center gap-2">
                     <Search className="size-3.5 text-muted-foreground md:size-4" />
                     <h2 className="text-sm font-medium">
-                        {t('canvas_filter.title', 'Filter Tables')}{' '}
+                        {t('canvas_filter.title')}{' '}
                     </h2>
                     <span className="text-xs text-muted-foreground">
                         ({openFilterShortcut})
@@ -310,10 +310,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         ref={searchInputRef}
-                        placeholder={t(
-                            'canvas_filter.search_placeholder',
-                            'Search tables...'
-                        )}
+                        placeholder={t('canvas_filter.search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="h-full pl-9"
@@ -333,11 +330,11 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                 >
                     <ToggleGroupItem value="schema" className="flex-1 text-xs">
                         <Database className="mr-1.5 size-3.5" />
-                        {t('canvas_filter.group_by_schema', 'Group by Schema')}
+                        {t('canvas_filter.group_by_schema')}
                     </ToggleGroupItem>
                     <ToggleGroupItem value="area" className="flex-1 text-xs">
                         <Box className="mr-1.5 size-3.5" />
-                        {t('canvas_filter.group_by_area', 'Group by Area')}
+                        {t('canvas_filter.group_by_area')}
                     </ToggleGroupItem>
                 </ToggleGroup>
             </div>
@@ -349,21 +346,14 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                         <SearchX className="size-10 text-muted-foreground/50" />
                         <div className="space-y-1">
                             <p className="text-sm font-medium text-muted-foreground">
-                                {t(
-                                    'canvas_filter.no_tables_found',
-                                    'No tables found'
-                                )}
+                                {t('canvas_filter.no_tables_found')}
                             </p>
                             <p className="text-xs text-muted-foreground/70">
                                 {isDiagramEmpty
                                     ? t(
-                                          'canvas_filter.empty_diagram_description',
-                                          'Create a table to get started'
+                                          'canvas_filter.empty_diagram_description'
                                       )
-                                    : t(
-                                          'canvas_filter.no_tables_description',
-                                          'Try adjusting your search or filter'
-                                      )}
+                                    : t('canvas_filter.no_tables_description')}
                             </p>
                         </div>
                         {!isDiagramEmpty && (
@@ -373,10 +363,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                                 onClick={handleClearFilter}
                                 className="mt-2"
                             >
-                                {t(
-                                    'canvas_filter.clear_filter',
-                                    'Clear filter'
-                                )}
+                                {t('canvas_filter.clear_filter')}
                             </Button>
                         )}
                     </div>

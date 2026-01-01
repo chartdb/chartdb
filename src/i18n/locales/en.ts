@@ -125,6 +125,8 @@ export const en = {
                 no_results: 'No tables found matching your filter.',
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'All tables are hidden',
+                show_all: 'Show all',
 
                 table: {
                     fields: 'Fields',
@@ -510,6 +512,22 @@ export const en = {
             duplicate_table: 'Duplicate Table',
             delete_table: 'Delete Table',
             add_relationship: 'Add Relationship',
+        },
+
+        canvas: {
+            all_tables_hidden: 'All tables are hidden',
+            show_all_tables: 'Show all',
+        },
+
+        canvas_filter: {
+            title: 'Filter Tables',
+            search_placeholder: 'Search tables...',
+            group_by_schema: 'Group by Schema',
+            group_by_area: 'Group by Area',
+            no_tables_found: 'No tables found',
+            empty_diagram_description: 'Create a table to get started',
+            no_tables_description: 'Try adjusting your search or filter',
+            clear_filter: 'Clear filter',
         },
 
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',

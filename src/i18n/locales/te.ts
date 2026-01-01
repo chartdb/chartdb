@@ -129,6 +129,8 @@ export const te: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
+                all_hidden: 'అన్ని పట్టికలు దాచబడ్డాయి',
+                show_all: 'అన్ని చూపించు',
 
                 table: {
                     fields: 'ఫీల్డులు',
@@ -528,6 +530,22 @@ export const te: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'పట్టికను తొలగించు',
             add_relationship: 'Add Relationship', // TODO: Translate
+        },
+
+        canvas: {
+            all_tables_hidden: 'అన్ని పట్టికలు దాచబడ్డాయి',
+            show_all_tables: 'అన్ని చూపించు',
+        },
+
+        canvas_filter: {
+            title: 'పట్టికలను ఫిల్టర్ చేయండి',
+            search_placeholder: 'పట్టికలను శోధించండి...',
+            group_by_schema: 'స్కీమా ద్వారా గ్రూప్ చేయండి',
+            group_by_area: 'ప్రాంతం ద్వారా గ్రూప్ చేయండి',
+            no_tables_found: 'పట్టికలు కనుగొనబడలేదు',
+            empty_diagram_description: 'ప్రారంభించడానికి పట్టికను సృష్టించండి',
+            no_tables_description: 'మీ శోధన లేదా ఫిల్టర్‌ను సర్దుబాటు చేయడానికి ప్రయత్నించండి',
+            clear_filter: 'ఫిల్టర్ క్లియర్ చేయండి',
         },
 
         // TODO: Translate
