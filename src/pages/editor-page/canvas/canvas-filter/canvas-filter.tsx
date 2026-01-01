@@ -66,6 +66,7 @@ export const CanvasFilter: React.FC<CanvasFilterProps> = ({ onClose }) => {
                     name: table.name,
                     schema: table.schema,
                     parentAreaId: table.parentAreaId,
+                    isView: table.isView,
                 })),
         [tables, showDBViews, checkIfNewTable]
     );
