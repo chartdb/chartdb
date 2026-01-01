@@ -4,7 +4,7 @@ export const fr: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Nouveau',
-            browse: 'Parcourir',
+            browse: 'Ouvrir',
             tables: 'Tables',
             refs: 'Refs',
             dependencies: 'Dépendances',
@@ -15,7 +15,7 @@ export const fr: LanguageTranslation = {
             actions: {
                 actions: 'Actions',
                 new: 'Nouveau...',
-                browse: 'Parcourir...',
+                browse: 'Toutes les bases de données...',
                 save: 'Enregistrer',
                 import: 'Importer Base de Données',
                 export_sql: 'Exporter SQL',
@@ -353,6 +353,7 @@ export const fr: LanguageTranslation = {
             },
             cancel: 'Annuler',
             open: 'Ouvrir',
+            new_database: 'Nouvelle Base de Données',
 
             diagram_actions: {
                 open: 'Ouvrir',

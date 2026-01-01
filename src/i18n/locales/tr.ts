@@ -4,7 +4,7 @@ export const tr: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Yeni',
-            browse: 'Gözat',
+            browse: 'Aç',
             tables: 'Tablolar',
             refs: 'Refs',
             dependencies: 'Bağımlılıklar',
@@ -15,7 +15,7 @@ export const tr: LanguageTranslation = {
             actions: {
                 actions: 'Eylemler',
                 new: 'Yeni...',
-                browse: 'Gözat...',
+                browse: 'Tüm veritabanları...',
                 save: 'Kaydet',
                 import: 'Veritabanı İçe Aktar',
                 export_sql: 'SQL Olarak Dışa Aktar',
@@ -352,6 +352,7 @@ export const tr: LanguageTranslation = {
             },
             cancel: 'İptal',
             open: 'Aç',
+            new_database: 'Yeni Veritabanı',
 
             diagram_actions: {
                 open: 'Aç',

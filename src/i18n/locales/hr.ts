@@ -4,7 +4,7 @@ export const hr: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Novi',
-            browse: 'Pregledaj',
+            browse: 'Otvori',
             tables: 'Tablice',
             refs: 'Refs',
             dependencies: 'Ovisnosti',
@@ -15,7 +15,7 @@ export const hr: LanguageTranslation = {
             actions: {
                 actions: 'Akcije',
                 new: 'Novi...',
-                browse: 'Pregledaj...',
+                browse: 'Sve baze podataka...',
                 save: 'Spremi',
                 import: 'Uvezi',
                 export_sql: 'Izvezi SQL',
@@ -349,6 +349,7 @@ export const hr: LanguageTranslation = {
             },
             cancel: 'Odustani',
             open: 'Otvori',
+            new_database: 'Nova baza podataka',
 
             diagram_actions: {
                 open: 'Otvori',

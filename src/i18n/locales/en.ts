@@ -4,7 +4,7 @@ export const en = {
     translation: {
         editor_sidebar: {
             new_diagram: 'New',
-            browse: 'Browse',
+            browse: 'Open',
             tables: 'Tables',
             refs: 'Refs',
             dependencies: 'Dependencies',
@@ -15,7 +15,7 @@ export const en = {
             actions: {
                 actions: 'Actions',
                 new: 'New...',
-                browse: 'Browse...',
+                browse: 'All Databases...',
                 save: 'Save',
                 import: 'Import',
                 export_sql: 'Export SQL',
@@ -345,6 +345,7 @@ export const en = {
             },
             cancel: 'Cancel',
             open: 'Open',
+            new_database: 'New Database',
 
             diagram_actions: {
                 open: 'Open',

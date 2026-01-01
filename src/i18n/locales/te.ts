@@ -4,7 +4,7 @@ export const te: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'కొత్తది',
-            browse: 'బ్రాఉజ్',
+            browse: 'తెరవు',
             tables: 'టేబల్లు',
             refs: 'సంబంధాలు',
             dependencies: 'ఆధారతలు',
@@ -15,7 +15,7 @@ export const te: LanguageTranslation = {
             actions: {
                 actions: 'చర్యలు',
                 new: 'కొత్తది...',
-                browse: 'బ్రాఉజ్ చేయండి...',
+                browse: 'అన్ని డేటాబేస్‌లు...',
                 save: 'సేవ్',
                 import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 export_sql: 'SQL ఎగుమతి',
@@ -357,6 +357,7 @@ export const te: LanguageTranslation = {
             },
             cancel: 'రద్దు',
             open: 'తెరవు',
+            new_database: 'కొత్త డేటాబేస్',
 
             diagram_actions: {
                 open: 'తెరవు',

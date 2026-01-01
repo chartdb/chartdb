@@ -4,7 +4,7 @@ export const ko_KR: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: '새로 만들기',
-            browse: '찾아보기',
+            browse: '열기',
             tables: '테이블',
             refs: 'Refs',
             dependencies: '종속성',
@@ -15,7 +15,7 @@ export const ko_KR: LanguageTranslation = {
             actions: {
                 actions: '작업',
                 new: '새로 만들기...',
-                browse: '찾아보기...',
+                browse: '모든 데이터베이스...',
                 save: '저장',
                 import: '데이터베이스 가져오기',
                 export_sql: 'SQL로 저장',
@@ -354,6 +354,7 @@ export const ko_KR: LanguageTranslation = {
             },
             cancel: '취소',
             open: '열기',
+            new_database: '새 데이터베이스',
 
             diagram_actions: {
                 open: '열기',

@@ -4,7 +4,7 @@ export const zh_CN: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: '新建',
-            browse: '浏览',
+            browse: '打开',
             tables: '表',
             refs: '引用',
             dependencies: '依赖关系',
@@ -15,7 +15,7 @@ export const zh_CN: LanguageTranslation = {
             actions: {
                 actions: '操作',
                 new: '新建...',
-                browse: '浏览...',
+                browse: '所有数据库...',
                 save: '保存',
                 import: '导入数据库',
                 export_sql: '导出 SQL 语句',
@@ -350,6 +350,7 @@ export const zh_CN: LanguageTranslation = {
             },
             cancel: '取消',
             open: '打开',
+            new_database: '新建数据库',
 
             diagram_actions: {
                 open: '打开',

@@ -4,7 +4,7 @@ export const gu: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'નવું',
-            browse: 'બ્રાઉજ',
+            browse: 'ખોલો',
             tables: 'ટેબલો',
             refs: 'રેફ્સ',
             dependencies: 'નિર્ભરતાઓ',
@@ -15,7 +15,7 @@ export const gu: LanguageTranslation = {
             actions: {
                 actions: 'ક્રિયાઓ',
                 new: 'નવું...',
-                browse: 'બ્રાઉજ કરો...',
+                browse: 'બધા ડેટાબેસ...',
                 save: 'સાચવો',
                 import: 'ડેટાબેસ આયાત કરો',
                 export_sql: 'SQL નિકાસ કરો',
@@ -355,6 +355,7 @@ export const gu: LanguageTranslation = {
             },
             cancel: 'રદ કરો',
             open: 'ખોલો',
+            new_database: 'નવું ડેટાબેસ',
 
             diagram_actions: {
                 open: 'ખોલો',

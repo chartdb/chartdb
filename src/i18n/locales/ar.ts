@@ -4,7 +4,7 @@ export const ar: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'جديد',
-            browse: 'تصفح',
+            browse: 'فتح',
             tables: 'الجداول',
             refs: 'المراجع',
             dependencies: 'التبعيات',
@@ -15,7 +15,7 @@ export const ar: LanguageTranslation = {
             actions: {
                 actions: 'الإجراءات',
                 new: 'جديد...',
-                browse: 'تصفح...',
+                browse: 'جميع قواعد البيانات...',
                 save: 'حفظ',
                 import: 'استيراد قاعدة بيانات',
                 export_sql: 'SQL تصدير',
@@ -351,6 +351,7 @@ export const ar: LanguageTranslation = {
             },
             cancel: 'إلغاء',
             open: 'فتح',
+            new_database: 'قاعدة بيانات جديدة',
 
             diagram_actions: {
                 open: 'فتح',

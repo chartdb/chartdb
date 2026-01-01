@@ -4,7 +4,7 @@ export const hi: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'नया',
-            browse: 'ब्राउज़',
+            browse: 'खोलें',
             tables: 'टेबल',
             refs: 'रेफ्स',
             dependencies: 'निर्भरताएं',
@@ -15,7 +15,7 @@ export const hi: LanguageTranslation = {
             actions: {
                 actions: 'कार्य',
                 new: 'नया...',
-                browse: 'ब्राउज़ करें...',
+                browse: 'सभी डेटाबेस...',
                 save: 'सहेजें',
                 import: 'डेटाबेस आयात करें',
                 export_sql: 'SQL निर्यात करें',
@@ -357,6 +357,7 @@ export const hi: LanguageTranslation = {
             },
             cancel: 'रद्द करें',
             open: 'खोलें',
+            new_database: 'नया डेटाबेस',
 
             diagram_actions: {
                 open: 'खोलें',

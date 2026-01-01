@@ -37,7 +37,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,
     canClose = true,
 }) => {
-    const { closeOpenDiagramDialog } = useDialog();
+    const { closeOpenDiagramDialog, openCreateDiagramDialog } = useDialog();
     const { t } = useTranslation();
     const { updateConfig } = useConfig();
     const navigate = useNavigate();
@@ -254,15 +254,29 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                     ) : (
                         <div />
                     )}
-                    <DialogClose asChild>
+                    <div className="flex gap-2">
                         <Button
-                            type="submit"
-                            disabled={!selectedDiagramId}
-                            onClick={() => openDiagram(selectedDiagramId ?? '')}
+                            type="button"
+                            variant="secondary"
+                            onClick={() => {
+                                closeOpenDiagramDialog();
+                                openCreateDiagramDialog();
+                            }}
                         >
-                            {t('open_diagram_dialog.open')}
+                            {t('open_diagram_dialog.new_database')}
                         </Button>
-                    </DialogClose>
+                        <DialogClose asChild>
+                            <Button
+                                type="submit"
+                                disabled={!selectedDiagramId}
+                                onClick={() =>
+                                    openDiagram(selectedDiagramId ?? '')
+                                }
+                            >
+                                {t('open_diagram_dialog.open')}
+                            </Button>
+                        </DialogClose>
+                    </div>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
