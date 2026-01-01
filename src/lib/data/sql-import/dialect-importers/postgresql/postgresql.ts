@@ -30,6 +30,7 @@ import {
 interface ParsedStatement {
     type:
         | 'table'
+        | 'view'
         | 'index'
         | 'alter'
         | 'function'
@@ -142,6 +143,13 @@ function preprocessSQL(sqlContent: string): PreprocessResult {
             } else {
                 statements.push({ type: 'alter', sql: trimmedStmt });
             }
+        } else if (
+            upperStmt.startsWith('CREATE VIEW') ||
+            upperStmt.startsWith('CREATE OR REPLACE VIEW') ||
+            upperStmt.includes('CREATE VIEW') ||
+            upperStmt.includes('CREATE OR REPLACE VIEW')
+        ) {
+            statements.push({ type: 'view', sql: trimmedStmt });
         } else if (
             upperStmt.startsWith('CREATE FUNCTION') ||
             upperStmt.startsWith('CREATE OR REPLACE FUNCTION')
@@ -569,6 +577,105 @@ function extractColumnsFromSQL(sql: string): SQLColumn[] {
 }
 
 /**
+ * Extract columns from a CREATE VIEW statement
+ * Views can have explicit column names or derive them from the SELECT
+ */
+function extractColumnsFromView(sql: string): SQLColumn[] {
+    const columns: SQLColumn[] = [];
+
+    // First, try to extract explicit column list from CREATE VIEW viewname (col1, col2, ...) AS
+    const explicitColumnsMatch = sql.match(
+        /CREATE\s+(?:OR\s+REPLACE\s+)?VIEW\s+(?:(?:"[^"]+"|[^"\s.]+)\.)?(?:"[^"]+"|[^"\s.(]+)\s*\(([^)]+)\)\s*AS/i
+    );
+
+    if (explicitColumnsMatch) {
+        // Parse explicit column list
+        const columnList = explicitColumnsMatch[1];
+        const columnNames = columnList
+            .split(',')
+            .map((col) => col.trim().replace(/^["']|["']$/g, ''));
+
+        for (const colName of columnNames) {
+            if (colName) {
+                columns.push({
+                    name: colName,
+                    type: 'text', // Default type for views since we don't know the actual type
+                    nullable: true,
+                    primaryKey: false,
+                    unique: false,
+                });
+            }
+        }
+
+        return columns;
+    }
+
+    // If no explicit columns, try to extract from SELECT clause
+    // Match: AS SELECT ... FROM (extracting the column references)
+    const selectMatch = sql.match(/\bAS\s+SELECT\s+([\s\S]+?)\s+FROM\s+/i);
+
+    if (selectMatch) {
+        const selectClause = selectMatch[1];
+
+        // Handle SELECT * - we can't determine columns
+        if (selectClause.trim() === '*') {
+            return columns;
+        }
+
+        // Split by comma, but be careful of nested functions/expressions
+        let depth = 0;
+        let currentCol = '';
+        const selectParts: string[] = [];
+
+        for (const char of selectClause) {
+            if (char === '(' || char === '[') depth++;
+            else if (char === ')' || char === ']') depth--;
+            else if (char === ',' && depth === 0) {
+                selectParts.push(currentCol.trim());
+                currentCol = '';
+                continue;
+            }
+            currentCol += char;
+        }
+        if (currentCol.trim()) {
+            selectParts.push(currentCol.trim());
+        }
+
+        for (const part of selectParts) {
+            // Extract column name - handle aliases (AS name), qualified names (table.col), and expressions
+            let columnName = '';
+
+            // Check for alias: ... AS "name" or ... AS name
+            const aliasMatch = part.match(/\s+AS\s+["']?(\w+)["']?\s*$/i);
+            if (aliasMatch) {
+                columnName = aliasMatch[1];
+            } else {
+                // Try to extract the column reference
+                // Handle: col, table.col, "col", table."col"
+                const colRefMatch = part.match(
+                    /(?:[\w"]+\.)?["']?(\w+)["']?\s*$/
+                );
+                if (colRefMatch) {
+                    columnName = colRefMatch[1];
+                }
+            }
+
+            if (columnName && columnName !== '*') {
+                columns.push({
+                    name: columnName,
+                    type: 'text', // Default type for views
+                    nullable: true,
+                    primaryKey: false,
+                    unique: false,
+                });
+            }
+        }
+    }
+
+    return columns;
+}
+
+/**
  * Extract enum type definition from CREATE TYPE statement
  */
 function extractEnumFromSQL(sql: string): SQLEnumType | null {
@@ -745,7 +852,7 @@ export async function fromPostgres(
     const { Parser } = await import('node-sql-parser');
     const parser = new Parser();
 
-    // First pass: collect all table names and custom types
+    // First pass: collect all table names, view names, and custom types
     for (const stmt of statements) {
         if (stmt.type === 'table') {
             // Extract just the CREATE TABLE part if there are comments
@@ -770,6 +877,24 @@ export async function fromPostgres(
                 const tableKey = `${schemaName}.${tableName}`;
                 tableMap[tableKey] = generateId();
             }
+        } else if (stmt.type === 'view') {
+            // Extract view name similar to table
+            const createViewIndex = stmt.sql.toUpperCase().indexOf('CREATE');
+            const sqlFromCreate =
+                createViewIndex >= 0
+                    ? stmt.sql.substring(createViewIndex)
+                    : stmt.sql;
+
+            // Matches: CREATE [OR REPLACE] VIEW [schema.]viewname
+            const viewMatch = sqlFromCreate.match(
+                /CREATE\s+(?:OR\s+REPLACE\s+)?VIEW\s+(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))/i
+            );
+            if (viewMatch) {
+                const schemaName = viewMatch[1] || viewMatch[2] || 'public';
+                const viewName = viewMatch[3] || viewMatch[4];
+                const viewKey = `${schemaName}.${viewName}`;
+                tableMap[viewKey] = generateId();
+            }
         } else if (stmt.type === 'type') {
             // Extract enum type definition
             const enumType = extractEnumFromSQL(stmt.sql);
@@ -783,6 +908,7 @@ export async function fromPostgres(
     for (const stmt of statements) {
         if (
             stmt.type === 'table' ||
+            stmt.type === 'view' ||
             stmt.type === 'index' ||
             stmt.type === 'alter'
         ) {
@@ -807,8 +933,8 @@ export async function fromPostgres(
                 );
 
                 // Mark the statement as having parse errors but keep it for fallback processing
-                if (stmt.type === 'table') {
-                    stmt.parsed = null; // Mark as failed but still a table
+                if (stmt.type === 'table' || stmt.type === 'view') {
+                    stmt.parsed = null; // Mark as failed but still a table/view
                 }
             }
         }
@@ -1137,6 +1263,47 @@ export async function fromPostgres(
                     warnings.push(
                         `Table ${tableName} was parsed with limited column information due to complex syntax`
                     );
+                }
+            }
+        }
+    }
+
+    // Third pass (continued): extract view definitions
+    for (const stmt of statements) {
+        if (stmt.type === 'view') {
+            // Extract view name
+            const createViewIndex = stmt.sql.toUpperCase().indexOf('CREATE');
+            const sqlFromCreate =
+                createViewIndex >= 0
+                    ? stmt.sql.substring(createViewIndex)
+                    : stmt.sql;
+
+            const viewMatch = sqlFromCreate.match(
+                /CREATE\s+(?:OR\s+REPLACE\s+)?VIEW\s+(?:(?:"([^"]+)"|([^"\s.]+))\.)?(?:"([^"]+)"|([^"\s.(]+))/i
+            );
+
+            if (viewMatch) {
+                const schemaName = viewMatch[1] || viewMatch[2] || 'public';
+                const viewName = viewMatch[3] || viewMatch[4];
+                const viewKey = `${schemaName}.${viewName}`;
+                const viewId = tableMap[viewKey];
+
+                if (viewId) {
+                    // Extract columns from the view definition
+                    const columns = extractColumnsFromView(stmt.sql);
+
+                    // Create view object (as a table with isView: true)
+                    const view: SQLTable = {
+                        id: viewId,
+                        name: viewName,
+                        schema: schemaName,
+                        columns,
+                        indexes: [], // Views don't have indexes
+                        order: tables.length,
+                        isView: true,
+                    };
+
+                    tables.push(view);
                 }
             }
         }
