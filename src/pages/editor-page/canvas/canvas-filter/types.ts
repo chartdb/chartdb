@@ -24,4 +24,5 @@ export type RelevantTableData = {
     name: string;
     schema?: string | null;
     parentAreaId?: string | null;
+    isView?: boolean;
 };

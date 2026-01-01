@@ -24,6 +24,7 @@ import {
     SquareDot,
     SquarePlus,
     SquareMinus,
+    View,
 } from 'lucide-react';
 import { Label } from '@/components/label/label';
 import {
@@ -344,6 +345,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             () =>
                 cn(
                     'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
+                    table.isView ? 'border-dashed' : '',
                     selected || isTarget || isPartOfCreatingRelationship
                         ? 'border-pink-600'
                         : 'border-slate-500 dark:border-slate-700',
@@ -390,6 +392,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 isTarget,
                 editTableMode,
                 isPartOfCreatingRelationship,
+                table.isView,
             ]
         );
 
@@ -537,6 +540,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                         Table Changed
                                     </TooltipContent>
                                 </Tooltip>
+                            ) : table.isView ? (
+                                <View className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                             ) : (
                                 <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                             )}
