@@ -423,10 +423,9 @@ export const ne: LanguageTranslation = {
         export_image_dialog: {
             title: 'इमेज निर्यात गर्नुहोस्',
             description: 'निर्यात गर्नका लागि गणना कारक छान्नुहोस्:',
-            scale_1x: '१x सामान्य',
-            scale_2x: '२x (सिफारिस गरिएको)',
-            scale_3x: '३x',
-            scale_4x: '४x',
+            scale_1x: '१x (कम गुणस्तर)',
+            scale_2x: '२x (सामान्य गुणस्तर)',
+            scale_4x: '४x (उत्तम गुणस्तर)',
             cancel: 'रद्द गर्नुहोस्',
             export: 'निर्यात गर्नुहोस्',
             // TODO: Translate

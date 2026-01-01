@@ -420,10 +420,9 @@ export const uk: LanguageTranslation = {
         export_image_dialog: {
             title: 'Експорт зображення',
             description: 'Виберіть коефіцієнт масштабування для експорту:',
-            scale_1x: '1x Звичайний',
-            scale_2x: '2x (Рекомендовано)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Низька якість)',
+            scale_2x: '2x (Звичайна якість)',
+            scale_4x: '4x (Найкраща якість)',
             cancel: 'Скасувати',
             export: 'Експортувати',
             // TODO: Translate

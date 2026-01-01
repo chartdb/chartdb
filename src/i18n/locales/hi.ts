@@ -423,10 +423,9 @@ export const hi: LanguageTranslation = {
         export_image_dialog: {
             title: 'छवि निर्यात करें',
             description: 'निर्यात के लिए स्केल फ़ैक्टर चुनें:',
-            scale_1x: '1x सामान्य',
-            scale_2x: '2x (अनुशंसित)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (निम्न गुणवत्ता)',
+            scale_2x: '2x (सामान्य गुणवत्ता)',
+            scale_4x: '4x (सर्वोत्तम गुणवत्ता)',
             cancel: 'रद्द करें',
             export: 'निर्यात करें',
             // TODO: Translate

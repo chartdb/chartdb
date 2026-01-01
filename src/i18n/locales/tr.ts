@@ -415,10 +415,9 @@ export const tr: LanguageTranslation = {
         export_image_dialog: {
             title: 'Resmi Dışa Aktar',
             description: 'Dışa aktarım için ölçek faktörünü seçin:',
-            scale_1x: '1x Normal',
-            scale_2x: '2x (Önerilen)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Düşük Kalite)',
+            scale_2x: '2x (Normal Kalite)',
+            scale_4x: '4x (En İyi Kalite)',
             cancel: 'İptal',
             export: 'Dışa Aktar',
             // TODO: Translate

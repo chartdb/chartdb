@@ -419,10 +419,9 @@ export const vi: LanguageTranslation = {
         export_image_dialog: {
             title: 'Xuất ảnh',
             description: 'Chọn tỉ lệ để xuất:',
-            scale_1x: '1x Thông thường',
-            scale_2x: '2x (Khuyến khích)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Chất lượng thấp)',
+            scale_2x: '2x (Chất lượng bình thường)',
+            scale_4x: '4x (Chất lượng tốt nhất)',
             cancel: 'Hủy',
             export: 'Xuất',
             // TODO: Translate

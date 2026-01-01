@@ -415,10 +415,9 @@ export const zh_CN: LanguageTranslation = {
         export_image_dialog: {
             title: '导出图片',
             description: '选择导出的缩放比例：',
-            scale_1x: '1x 常规',
-            scale_2x: '2x （推荐）',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (低质量)',
+            scale_2x: '2x (普通质量)',
+            scale_4x: '4x (最佳质量)',
             cancel: '取消',
             export: '导出',
             // TODO: Translate

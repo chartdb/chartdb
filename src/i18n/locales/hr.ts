@@ -415,10 +415,9 @@ export const hr: LanguageTranslation = {
         export_image_dialog: {
             title: 'Izvezi sliku',
             description: 'Odaberite faktor veličine za izvoz:',
-            scale_1x: '1x Obično',
-            scale_2x: '2x (Preporučeno)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Niska kvaliteta)',
+            scale_2x: '2x (Normalna kvaliteta)',
+            scale_4x: '4x (Najbolja kvaliteta)',
             cancel: 'Odustani',
             export: 'Izvezi',
             advanced_options: 'Napredne opcije',

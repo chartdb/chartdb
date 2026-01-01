@@ -424,10 +424,9 @@ export const de: LanguageTranslation = {
         export_image_dialog: {
             title: 'Bild exportieren',
             description: 'Wählen Sie den Skalierungsfaktor für den Export:',
-            scale_1x: '1x Normal',
-            scale_2x: '2x (Empfohlen)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Niedrige Qualität)',
+            scale_2x: '2x (Normale Qualität)',
+            scale_4x: '4x (Beste Qualität)',
             cancel: 'Abbrechen',
             export: 'Exportieren',
             // TODO: Translate

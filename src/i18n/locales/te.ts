@@ -423,10 +423,9 @@ export const te: LanguageTranslation = {
         export_image_dialog: {
             title: 'చిత్రం ఎగుమతి',
             description: 'ఎగుమతి కోసం స్కేల్ ఫ్యాక్టర్ ఎంచుకోండి:',
-            scale_1x: '1x సాధారణ',
-            scale_2x: '2x (సిఫార్సు చేయబడినది)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (తక్కువ నాణ్యత)',
+            scale_2x: '2x (సాధారణ నాణ్యత)',
+            scale_4x: '4x (అత్యుత్తమ నాణ్యత)',
             cancel: 'రద్దు',
             export: 'ఎగుమతి',
             // TODO: Translate

@@ -421,10 +421,9 @@ export const bn: LanguageTranslation = {
         export_image_dialog: {
             title: 'চিত্র রপ্তানি করুন',
             description: 'রপ্তানির জন্য স্কেল ফ্যাক্টর নির্বাচন করুন:',
-            scale_1x: '1x স্বাভাবিক',
-            scale_2x: '2x (প্রস্তাবিত)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (নিম্ন মান)',
+            scale_2x: '2x (সাধারণ মান)',
+            scale_4x: '4x (সেরা মান)',
             cancel: 'বাতিল করুন',
             export: 'রপ্তানি করুন',
             // TODO: Translate

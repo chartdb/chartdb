@@ -419,10 +419,9 @@ export const id_ID: LanguageTranslation = {
         export_image_dialog: {
             title: 'Ekspor Gambar',
             description: 'Pilih faktor skala untuk ekspor:',
-            scale_1x: '1x Biasa',
-            scale_2x: '2x (Disarankan)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (Kualitas Rendah)',
+            scale_2x: '2x (Kualitas Normal)',
+            scale_4x: '4x (Kualitas Terbaik)',
             cancel: 'Batal',
             export: 'Ekspor',
             // TODO: Translate

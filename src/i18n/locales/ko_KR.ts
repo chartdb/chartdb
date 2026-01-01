@@ -419,10 +419,9 @@ export const ko_KR: LanguageTranslation = {
         export_image_dialog: {
             title: '이미지로 내보내기',
             description: '내보낼 배율을 선택해주세요:',
-            scale_1x: '1x 기본',
-            scale_2x: '2x (권장)',
-            scale_3x: '3x',
-            scale_4x: '4x',
+            scale_1x: '1x (저화질)',
+            scale_2x: '2x (일반 화질)',
+            scale_4x: '4x (최고 화질)',
             cancel: '취소',
             export: '내보내기',
             // TODO: Translate
