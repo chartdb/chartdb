@@ -12,6 +12,7 @@ export interface TreeNode<
     icon?: LucideIcon;
     iconProps?: React.ComponentProps<LucideIcon>;
     labelProps?: React.ComponentProps<'span'>;
+    suffix?: string;
     type: Type;
     unselectable?: boolean;
     tooltip?: string;

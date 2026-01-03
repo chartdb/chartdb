@@ -354,13 +354,27 @@ function TreeNode<Type extends string, Context extends Record<Type, unknown>>({
                 <span
                     {...node.labelProps}
                     className={cn(
-                        'text-xs truncate min-w-0 flex-1 w-0',
+                        'text-xs truncate min-w-0 flex-1 w-0 flex items-center gap-1.5',
                         isSelected && 'font-medium text-primary text-white',
                         node.labelProps?.className
                     )}
                     {...(isSelected ? { 'data-selected': true } : {})}
                 >
-                    {node.empty ? '' : node.name}
+                    <span className="truncate">
+                        {node.empty ? '' : node.name}
+                    </span>
+                    {node.suffix && (
+                        <span
+                            className={cn(
+                                'flex-shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium leading-none',
+                                isSelected
+                                    ? 'bg-sky-400/50 text-white'
+                                    : 'bg-gray-200/50 text-muted-foreground dark:bg-gray-700/50'
+                            )}
+                        >
+                            {node.suffix}
+                        </span>
+                    )}
                 </span>
                 {renderActionsComponent && renderActionsComponent(node)}
                 {isHovered && renderHoverComponent
