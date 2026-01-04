@@ -207,71 +207,82 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     </AccordionContent>
                 </AccordionItem>
 
-                <AccordionItem value="indexes" className="mb-2 border-y-0">
-                    <AccordionTrigger
-                        iconPosition="right"
-                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
-                        asChild
-                    >
-                        <div className="flex flex-1 items-center justify-between">
-                            <div className="flex flex-row items-center gap-1">
-                                <FileKey2 className="size-4" />
-                                {t('side_panel.tables_section.table.indexes')}
-                            </div>
-                            {!readonly ? (
-                                <div className="flex flex-row-reverse">
-                                    <div className="hidden flex-row-reverse group-hover:flex">
-                                        <Button
-                                            variant="ghost"
-                                            className="size-4 p-0 text-xs hover:bg-primary-foreground"
-                                            onClick={createIndexHandler}
-                                        >
-                                            <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-                                        </Button>
+                {!table.isView ? (
+                    <AccordionItem value="indexes" className="mb-2 border-y-0">
+                        <AccordionTrigger
+                            iconPosition="right"
+                            className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
+                            asChild
+                        >
+                            <div className="flex flex-1 items-center justify-between">
+                                <div className="flex flex-row items-center gap-1">
+                                    <FileKey2 className="size-4" />
+                                    {t(
+                                        'side_panel.tables_section.table.indexes'
+                                    )}
+                                </div>
+                                {!readonly ? (
+                                    <div className="flex flex-row-reverse">
+                                        <div className="hidden flex-row-reverse group-hover:flex">
+                                            <Button
+                                                variant="ghost"
+                                                className="size-4 p-0 text-xs hover:bg-primary-foreground"
+                                                onClick={createIndexHandler}
+                                            >
+                                                <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                                            </Button>
+                                        </div>
                                     </div>
+                                ) : null}
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-0 pt-1">
+                            {[...table.indexes]
+                                .sort((a, b) => {
+                                    // Sort PK indexes first
+                                    if (a.isPrimaryKey && !b.isPrimaryKey)
+                                        return -1;
+                                    if (!a.isPrimaryKey && b.isPrimaryKey)
+                                        return 1;
+                                    return 0;
+                                })
+                                .map((index) => (
+                                    <TableIndex
+                                        key={index.id}
+                                        index={index}
+                                        removeIndex={() =>
+                                            removeIndex(table.id, index.id)
+                                        }
+                                        updateIndex={(
+                                            attrs: Partial<DBIndex>
+                                        ) =>
+                                            updateIndex(
+                                                table.id,
+                                                index.id,
+                                                attrs
+                                            )
+                                        }
+                                        fields={table.fields}
+                                    />
+                                ))}
+
+                            {!readonly ? (
+                                <div className="flex justify-start p-1">
+                                    <Button
+                                        variant="ghost"
+                                        className="flex h-7 items-center gap-1 px-2 text-xs"
+                                        onClick={createIndexHandler}
+                                    >
+                                        <Plus className="size-4 text-muted-foreground" />
+                                        {t(
+                                            'side_panel.tables_section.table.add_index'
+                                        )}
+                                    </Button>
                                 </div>
                             ) : null}
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pb-0 pt-1">
-                        {[...table.indexes]
-                            .sort((a, b) => {
-                                // Sort PK indexes first
-                                if (a.isPrimaryKey && !b.isPrimaryKey)
-                                    return -1;
-                                if (!a.isPrimaryKey && b.isPrimaryKey) return 1;
-                                return 0;
-                            })
-                            .map((index) => (
-                                <TableIndex
-                                    key={index.id}
-                                    index={index}
-                                    removeIndex={() =>
-                                        removeIndex(table.id, index.id)
-                                    }
-                                    updateIndex={(attrs: Partial<DBIndex>) =>
-                                        updateIndex(table.id, index.id, attrs)
-                                    }
-                                    fields={table.fields}
-                                />
-                            ))}
-
-                        {!readonly ? (
-                            <div className="flex justify-start p-1">
-                                <Button
-                                    variant="ghost"
-                                    className="flex h-7 items-center gap-1 px-2 text-xs"
-                                    onClick={createIndexHandler}
-                                >
-                                    <Plus className="size-4 text-muted-foreground" />
-                                    {t(
-                                        'side_panel.tables_section.table.add_index'
-                                    )}
-                                </Button>
-                            </div>
-                        ) : null}
-                    </AccordionContent>
-                </AccordionItem>
+                        </AccordionContent>
+                    </AccordionItem>
+                ) : null}
 
                 <AccordionItem value="comments" className="border-y-0">
                     <AccordionTrigger
@@ -317,14 +328,16 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
 
                 {!readonly ? (
                     <div className="flex gap-1">
-                        <Button
-                            variant="outline"
-                            className="h-8 p-2 text-xs"
-                            onClick={createIndexHandler}
-                        >
-                            <FileKey2 className="h-4" />
-                            {t('side_panel.tables_section.table.add_index')}
-                        </Button>
+                        {!table.isView ? (
+                            <Button
+                                variant="outline"
+                                className="h-8 p-2 text-xs"
+                                onClick={createIndexHandler}
+                            >
+                                <FileKey2 className="h-4" />
+                                {t('side_panel.tables_section.table.add_index')}
+                            </Button>
+                        ) : null}
                         <Button
                             variant="outline"
                             className="h-8 p-2 text-xs"

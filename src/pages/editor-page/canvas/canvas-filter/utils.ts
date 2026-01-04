@@ -9,7 +9,7 @@ import type {
     TableContext,
 } from './types';
 import type { TreeNode } from '@/components/tree-view/tree';
-import { Box, Database, Layers, Table } from 'lucide-react';
+import { Box, Database, Layers, Table, View } from 'lucide-react';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 
@@ -42,7 +42,7 @@ const createTableChildren = (
         name: table.name,
         type: 'table' as const,
         isFolder: false,
-        icon: Table,
+        icon: table.isView ? View : Table,
         context: {
             tableSchema: table.schema,
             visible: table.visible,

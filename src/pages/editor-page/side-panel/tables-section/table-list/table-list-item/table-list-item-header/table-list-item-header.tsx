@@ -184,18 +184,20 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             )}
                             <FileType2 className="size-3.5" />
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                            className="flex justify-between gap-4"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                createIndex(table.id);
-                            }}
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.add_index'
-                            )}
-                            <FileKey2 className="size-3.5" />
-                        </DropdownMenuItem>
+                        {!table.isView ? (
+                            <DropdownMenuItem
+                                className="flex justify-between gap-4"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    createIndex(table.id);
+                                }}
+                            >
+                                {t(
+                                    'side_panel.tables_section.table.table_actions.add_index'
+                                )}
+                                <FileKey2 className="size-3.5" />
+                            </DropdownMenuItem>
+                        ) : null}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
@@ -226,6 +228,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         ),
         [
             table.id,
+            table.isView,
             createField,
             createIndex,
             deleteTableHandler,
@@ -299,10 +302,15 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     </div>
                 )}
             </div>
-            <div className="flex flex-row-reverse">
+            <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>
                         {!readonly ? <div>{renderDropDownMenu()}</div> : null}
+                        {table.isView ? (
+                            <span className="rounded bg-muted px-1.5 py-0 text-[10px] font-medium text-muted-foreground">
+                                View
+                            </span>
+                        ) : null}
                         <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
                             {!readonly ? (
                                 <ListItemHeaderButton onClick={enterEditMode}>
