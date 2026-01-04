@@ -192,6 +192,21 @@ export function exportMSSQL({
                               .map((f) => `[${f.name}]`)
                               .join(', ')})`
                         : ''
+                }${
+                    // Add check constraints (filter out empty expressions)
+                    (() => {
+                        const validChecks = (
+                            table.checkConstraints ?? []
+                        ).filter((c) => c.expression && c.expression.trim());
+                        return validChecks.length > 0
+                            ? validChecks
+                                  .map(
+                                      (constraint) =>
+                                          `,\n    CHECK (${constraint.expression})`
+                                  )
+                                  .join('')
+                            : '';
+                    })()
                 }\n);\n${(() => {
                     const validIndexes = table.indexes
                         .map((index) => {

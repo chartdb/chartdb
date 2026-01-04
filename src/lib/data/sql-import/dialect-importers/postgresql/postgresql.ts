@@ -6,6 +6,7 @@ import type {
     SQLIndex,
     SQLForeignKey,
     SQLEnumType,
+    SQLCheckConstraint,
 } from '../../common';
 import { buildSQLFromAST } from '../../common';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -834,6 +835,50 @@ function extractForeignKeysFromCreateTable(
 }
 
 /**
+ * Extract CHECK constraints from CREATE TABLE statements
+ * Handles both inline column-level and table-level CHECK constraints
+ */
+function extractCheckConstraintsFromCreateTable(
+    sql: string
+): SQLCheckConstraint[] {
+    const constraints: SQLCheckConstraint[] = [];
+
+    // Extract the table body
+    const tableBodyMatch = sql.match(/\(([\s\S]+)\)/);
+    if (!tableBodyMatch) return constraints;
+
+    const tableBody = tableBodyMatch[1];
+
+    // Pattern for table-level CHECK constraints:
+    // CHECK (expression) or CONSTRAINT name CHECK (expression)
+    // We need to handle nested parentheses in the expression
+    const checkPattern = /(?:CONSTRAINT\s+(?:"[^"]+"|[^\s]+)\s+)?CHECK\s*\(/gi;
+    let match;
+
+    while ((match = checkPattern.exec(tableBody)) !== null) {
+        const startIdx = match.index + match[0].length;
+        let depth = 1;
+        let endIdx = startIdx;
+
+        // Find the matching closing parenthesis
+        for (let i = startIdx; i < tableBody.length && depth > 0; i++) {
+            if (tableBody[i] === '(') depth++;
+            else if (tableBody[i] === ')') depth--;
+            endIdx = i;
+        }
+
+        if (depth === 0) {
+            const expression = tableBody.substring(startIdx, endIdx).trim();
+            if (expression) {
+                constraints.push({ expression });
+            }
+        }
+    }
+
+    return constraints;
+}
+
+/**
  * Parse PostgreSQL SQL with improved error handling and statement filtering
  */
 export async function fromPostgres(
@@ -1197,6 +1242,11 @@ export async function fromPostgres(
             );
             relationships.push(...tableFKs);
 
+            // Extract check constraints from the original SQL
+            const checkConstraints = extractCheckConstraintsFromCreateTable(
+                stmt.sql
+            );
+
             // Create table object
             const table: SQLTable = {
                 id: tableId,
@@ -1204,6 +1254,8 @@ export async function fromPostgres(
                 schema: schemaName,
                 columns,
                 indexes,
+                checkConstraints:
+                    checkConstraints.length > 0 ? checkConstraints : undefined,
                 order: tables.length,
             };
 
@@ -1249,6 +1301,10 @@ export async function fromPostgres(
                     );
                     relationships.push(...fks);
 
+                    // Extract check constraints
+                    const checkConstraints =
+                        extractCheckConstraintsFromCreateTable(stmt.sql);
+
                     // Create table object
                     const table: SQLTable = {
                         id: tableId,
@@ -1256,6 +1312,10 @@ export async function fromPostgres(
                         schema: schemaName,
                         columns,
                         indexes: [],
+                        checkConstraints:
+                            checkConstraints.length > 0
+                                ? checkConstraints
+                                : undefined,
                         order: tables.length,
                     };
 

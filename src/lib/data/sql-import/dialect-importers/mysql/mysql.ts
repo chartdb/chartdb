@@ -5,8 +5,51 @@ import type {
     SQLColumn,
     SQLIndex,
     SQLForeignKey,
+    SQLCheckConstraint,
 } from '../../common';
 import { buildSQLFromAST } from '../../common';
+
+/**
+ * Extract CHECK constraints from CREATE TABLE statements
+ */
+function extractCheckConstraintsFromCreateTable(
+    sql: string
+): SQLCheckConstraint[] {
+    const constraints: SQLCheckConstraint[] = [];
+
+    // Extract the table body
+    const tableBodyMatch = sql.match(/\(([\s\S]+)\)/);
+    if (!tableBodyMatch) return constraints;
+
+    const tableBody = tableBodyMatch[1];
+
+    // Pattern for CHECK constraints:
+    // CHECK (expression) or CONSTRAINT name CHECK (expression)
+    const checkPattern = /(?:CONSTRAINT\s+(?:`[^`]+`|[^\s]+)\s+)?CHECK\s*\(/gi;
+    let match;
+
+    while ((match = checkPattern.exec(tableBody)) !== null) {
+        const startIdx = match.index + match[0].length;
+        let depth = 1;
+        let endIdx = startIdx;
+
+        // Find the matching closing parenthesis
+        for (let i = startIdx; i < tableBody.length && depth > 0; i++) {
+            if (tableBody[i] === '(') depth++;
+            else if (tableBody[i] === ')') depth--;
+            endIdx = i;
+        }
+
+        if (depth === 0) {
+            const expression = tableBody.substring(startIdx, endIdx).trim();
+            if (expression) {
+                constraints.push({ expression });
+            }
+        }
+    }
+
+    return constraints;
+}
 import type {
     ColumnDefinition,
     ConstraintDefinition,
@@ -828,6 +871,12 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                 }
                             }
 
+                            // Extract check constraints
+                            const checkConstraints =
+                                extractCheckConstraintsFromCreateTable(
+                                    trimmedStmt
+                                );
+
                             // Create and store the table
                             tables.push({
                                 id: tableId,
@@ -835,6 +884,10 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                 schema: database || undefined,
                                 columns,
                                 indexes,
+                                checkConstraints:
+                                    checkConstraints.length > 0
+                                        ? checkConstraints
+                                        : undefined,
                                 order: tables.length,
                             });
                         }
@@ -857,12 +910,20 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         const extractedColumns =
                             extractColumnsFromCreateTable(trimmedStmt);
                         if (extractedColumns.length > 0) {
+                            const checkConstraints =
+                                extractCheckConstraintsFromCreateTable(
+                                    trimmedStmt
+                                );
                             tables.push({
                                 id: tableId,
                                 name: tableName,
                                 schema: undefined,
                                 columns: extractedColumns,
                                 indexes: [],
+                                checkConstraints:
+                                    checkConstraints.length > 0
+                                        ? checkConstraints
+                                        : undefined,
                                 order: tables.length,
                             });
                         }

@@ -2,6 +2,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { ChartDBContext } from '../chartdb-context/chartdb-context';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
+import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
@@ -88,6 +89,32 @@ type RedoUndoActionUpdateIndex = RedoUndoActionBase<
     'updateIndex',
     { tableId: string; indexId: string; index: Partial<DBIndex> },
     { tableId: string; indexId: string; index: Partial<DBIndex> }
+>;
+
+type RedoUndoActionAddCheckConstraint = RedoUndoActionBase<
+    'addCheckConstraint',
+    { tableId: string; constraint: DBCheckConstraint },
+    { tableId: string; constraintId: string }
+>;
+
+type RedoUndoActionRemoveCheckConstraint = RedoUndoActionBase<
+    'removeCheckConstraint',
+    { tableId: string; constraintId: string },
+    { tableId: string; constraint: DBCheckConstraint }
+>;
+
+type RedoUndoActionUpdateCheckConstraint = RedoUndoActionBase<
+    'updateCheckConstraint',
+    {
+        tableId: string;
+        constraintId: string;
+        constraint: Partial<DBCheckConstraint>;
+    },
+    {
+        tableId: string;
+        constraintId: string;
+        constraint: Partial<DBCheckConstraint>;
+    }
 >;
 
 type RedoUndoActionAddRelationships = RedoUndoActionBase<
@@ -192,6 +219,9 @@ export type RedoUndoAction =
     | RedoUndoActionAddIndex
     | RedoUndoActionRemoveIndex
     | RedoUndoActionUpdateIndex
+    | RedoUndoActionAddCheckConstraint
+    | RedoUndoActionRemoveCheckConstraint
+    | RedoUndoActionUpdateCheckConstraint
     | RedoUndoActionAddRelationships
     | RedoUndoActionUpdateRelationship
     | RedoUndoActionRemoveRelationships

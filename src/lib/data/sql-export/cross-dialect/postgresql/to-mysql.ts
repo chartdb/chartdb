@@ -394,6 +394,21 @@ export function exportPostgreSQLToMySQL({
                               .map((f) => `\`${f.name}\``)
                               .join(', ')})`
                         : ''
+                }${
+                    // Add CHECK constraints (filter out empty expressions)
+                    (() => {
+                        const validChecks = (
+                            table.checkConstraints ?? []
+                        ).filter((c) => c.expression && c.expression.trim());
+                        return validChecks.length > 0
+                            ? validChecks
+                                  .map(
+                                      (constraint) =>
+                                          `,\n    CHECK (${constraint.expression})`
+                                  )
+                                  .join('')
+                            : '';
+                    })()
                 }\n)${
                     // MySQL supports table comments
                     table.comments

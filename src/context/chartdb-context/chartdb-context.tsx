@@ -4,6 +4,7 @@ import { emptyFn } from '@/lib/utils';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
+import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -171,6 +172,25 @@ export interface ChartDBContext {
         tableId: string,
         indexId: string,
         index: Partial<DBIndex>,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+
+    // Check constraint operations
+    createCheckConstraint: (tableId: string) => Promise<DBCheckConstraint>;
+    addCheckConstraint: (
+        tableId: string,
+        constraint: DBCheckConstraint,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeCheckConstraint: (
+        tableId: string,
+        constraintId: string,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    updateCheckConstraint: (
+        tableId: string,
+        constraintId: string,
+        constraint: Partial<DBCheckConstraint>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
 
@@ -368,6 +388,12 @@ export const chartDBContext = createContext<ChartDBContext>({
     getIndex: emptyFn,
     removeIndex: emptyFn,
     updateIndex: emptyFn,
+
+    // Check constraint operations
+    createCheckConstraint: emptyFn,
+    addCheckConstraint: emptyFn,
+    removeCheckConstraint: emptyFn,
+    updateCheckConstraint: emptyFn,
 
     // Relationship operations
     createRelationship: emptyFn,

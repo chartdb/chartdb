@@ -3,6 +3,7 @@ export * from './config';
 export * from './database-clients';
 export * from './database-edition';
 export * from './database-type';
+export * from './db-check-constraint';
 export * from './db-custom-type';
 export * from './db-dependency';
 export * from './db-field';
