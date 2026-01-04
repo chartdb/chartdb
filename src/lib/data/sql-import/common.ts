@@ -9,7 +9,7 @@ import {
     type DataType,
 } from '@/lib/data/data-types/data-types';
 import { genericDataTypes } from '@/lib/data/data-types/generic-data-types';
-import { defaultTableColor } from '@/lib/colors';
+import { defaultTableColor, viewColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
@@ -43,6 +43,7 @@ export interface SQLTable {
     indexes: SQLIndex[];
     comment?: string;
     order: number;
+    isView?: boolean;
 }
 
 export interface SQLIndex {
@@ -911,8 +912,8 @@ export function convertToChartDBDiagram(
             indexes,
             x: col * tableSpacing,
             y: row * tableSpacing,
-            color: defaultTableColor,
-            isView: false,
+            color: table.isView ? viewColor : defaultTableColor,
+            isView: table.isView ?? false,
             createdAt: Date.now(),
         } satisfies DBTable;
     });

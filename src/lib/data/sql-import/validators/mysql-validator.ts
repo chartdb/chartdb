@@ -40,6 +40,7 @@ export function validateMySQLDialect(sql: string): ValidationResult {
     // Check for common MySQL syntax patterns
     const lines = sql.split('\n');
     let tableCount = 0;
+    let viewCount = 0;
 
     lines.forEach((line, index) => {
         const trimmedLine = line.trim();
@@ -47,6 +48,11 @@ export function validateMySQLDialect(sql: string): ValidationResult {
         // Count CREATE TABLE statements
         if (trimmedLine.match(/^\s*CREATE\s+TABLE/i)) {
             tableCount++;
+        }
+
+        // Count CREATE VIEW statements
+        if (trimmedLine.match(/^\s*CREATE\s+(OR\s+REPLACE\s+)?VIEW/i)) {
+            viewCount++;
         }
 
         // Check for PostgreSQL-specific syntax that won't work in MySQL
@@ -65,10 +71,26 @@ export function validateMySQLDialect(sql: string): ValidationResult {
         }
     });
 
+    // Add import summary message
+    if (tableCount > 0 || viewCount > 0) {
+        const parts: string[] = [];
+        if (tableCount > 0) {
+            parts.push(`${tableCount} table${tableCount !== 1 ? 's' : ''}`);
+        }
+        if (viewCount > 0) {
+            parts.push(`${viewCount} view${viewCount !== 1 ? 's' : ''}`);
+        }
+        warnings.unshift({
+            message: `Found ${parts.join(' and ')} to import.`,
+            type: 'compatibility',
+        });
+    }
+
     return {
         isValid: errors.length === 0,
         errors,
         warnings,
         tableCount,
+        viewCount,
     };
 }
