@@ -329,10 +329,16 @@ export function exportPostgreSQLToMySQL({
                     (f) => f.primaryKey
                 );
 
-                return `${
-                    table.comments ? formatTableComment(table.comments) : ''
-                }\nCREATE TABLE IF NOT EXISTS ${tableName} (\n${table.fields
-                    .map((field: DBField) => {
+                // Check if we have following constraints (for comma placement)
+                const validCheckConstraints = (
+                    table.checkConstraints ?? []
+                ).filter((c) => c.expression && c.expression.trim());
+                const hasFollowingConstraints =
+                    primaryKeyFields.length > 0 ||
+                    validCheckConstraints.length > 0;
+
+                const fieldDefinitions = table.fields.map(
+                    (field: DBField, index: number, allFields: DBField[]) => {
                         const fieldName = `\`${field.name}\``;
 
                         // Map type to MySQL
@@ -377,12 +383,21 @@ export function exportPostgreSQLToMySQL({
                             ? ` -- ${fullInlineComment}`
                             : '';
 
-                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeName}${notNull}${autoIncrement}${unique}${defaultValue}${comment}${sqlInlineComment}`;
-                    })
-                    .join(',\n')}${
+                        // Determine if this field needs a trailing comma
+                        const isLastField = index === allFields.length - 1;
+                        const needsComma =
+                            !isLastField || hasFollowingConstraints;
+
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeName}${notNull}${autoIncrement}${unique}${defaultValue}${comment}${needsComma ? ',' : ''}${sqlInlineComment}`;
+                    }
+                );
+
+                return `${
+                    table.comments ? formatTableComment(table.comments) : ''
+                }\nCREATE TABLE IF NOT EXISTS ${tableName} (\n${fieldDefinitions.join('\n')}${
                     // Add PRIMARY KEY as table constraint
                     primaryKeyFields.length > 0
-                        ? `,\n    ${(() => {
+                        ? `\n    ${(() => {
                               // Find PK index to get the constraint name
                               const pkIndex = table.indexes.find(
                                   (idx) => idx.isPrimaryKey
@@ -392,23 +407,20 @@ export function exportPostgreSQLToMySQL({
                                   : '';
                           })()}PRIMARY KEY (${primaryKeyFields
                               .map((f) => `\`${f.name}\``)
-                              .join(', ')})`
+                              .join(
+                                  ', '
+                              )})${validCheckConstraints.length > 0 ? ',' : ''}`
                         : ''
                 }${
-                    // Add CHECK constraints (filter out empty expressions)
-                    (() => {
-                        const validChecks = (
-                            table.checkConstraints ?? []
-                        ).filter((c) => c.expression && c.expression.trim());
-                        return validChecks.length > 0
-                            ? validChecks
-                                  .map(
-                                      (constraint) =>
-                                          `,\n    CHECK (${constraint.expression})`
-                                  )
-                                  .join('')
-                            : '';
-                    })()
+                    // Add CHECK constraints (already computed above as validCheckConstraints)
+                    validCheckConstraints.length > 0
+                        ? validCheckConstraints
+                              .map(
+                                  (constraint, index) =>
+                                      `${index > 0 ? ',' : ''}\n    CHECK (${constraint.expression})`
+                              )
+                              .join('')
+                        : ''
                 }\n)${
                     // MySQL supports table comments
                     table.comments

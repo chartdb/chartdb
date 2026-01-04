@@ -132,9 +132,15 @@ export function exportMSSQL({
                                 typeName.toLowerCase() === 'varchar' ||
                                 typeName.toLowerCase() === 'nvarchar' ||
                                 typeName.toLowerCase() === 'char' ||
-                                typeName.toLowerCase() === 'nchar'
+                                typeName.toLowerCase() === 'nchar' ||
+                                typeName.toLowerCase() === 'varbinary'
                             ) {
-                                typeWithSize = `${typeName}(${field.characterMaximumLength})`;
+                                // SQL Server uses -1 to represent MAX length
+                                const lengthSpec =
+                                    field.characterMaximumLength === '-1'
+                                        ? 'MAX'
+                                        : field.characterMaximumLength;
+                                typeWithSize = `${typeName}(${lengthSpec})`;
                             }
                         }
                         if (field.precision && field.scale) {
@@ -235,12 +241,12 @@ export function exportMSSQL({
                                 );
                                 indexFields.length = 32;
                                 return indexFields.length > 0
-                                    ? `${warningComment}CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFields.join(', ')});`
+                                    ? `${warningComment}CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFields.join(', ')});`
                                     : '';
                             }
 
                             return indexFields.length > 0
-                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName}\nON ${tableName} (${indexFields.join(', ')});`
+                                ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName} (${indexFields.join(', ')});`
                                 : '';
                         })
                         .filter(Boolean)
