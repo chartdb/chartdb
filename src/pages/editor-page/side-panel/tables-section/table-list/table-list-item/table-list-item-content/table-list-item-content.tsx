@@ -337,27 +337,31 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-0 pt-1">
-                        {(table.checkConstraints ?? []).map((constraint) => (
-                            <TableCheckConstraint
-                                key={constraint.id}
-                                constraint={constraint}
-                                removeConstraint={() =>
-                                    removeCheckConstraint(
-                                        table.id,
-                                        constraint.id
-                                    )
-                                }
-                                updateConstraint={(
-                                    attrs: Partial<DBCheckConstraint>
-                                ) =>
-                                    updateCheckConstraint(
-                                        table.id,
-                                        constraint.id,
-                                        attrs
-                                    )
-                                }
-                            />
-                        ))}
+                        <div className="flex flex-col gap-1">
+                            {(table.checkConstraints ?? []).map(
+                                (constraint) => (
+                                    <TableCheckConstraint
+                                        key={constraint.id}
+                                        constraint={constraint}
+                                        removeConstraint={() =>
+                                            removeCheckConstraint(
+                                                table.id,
+                                                constraint.id
+                                            )
+                                        }
+                                        updateConstraint={(
+                                            attrs: Partial<DBCheckConstraint>
+                                        ) =>
+                                            updateCheckConstraint(
+                                                table.id,
+                                                constraint.id,
+                                                attrs
+                                            )
+                                        }
+                                    />
+                                )
+                            )}
+                        </div>
 
                         {!readonly ? (
                             <div className="flex justify-start p-1">

@@ -20,7 +20,12 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
-import { validateArrayTypesForDatabase } from './dbml-import-error';
+import {
+    validateArrayTypesForDatabase,
+    DBMLValidationError,
+    getPositionFromIndex,
+} from './dbml-import-error';
+import { validateCheckConstraintWithDetails } from '@/lib/check-constraints/check-constraints-validator';
 
 export const defaultDBMLDiagramName = 'DBML Import';
 
@@ -117,6 +122,26 @@ export const preprocessDBML = (content: string): PreprocessDBMLResult => {
             const fieldName = checkMatch[1];
             const expression = checkMatch[2];
 
+            // Validate the check constraint expression
+            const validationResult =
+                validateCheckConstraintWithDetails(expression);
+            if (!validationResult.isValid) {
+                // Calculate position in original content
+                const expressionStartInTableBody =
+                    checkMatch.index + checkMatch[0].indexOf(expression);
+                const expressionStartInContent =
+                    openBraceIndex + 1 + expressionStartInTableBody;
+                const { line, column } = getPositionFromIndex(
+                    content,
+                    expressionStartInContent
+                );
+                throw new DBMLValidationError(
+                    `Invalid check constraint expression "${expression}" on field "${fieldName}": ${validationResult.error}`,
+                    line,
+                    column
+                );
+            }
+
             if (!fieldChecks.has(fullTableName)) {
                 fieldChecks.set(fullTableName, new Map());
             }
@@ -129,6 +154,8 @@ export const preprocessDBML = (content: string): PreprocessDBMLResult => {
 
         if (checksBlockMatch) {
             const checksContent = checksBlockMatch[1];
+            const checksBlockStartInTableBody = checksBlockMatch.index;
+
             // Parse individual check constraints within the block
             // Pattern: `expression` or `expression` [name: 'name']
             const checkItemPattern =
@@ -139,8 +166,37 @@ export const preprocessDBML = (content: string): PreprocessDBMLResult => {
             while (
                 (checkItemMatch = checkItemPattern.exec(checksContent)) !== null
             ) {
+                const expression = checkItemMatch[1];
+
+                // Validate the check constraint expression
+                const validationResult =
+                    validateCheckConstraintWithDetails(expression);
+                if (!validationResult.isValid) {
+                    // Calculate position in original content
+                    // checksContent starts after "checks {"
+                    const checksBlockHeaderLength =
+                        checksBlockMatch[0].indexOf(checksContent);
+                    const expressionStartInChecksContent =
+                        checkItemMatch.index + 1; // +1 to skip the opening backtick
+                    const expressionStartInContent =
+                        openBraceIndex +
+                        1 +
+                        checksBlockStartInTableBody +
+                        checksBlockHeaderLength +
+                        expressionStartInChecksContent;
+                    const { line, column } = getPositionFromIndex(
+                        content,
+                        expressionStartInContent
+                    );
+                    throw new DBMLValidationError(
+                        `Invalid check constraint expression "${expression}": ${validationResult.error}`,
+                        line,
+                        column
+                    );
+                }
+
                 constraints.push({
-                    expression: checkItemMatch[1],
+                    expression,
                     name: checkItemMatch[2] || undefined,
                 });
             }

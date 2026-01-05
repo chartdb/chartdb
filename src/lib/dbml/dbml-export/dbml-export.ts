@@ -5,6 +5,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
+import { validateCheckConstraint } from '@/lib/check-constraints/check-constraints-validator';
 
 // Use DBCustomType for generating Enum DBML
 const generateEnumsDBML = (customTypes: DBCustomType[] | undefined): string => {
@@ -664,9 +665,12 @@ const restoreCheckConstraints = (dbml: string, tables: DBTable[]): string => {
     let result = dbml;
 
     tables.forEach((table) => {
-        // Filter out empty expressions
+        // Filter out empty and invalid expressions
         const validChecks = (table.checkConstraints ?? []).filter(
-            (c) => c.expression && c.expression.trim()
+            (c) =>
+                c.expression &&
+                c.expression.trim() &&
+                validateCheckConstraint(c.expression)
         );
 
         if (validChecks.length === 0) {
@@ -1050,7 +1054,7 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
     // Sanitize field names ('from'/'to' in 'relation' table)
     const cleanDiagram = fixProblematicFieldNames(filteredDiagram);
 
-    // Simplified processing - just handle duplicate field names
+    // Simplified processing - handle duplicate field names and filter invalid check constraints
     const processTable = (table: DBTable) => {
         const fieldNameCounts = new Map<string, number>();
         const processedFields = table.fields.map((field) => {
@@ -1067,6 +1071,14 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             return field;
         });
 
+        // Filter out empty and invalid check constraint expressions
+        const validCheckConstraints = (table.checkConstraints ?? []).filter(
+            (c) =>
+                c.expression &&
+                c.expression.trim() &&
+                validateCheckConstraint(c.expression)
+        );
+
         return {
             ...table,
             fields: processedFields,
@@ -1078,6 +1090,10 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
                         index.name ||
                         `idx_${Math.random().toString(36).substring(2, 8)}`,
                 })),
+            checkConstraints:
+                validCheckConstraints.length > 0
+                    ? validCheckConstraints
+                    : undefined,
         };
     };
 
