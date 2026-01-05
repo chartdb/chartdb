@@ -199,6 +199,7 @@ export const zh_CN: LanguageTranslation = {
                     delete_relationship: '删除',
                     relationship_actions: {
                         title: '操作',
+                        switch_tables: '交换表',
                         delete_relationship: '删除',
                     },
                 },

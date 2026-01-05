@@ -199,6 +199,7 @@ export const ru: LanguageTranslation = {
                     delete_relationship: 'Удалить',
                     relationship_actions: {
                         title: 'Действия',
+                        switch_tables: 'Поменять таблицы',
                         delete_relationship: 'Удалить',
                     },
                 },

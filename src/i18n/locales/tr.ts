@@ -203,6 +203,7 @@ export const tr: LanguageTranslation = {
                     delete_relationship: 'Sil',
                     relationship_actions: {
                         title: 'İşlemler',
+                        switch_tables: 'Tabloları Değiştir',
                         delete_relationship: 'Sil',
                     },
                 },

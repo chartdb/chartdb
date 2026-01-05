@@ -202,6 +202,7 @@ export const es: LanguageTranslation = {
                     delete_relationship: 'Eliminar',
                     relationship_actions: {
                         title: 'Acciones',
+                        switch_tables: 'Intercambiar Tablas',
                         delete_relationship: 'Eliminar',
                     },
                 },

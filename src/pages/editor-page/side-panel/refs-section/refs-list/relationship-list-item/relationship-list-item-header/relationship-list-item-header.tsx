@@ -5,6 +5,7 @@ import {
     CircleDotDashed,
     Trash2,
     Check,
+    ArrowLeftRight,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '../../../../list-item-header-button/list-item-header-button';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
@@ -92,6 +93,25 @@ export const RelationshipListItemHeader: React.FC<
         });
     }, [relationship.id, removeRelationship, deleteElements]);
 
+    const switchTablesHandler = useCallback(
+        (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            e.stopPropagation();
+            updateRelationship(
+                relationship.id,
+                {
+                    sourceTableId: relationship.targetTableId,
+                    targetTableId: relationship.sourceTableId,
+                    sourceFieldId: relationship.targetFieldId,
+                    targetFieldId: relationship.sourceFieldId,
+                    sourceCardinality: relationship.targetCardinality,
+                    targetCardinality: relationship.sourceCardinality,
+                },
+                { updateHistory: true }
+            );
+        },
+        [relationship, updateRelationship]
+    );
+
     const renderDropDownMenu = useCallback(
         () => (
             <DropdownMenu>
@@ -109,6 +129,18 @@ export const RelationshipListItemHeader: React.FC<
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
+                            onClick={switchTablesHandler}
+                            className="flex justify-between"
+                        >
+                            {t(
+                                'side_panel.refs_section.relationship.relationship_actions.switch_tables'
+                            )}
+                            <ArrowLeftRight className="size-3.5" />
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
                             onClick={deleteRelationshipHandler}
                             className="flex justify-between !text-red-700"
                         >
@@ -121,7 +153,7 @@ export const RelationshipListItemHeader: React.FC<
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [deleteRelationshipHandler, t]
+        [deleteRelationshipHandler, switchTablesHandler, t]
     );
 
     return (

@@ -10,6 +10,7 @@ import { getCardinalityMarkerId } from '../canvas-utils';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
+import { useLayout } from '@/hooks/use-layout';
 import { EditRelationshipPopover } from './edit-relationship-popover';
 import { EllipsisIcon } from 'lucide-react';
 
@@ -46,6 +47,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 openRelationshipPopover,
                 closeRelationshipPopover,
             } = useCanvas();
+            const { openRelationshipFromSidebar } = useLayout();
 
             const relationship = data?.relationship;
 
@@ -137,6 +139,11 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 removeRelationship(id, { updateHistory: true });
                 closeRelationshipPopover();
             }, [id, removeRelationship, closeRelationshipPopover]);
+
+            const handleLocate = useCallback(() => {
+                openRelationshipFromSidebar(id);
+                closeRelationshipPopover();
+            }, [id, openRelationshipFromSidebar, closeRelationshipPopover]);
 
             const edgeNumber = useMemo(() => {
                 let index = 0;
@@ -380,6 +387,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                                 onCardinalityChange={handleCardinalityChange}
                                 onSwitch={handleSwitchTables}
                                 onDelete={handleDelete}
+                                onLocate={handleLocate}
                             />,
                             document.body
                         )}

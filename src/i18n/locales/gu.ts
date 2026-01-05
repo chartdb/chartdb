@@ -204,6 +204,7 @@ export const gu: LanguageTranslation = {
                     delete_relationship: 'કાઢી નાખો',
                     relationship_actions: {
                         title: 'ક્રિયાઓ',
+                        switch_tables: 'ટેબલ્સ બદલો',
                         delete_relationship: 'કાઢી નાખો',
                     },
                 },

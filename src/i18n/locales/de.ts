@@ -203,6 +203,7 @@ export const de: LanguageTranslation = {
                     delete_relationship: 'Löschen',
                     relationship_actions: {
                         title: 'Aktionen',
+                        switch_tables: 'Tabellen tauschen',
                         delete_relationship: 'Löschen',
                     },
                 },

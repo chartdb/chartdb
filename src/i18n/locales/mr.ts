@@ -206,6 +206,7 @@ export const mr: LanguageTranslation = {
                     delete_relationship: 'हटवा',
                     relationship_actions: {
                         title: 'क्रिया',
+                        switch_tables: 'सारण्या बदला',
                         delete_relationship: 'हटवा',
                     },
                 },

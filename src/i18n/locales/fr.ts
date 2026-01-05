@@ -200,6 +200,7 @@ export const fr: LanguageTranslation = {
                     delete_relationship: 'Supprimer',
                     relationship_actions: {
                         title: 'Actions',
+                        switch_tables: 'Inverser les Tables',
                         delete_relationship: 'Supprimer',
                     },
                 },

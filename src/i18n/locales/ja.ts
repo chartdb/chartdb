@@ -205,6 +205,7 @@ export const ja: LanguageTranslation = {
                     delete_relationship: '削除',
                     relationship_actions: {
                         title: '操作',
+                        switch_tables: 'テーブルを入れ替え',
                         delete_relationship: '削除',
                     },
                 },

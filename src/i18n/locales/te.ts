@@ -204,6 +204,7 @@ export const te: LanguageTranslation = {
                     delete_relationship: 'సంబంధం తొలగించు',
                     relationship_actions: {
                         title: 'చర్యలు',
+                        switch_tables: 'టేబుల్‌లను మార్చు',
                         delete_relationship: 'సంబంధం తొలగించు',
                     },
                 },

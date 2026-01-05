@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Trash2, ArrowLeftRight } from 'lucide-react';
+import { Trash2, ArrowLeftRight, CircleDotDashed } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import type { Cardinality } from '@/lib/domain/db-relationship';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,7 @@ export interface EditRelationshipPopoverProps {
     ) => void;
     onSwitch: () => void;
     onDelete: () => void;
+    onLocate: () => void;
 }
 
 type RelationshipTypeOption = {
@@ -39,6 +40,7 @@ export const EditRelationshipPopover: React.FC<
     onCardinalityChange,
     onSwitch,
     onDelete,
+    onLocate,
 }) => {
     const popoverRef = useRef<HTMLDivElement>(null);
     const { closeRelationshipPopover } = useCanvas();
@@ -55,6 +57,20 @@ export const EditRelationshipPopover: React.FC<
             }}
         >
             <div className="flex items-center gap-1">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="size-7 p-0 text-slate-600 hover:bg-slate-100 hover:text-slate-700"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onLocate();
+                    }}
+                    title="Locate in side panel"
+                >
+                    <CircleDotDashed className="!size-3.5" />
+                </Button>
+                <div className="mx-1 h-6 w-px bg-slate-300" />
                 {relationshipTypes.map((type) => {
                     const isActive =
                         type.sourceCardinality === sourceCardinality &&

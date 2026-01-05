@@ -22,12 +22,7 @@ import {
     determineRelationshipType,
 } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
-import {
-    FileMinus2,
-    FileOutput,
-    Trash2,
-    ChevronsLeftRightEllipsis,
-} from 'lucide-react';
+import { Trash2, ChevronsLeftRightEllipsis } from 'lucide-react';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -92,13 +87,8 @@ export const RelationshipListItemContent: React.FC<
             <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between gap-1 text-xs">
                     <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
-                        <div className="flex flex-row items-center gap-1">
-                            <FileOutput className="size-4 text-subtitle" />
-                            <div className="font-bold text-subtitle">
-                                {t(
-                                    'side_panel.refs_section.relationship.primary'
-                                )}
-                            </div>
+                        <div className="font-bold text-subtitle">
+                            {t('side_panel.refs_section.relationship.primary')}
                         </div>
                         <Tooltip>
                             <TooltipTrigger>
@@ -118,13 +108,8 @@ export const RelationshipListItemContent: React.FC<
                         </Tooltip>
                     </div>
                     <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
-                        <div className="flex flex-row items-center gap-1">
-                            <FileMinus2 className="size-4 text-subtitle" />
-                            <div className="font-bold text-subtitle">
-                                {t(
-                                    'side_panel.refs_section.relationship.foreign'
-                                )}
-                            </div>
+                        <div className="font-bold text-subtitle">
+                            {t('side_panel.refs_section.relationship.foreign')}
                         </div>
                         <Tooltip>
                             <TooltipTrigger>

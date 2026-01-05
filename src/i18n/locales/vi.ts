@@ -202,6 +202,7 @@ export const vi: LanguageTranslation = {
                     delete_relationship: 'Xóa',
                     relationship_actions: {
                         title: 'Hành động',
+                        switch_tables: 'Đổi Bảng',
                         delete_relationship: 'Xóa',
                     },
                 },

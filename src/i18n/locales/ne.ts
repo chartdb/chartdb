@@ -203,6 +203,7 @@ export const ne: LanguageTranslation = {
                     delete_relationship: 'हटाउनुहोस्',
                     relationship_actions: {
                         title: 'कार्यहरू',
+                        switch_tables: 'तालिकाहरू स्विच गर्नुहोस्',
                         delete_relationship: 'हटाउनुहोस्',
                     },
                 },

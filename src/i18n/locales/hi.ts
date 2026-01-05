@@ -203,6 +203,7 @@ export const hi: LanguageTranslation = {
                     delete_relationship: 'हटाएँ',
                     relationship_actions: {
                         title: 'क्रियाएँ',
+                        switch_tables: 'टेबल्स बदलें',
                         delete_relationship: 'हटाएँ',
                     },
                 },

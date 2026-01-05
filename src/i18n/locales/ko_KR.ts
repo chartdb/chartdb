@@ -202,6 +202,7 @@ export const ko_KR: LanguageTranslation = {
                     delete_relationship: '제거',
                     relationship_actions: {
                         title: '연관 관계 작업',
+                        switch_tables: '테이블 전환',
                         delete_relationship: '연관 관계 삭제',
                     },
                 },

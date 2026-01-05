@@ -202,6 +202,7 @@ export const id_ID: LanguageTranslation = {
                     delete_relationship: 'Hapus',
                     relationship_actions: {
                         title: 'Aksi',
+                        switch_tables: 'Tukar Tabel',
                         delete_relationship: 'Hapus',
                     },
                 },

@@ -203,6 +203,7 @@ export const bn: LanguageTranslation = {
                     delete_relationship: 'মুছুন',
                     relationship_actions: {
                         title: 'কর্ম',
+                        switch_tables: 'টেবিল পরিবর্তন করুন',
                         delete_relationship: 'মুছুন',
                     },
                 },

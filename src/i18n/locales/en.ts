@@ -197,6 +197,7 @@ export const en = {
                     delete_relationship: 'Delete',
                     relationship_actions: {
                         title: 'Actions',
+                        switch_tables: 'Switch Tables',
                         delete_relationship: 'Delete',
                     },
                 },

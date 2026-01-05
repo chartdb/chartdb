@@ -198,6 +198,7 @@ export const hr: LanguageTranslation = {
                     delete_relationship: 'Izbriši',
                     relationship_actions: {
                         title: 'Radnje',
+                        switch_tables: 'Zamijeni Tablice',
                         delete_relationship: 'Izbriši',
                     },
                 },

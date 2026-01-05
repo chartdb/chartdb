@@ -201,6 +201,7 @@ export const uk: LanguageTranslation = {
                     delete_relationship: 'Видалити',
                     relationship_actions: {
                         title: 'Дії',
+                        switch_tables: 'Поміняти таблиці',
                         delete_relationship: 'Видалити',
                     },
                 },

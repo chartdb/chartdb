@@ -201,6 +201,7 @@ export const ar: LanguageTranslation = {
                     delete_relationship: 'حذف',
                     relationship_actions: {
                         title: 'إجراءات',
+                        switch_tables: 'تبديل الجداول',
                         delete_relationship: 'حذف',
                     },
                 },
