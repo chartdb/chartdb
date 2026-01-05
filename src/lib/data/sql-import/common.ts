@@ -56,6 +56,7 @@ export interface SQLIndex {
     name: string;
     columns: string[];
     unique: boolean;
+    type?: string; // Index type (btree, hash, gin, gist, etc.)
 }
 
 export interface SQLForeignKey {
@@ -614,6 +615,9 @@ export const typeAffinity: Record<string, Record<string, string>> = {
     },
 };
 
+// CockroachDB uses PostgreSQL-compatible types - reference dynamically
+typeAffinity[DatabaseType.COCKROACHDB] = typeAffinity[DatabaseType.POSTGRESQL];
+
 // Convert SQLParserResult to ChartDB Diagram structure
 export function convertToChartDBDiagram(
     parserResult: SQLParserResult,
@@ -636,9 +640,18 @@ export function convertToChartDBDiagram(
             // Use special case handling for specific database types to ensure correct mapping
             let mappedType: DataType;
 
+            // Detect and handle array types (e.g., int[], text[], varchar[])
+            const isArrayType = column.type.endsWith('[]');
+            const baseColumnType = isArrayType
+                ? column.type.slice(0, -2)
+                : column.type;
+
+            // Create a modified column object with the base type for mapping
+            const columnForMapping = { ...column, type: baseColumnType };
+
             // SQLite-specific handling for numeric types
             if (sourceDatabaseType === DatabaseType.SQLITE) {
-                const normalizedType = column.type.toLowerCase();
+                const normalizedType = columnForMapping.type.toLowerCase();
 
                 if (normalizedType === 'integer' || normalizedType === 'int') {
                     // Ensure integer types are preserved
@@ -658,7 +671,7 @@ export function convertToChartDBDiagram(
                 } else {
                     // Use the standard mapping for other types
                     mappedType = mapSQLTypeToGenericType(
-                        column.type,
+                        columnForMapping.type,
                         sourceDatabaseType
                     );
                 }
@@ -668,7 +681,7 @@ export function convertToChartDBDiagram(
                 sourceDatabaseType === DatabaseType.MYSQL ||
                 sourceDatabaseType === DatabaseType.MARIADB
             ) {
-                const normalizedType = column.type
+                const normalizedType = columnForMapping.type
                     .toLowerCase()
                     .replace(/\(\d+\)/, '')
                     .trim();
@@ -690,17 +703,18 @@ export function convertToChartDBDiagram(
                 } else {
                     // Use the standard mapping for other types
                     mappedType = mapSQLTypeToGenericType(
-                        column.type,
+                        columnForMapping.type,
                         sourceDatabaseType
                     );
                 }
             }
-            // Handle PostgreSQL integer type specifically
+            // Handle PostgreSQL/CockroachDB integer type specifically
             else if (
-                sourceDatabaseType === DatabaseType.POSTGRESQL &&
-                (column.type.toLowerCase() === 'integer' ||
-                    column.type.toLowerCase() === 'int' ||
-                    column.type.toLowerCase() === 'int4')
+                (sourceDatabaseType === DatabaseType.POSTGRESQL ||
+                    sourceDatabaseType === DatabaseType.COCKROACHDB) &&
+                (columnForMapping.type.toLowerCase() === 'integer' ||
+                    columnForMapping.type.toLowerCase() === 'int' ||
+                    columnForMapping.type.toLowerCase() === 'int4')
             ) {
                 // Ensure integer types are preserved
                 mappedType = { id: 'integer', name: 'integer' };
@@ -708,21 +722,25 @@ export function convertToChartDBDiagram(
                 supportsCustomTypes(sourceDatabaseType) &&
                 parserResult.enums &&
                 parserResult.enums.some(
-                    (e) => e.name.toLowerCase() === column.type.toLowerCase()
+                    (e) =>
+                        e.name.toLowerCase() ===
+                        columnForMapping.type.toLowerCase()
                 )
             ) {
                 // If the column type matches a custom enum type, preserve it
                 mappedType = {
-                    id: column.type.toLowerCase(),
-                    name: column.type,
+                    id: columnForMapping.type.toLowerCase(),
+                    name: columnForMapping.type,
                 };
             }
-            // Handle PostgreSQL-specific types (not in genericDataTypes)
+            // Handle PostgreSQL/CockroachDB-specific types (not in genericDataTypes)
             else if (
-                sourceDatabaseType === DatabaseType.POSTGRESQL &&
-                targetDatabaseType === DatabaseType.POSTGRESQL
+                (sourceDatabaseType === DatabaseType.POSTGRESQL ||
+                    sourceDatabaseType === DatabaseType.COCKROACHDB) &&
+                (targetDatabaseType === DatabaseType.POSTGRESQL ||
+                    targetDatabaseType === DatabaseType.COCKROACHDB)
             ) {
-                const normalizedType = column.type.toLowerCase();
+                const normalizedType = columnForMapping.type.toLowerCase();
 
                 // Preserve PostgreSQL-specific types that don't exist in genericDataTypes
                 // Serial types are PostgreSQL-specific syntax (not true data types)
@@ -738,7 +756,7 @@ export function convertToChartDBDiagram(
                 } else {
                     // Use the standard mapping for other types
                     mappedType = mapSQLTypeToGenericType(
-                        column.type,
+                        columnForMapping.type,
                         sourceDatabaseType
                     );
                 }
@@ -748,7 +766,7 @@ export function convertToChartDBDiagram(
                 sourceDatabaseType === DatabaseType.SQL_SERVER &&
                 targetDatabaseType === DatabaseType.SQL_SERVER
             ) {
-                const normalizedType = column.type.toLowerCase();
+                const normalizedType = columnForMapping.type.toLowerCase();
 
                 // Preserve SQL Server specific types when target is also SQL Server
                 if (
@@ -770,14 +788,14 @@ export function convertToChartDBDiagram(
                 } else {
                     // Use the standard mapping for other types
                     mappedType = mapSQLTypeToGenericType(
-                        column.type,
+                        columnForMapping.type,
                         sourceDatabaseType
                     );
                 }
             } else {
                 // Use the standard mapping for other types
                 mappedType = mapSQLTypeToGenericType(
-                    column.type,
+                    columnForMapping.type,
                     sourceDatabaseType
                 );
             }
@@ -803,6 +821,7 @@ export function convertToChartDBDiagram(
                 default: column.default || '',
                 createdAt: Date.now(),
                 increment: column.increment,
+                isArray: isArrayType || undefined,
             };
 
             // Add type arguments if present
@@ -899,13 +918,20 @@ export function convertToChartDBDiagram(
                     return null;
                 }
 
-                return {
+                const index: DBIndex = {
                     id: generateId(),
                     name: sqlIndex.name,
                     fieldIds,
                     unique: sqlIndex.unique,
                     createdAt: Date.now(),
                 };
+
+                // Add type if specified (for GIN, HASH, etc.)
+                if (sqlIndex.type) {
+                    index.type = sqlIndex.type as DBIndex['type'];
+                }
+
+                return index;
             })
             .filter((idx): idx is DBIndex => idx !== null);
 

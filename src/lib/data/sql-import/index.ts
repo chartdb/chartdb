@@ -197,7 +197,9 @@ export async function sqlImportToDiagram({
     // Select the appropriate parser based on database type
     switch (sourceDatabaseType) {
         case DatabaseType.POSTGRESQL:
+        case DatabaseType.COCKROACHDB:
             // Check if the SQL is from pg_dump and use the appropriate parser
+            // CockroachDB uses PostgreSQL-compatible syntax
             if (isPgDumpFormat(sqlContent)) {
                 parserResult = await fromPostgresDump(sqlContent);
             } else {
@@ -278,7 +280,8 @@ export async function parseSQLError({
         // Validate SQL based on the database type
         switch (sourceDatabaseType) {
             case DatabaseType.POSTGRESQL:
-                // PostgreSQL validation - check format and use appropriate parser
+            case DatabaseType.COCKROACHDB:
+                // PostgreSQL/CockroachDB validation - check format and use appropriate parser
                 if (isPgDumpFormat(sqlContent)) {
                     await fromPostgresDump(sqlContent);
                 } else {

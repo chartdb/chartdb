@@ -1096,6 +1096,14 @@ export async function fromPostgres(
                                 | number
                                 | undefined;
 
+                            // Check if this is an array type (node-sql-parser stores this separately)
+                            const arrayInfo = definition?.array as
+                                | { dimension?: number }
+                                | undefined;
+                            const isArrayType =
+                                arrayInfo?.dimension !== undefined ||
+                                rawDataType.endsWith('[]');
+
                             // Normalize the type (pass length to handle parser quirks like INT with length=8)
                             let finalDataType = normalizePostgreSQLType(
                                 rawDataType,
@@ -1161,6 +1169,12 @@ export async function fromPostgres(
                                         finalDataType = `${finalDataType}(${typeLength})`;
                                     }
                                 }
+                            }
+
+                            // Add array suffix if this is an array type
+                            // (only if not already present from rawDataType)
+                            if (isArrayType && !finalDataType.endsWith('[]')) {
+                                finalDataType = `${finalDataType}[]`;
                             }
 
                             if (columnName) {
@@ -2172,12 +2186,29 @@ export async function fromPostgres(
                             createIndexStmt.index_name ||
                             `idx_${tableName}_${columns.join('_')}`;
 
+                        // Extract index type from USING clause (e.g., USING GIN, USING HASH)
+                        // The parser may store this in different properties
+                        let indexType: string | undefined;
+                        const indexUsing = createIndexStmt.index_using;
+                        if (typeof indexUsing === 'string') {
+                            indexType = indexUsing.toLowerCase();
+                        } else if (
+                            indexUsing &&
+                            typeof indexUsing === 'object' &&
+                            'type' in indexUsing
+                        ) {
+                            indexType = String(
+                                (indexUsing as { type: unknown }).type
+                            ).toLowerCase();
+                        }
+
                         table.indexes.push({
                             name: indexName,
                             columns,
                             unique:
                                 createIndexStmt.index_type === 'unique' ||
                                 createIndexStmt.unique === true,
+                            type: indexType,
                         });
                     }
                 }

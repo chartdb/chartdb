@@ -42,14 +42,20 @@ export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
 });
 
 export const databaseIndexTypes: { [key in DatabaseType]?: IndexType[] } = {
-    [DatabaseType.POSTGRESQL]: ['btree', 'hash'],
+    [DatabaseType.POSTGRESQL]: ['btree', 'hash', 'gin'],
 };
+// CockroachDB uses PostgreSQL-compatible index types
+databaseIndexTypes[DatabaseType.COCKROACHDB] =
+    databaseIndexTypes[DatabaseType.POSTGRESQL];
 
 export const defaultIndexTypeForDatabase: {
     [key in DatabaseType]?: IndexType;
 } = {
     [DatabaseType.POSTGRESQL]: 'btree',
 };
+// CockroachDB uses the same default as PostgreSQL
+defaultIndexTypeForDatabase[DatabaseType.COCKROACHDB] =
+    defaultIndexTypeForDatabase[DatabaseType.POSTGRESQL];
 
 export const getTablePrimaryKeyIndex = ({
     table,
