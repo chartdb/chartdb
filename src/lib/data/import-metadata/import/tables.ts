@@ -1,4 +1,4 @@
-import type { DBIndex, DBTable } from '@/lib/domain';
+import type { DBCheckConstraint, DBIndex, DBTable } from '@/lib/domain';
 import {
     DatabaseType,
     generateTableKey,
@@ -6,6 +6,7 @@ import {
 } from '@/lib/domain';
 import type { DatabaseMetadata } from '../metadata-types/database-metadata';
 import type { TableInfo } from '../metadata-types/table-info';
+import type { CheckConstraintInfo } from '../metadata-types/check-constraint-info';
 import { createAggregatedIndexes } from '../metadata-types/index-info';
 import {
     decodeBase64ToUtf16LE,
@@ -51,6 +52,7 @@ export const createTablesFromMetadata = ({
         columns,
         indexes,
         views: views,
+        check_constraints: checkConstraints,
     } = databaseMetadata;
 
     // Pre-compute view names for faster lookup if there are views
@@ -116,6 +118,21 @@ export const createTablesFromMetadata = ({
         }
         primaryKeysByTable.get(key)!.push(pk);
     });
+
+    // Group check constraints by table
+    const checkConstraintsByTable = new Map<string, CheckConstraintInfo[]>();
+    if (checkConstraints) {
+        checkConstraints.forEach((cc) => {
+            const key = generateTableKey({
+                schemaName: cc.schema,
+                tableName: cc.table,
+            });
+            if (!checkConstraintsByTable.has(key)) {
+                checkConstraintsByTable.set(key, []);
+            }
+            checkConstraintsByTable.get(key)!.push(cc);
+        });
+    }
 
     const result = tableInfos.map((tableInfo: TableInfo) => {
         const tableSchema = schemaNameToDomainSchemaName(tableInfo.schema);
@@ -204,6 +221,17 @@ export const createTablesFromMetadata = ({
         const isView = viewNamesSet.has(viewKey);
         const isMaterializedView = materializedViewNamesSet.has(viewKey);
 
+        // Convert check constraints for this table
+        const tableCheckConstraints = checkConstraintsByTable.get(tableKey);
+        const dbCheckConstraints: DBCheckConstraint[] | undefined =
+            tableCheckConstraints && tableCheckConstraints.length > 0
+                ? tableCheckConstraints.map((cc) => ({
+                      id: generateId(),
+                      expression: cc.expression,
+                      createdAt: Date.now(),
+                  }))
+                : undefined;
+
         // Initial random positions; these will be adjusted later
         return {
             id: generateId(),
@@ -213,6 +241,7 @@ export const createTablesFromMetadata = ({
             y: Math.random() * 800, // Placeholder Y
             fields,
             indexes: dbIndexes,
+            checkConstraints: dbCheckConstraints,
             color: isMaterializedView
                 ? materializedViewColor
                 : isView

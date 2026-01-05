@@ -5,6 +5,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
+import { validateCheckConstraint } from '@/lib/check-constraints/check-constraints-validator';
 
 // Use DBCustomType for generating Enum DBML
 const generateEnumsDBML = (customTypes: DBCustomType[] | undefined): string => {
@@ -656,6 +657,61 @@ const restoreIncrementAttribute = (dbml: string, tables: DBTable[]): string => {
     return result;
 };
 
+// Restore check constraints that may have been lost during DBML export
+// The @dbml/core importer doesn't support check constraints natively
+const restoreCheckConstraints = (dbml: string, tables: DBTable[]): string => {
+    if (!tables || tables.length === 0) return dbml;
+
+    let result = dbml;
+
+    tables.forEach((table) => {
+        // Filter out empty and invalid expressions
+        const validChecks = (table.checkConstraints ?? []).filter(
+            (c) =>
+                c.expression &&
+                c.expression.trim() &&
+                validateCheckConstraint(c.expression)
+        );
+
+        if (validChecks.length === 0) {
+            return;
+        }
+
+        // Build the table identifier pattern once for this table
+        const tableIdentifier = table.schema
+            ? `"${table.schema.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\."${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`
+            : `"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`;
+
+        // Pattern to match the entire table block
+        const tableBlockPattern = new RegExp(
+            `(Table ${tableIdentifier} \\{)([\\s\\S]*?)(^\\})`,
+            'gm'
+        );
+
+        result = result.replace(
+            tableBlockPattern,
+            (match, tableStart, tableContent, tableEnd) => {
+                // Check if a checks block already exists
+                if (/^\s*checks\s*\{/m.test(tableContent)) {
+                    return match;
+                }
+
+                // Build the checks block
+                const checksContent = validChecks
+                    .map((check) => `    \`${check.expression}\``)
+                    .join('\n');
+
+                const checksBlock = `\n  checks {\n${checksContent}\n  }\n`;
+
+                // Add the checks block at the end, before the closing brace
+                return `${tableStart}${tableContent}${checksBlock}${tableEnd}`;
+            }
+        );
+    });
+
+    return result;
+};
+
 // Restore table and field notes/comments that may have been lost during DBML export
 // This handles databases where @dbml/core doesn't recognize the comment syntax
 // (e.g., MySQL's inline COMMENT syntax). For databases like PostgreSQL where
@@ -998,7 +1054,7 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
     // Sanitize field names ('from'/'to' in 'relation' table)
     const cleanDiagram = fixProblematicFieldNames(filteredDiagram);
 
-    // Simplified processing - just handle duplicate field names
+    // Simplified processing - handle duplicate field names and filter invalid check constraints
     const processTable = (table: DBTable) => {
         const fieldNameCounts = new Map<string, number>();
         const processedFields = table.fields.map((field) => {
@@ -1015,6 +1071,14 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             return field;
         });
 
+        // Filter out empty and invalid check constraint expressions
+        const validCheckConstraints = (table.checkConstraints ?? []).filter(
+            (c) =>
+                c.expression &&
+                c.expression.trim() &&
+                validateCheckConstraint(c.expression)
+        );
+
         return {
             ...table,
             fields: processedFields,
@@ -1026,6 +1090,10 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
                         index.name ||
                         `idx_${Math.random().toString(36).substring(2, 8)}`,
                 })),
+            checkConstraints:
+                validCheckConstraints.length > 0
+                    ? validCheckConstraints
+                    : undefined,
         };
     };
 
@@ -1086,6 +1154,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         // Restore table and field notes/comments that may have been lost during DBML export
         standard = restoreNotes(standard, tablesWithFields);
+
+        // Restore check constraints that may have been lost during DBML export
+        standard = restoreCheckConstraints(standard, tablesWithFields);
 
         // Prepend Enum DBML to the standard output
         if (enumsDBML) {

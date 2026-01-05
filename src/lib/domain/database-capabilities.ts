@@ -5,6 +5,7 @@ export interface DatabaseCapabilities {
     supportsCustomTypes?: boolean;
     supportsSchemas?: boolean;
     supportsComments?: boolean;
+    supportsCheckConstraints?: boolean;
 }
 
 export const DATABASE_CAPABILITIES: Record<DatabaseType, DatabaseCapabilities> =
@@ -14,24 +15,34 @@ export const DATABASE_CAPABILITIES: Record<DatabaseType, DatabaseCapabilities> =
             supportsCustomTypes: true,
             supportsSchemas: true,
             supportsComments: true,
+            supportsCheckConstraints: true,
         },
         [DatabaseType.COCKROACHDB]: {
             supportsArrays: true,
             supportsSchemas: true,
             supportsComments: true,
+            supportsCheckConstraints: true,
         },
-        [DatabaseType.MYSQL]: {},
-        [DatabaseType.MARIADB]: {},
+        [DatabaseType.MYSQL]: {
+            supportsCheckConstraints: true,
+        },
+        [DatabaseType.MARIADB]: {
+            supportsCheckConstraints: true,
+        },
         [DatabaseType.SQL_SERVER]: {
             supportsSchemas: true,
+            supportsCheckConstraints: true,
         },
-        [DatabaseType.SQLITE]: {},
+        [DatabaseType.SQLITE]: {
+            supportsCheckConstraints: true,
+        },
         [DatabaseType.CLICKHOUSE]: {
             supportsSchemas: true,
         },
         [DatabaseType.ORACLE]: {
             supportsSchemas: true,
             supportsComments: true,
+            supportsCheckConstraints: true,
         },
         [DatabaseType.GENERIC]: {},
     };
@@ -54,4 +65,12 @@ export const databaseTypesWithCommentSupport: DatabaseType[] = Object.keys(
 
 export const supportsCustomTypes = (databaseType: DatabaseType): boolean => {
     return getDatabaseCapabilities(databaseType).supportsCustomTypes ?? false;
+};
+
+export const supportsCheckConstraints = (
+    databaseType: DatabaseType
+): boolean => {
+    return (
+        getDatabaseCapabilities(databaseType).supportsCheckConstraints ?? false
+    );
 };

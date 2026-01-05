@@ -32,6 +32,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         addIndex,
         removeIndex,
         updateIndex,
+        addCheckConstraint,
+        removeCheckConstraint,
+        updateCheckConstraint,
         removeRelationships,
         addAreas,
         removeAreas,
@@ -116,6 +119,30 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
+            addCheckConstraint: ({ redoData: { tableId, constraint } }) => {
+                return addCheckConstraint(tableId, constraint, {
+                    updateHistory: false,
+                });
+            },
+            removeCheckConstraint: ({
+                redoData: { tableId, constraintId },
+            }) => {
+                return removeCheckConstraint(tableId, constraintId, {
+                    updateHistory: false,
+                });
+            },
+            updateCheckConstraint: ({
+                redoData: { tableId, constraintId, constraint },
+            }) => {
+                return updateCheckConstraint(
+                    tableId,
+                    constraintId,
+                    constraint,
+                    {
+                        updateHistory: false,
+                    }
+                );
+            },
             addAreas: ({ redoData: { areas } }) => {
                 return addAreas(areas, { updateHistory: false });
             },
@@ -162,6 +189,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addIndex,
             removeIndex,
             updateIndex,
+            addCheckConstraint,
+            removeCheckConstraint,
+            updateCheckConstraint,
             removeRelationships,
             addDependencies,
             removeDependencies,
@@ -264,6 +294,28 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
+            addCheckConstraint: ({ undoData: { tableId, constraintId } }) => {
+                return removeCheckConstraint(tableId, constraintId, {
+                    updateHistory: false,
+                });
+            },
+            removeCheckConstraint: ({ undoData: { tableId, constraint } }) => {
+                return addCheckConstraint(tableId, constraint, {
+                    updateHistory: false,
+                });
+            },
+            updateCheckConstraint: ({
+                undoData: { tableId, constraintId, constraint },
+            }) => {
+                return updateCheckConstraint(
+                    tableId,
+                    constraintId,
+                    constraint,
+                    {
+                        updateHistory: false,
+                    }
+                );
+            },
             addAreas: ({ undoData: { areaIds } }) => {
                 return removeAreas(areaIds, { updateHistory: false });
             },
@@ -310,6 +362,9 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addIndex,
             removeIndex,
             updateIndex,
+            addCheckConstraint,
+            removeCheckConstraint,
+            updateCheckConstraint,
             removeRelationships,
             addDependencies,
             removeDependencies,

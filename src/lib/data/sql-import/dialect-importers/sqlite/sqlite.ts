@@ -5,6 +5,7 @@ import type {
     SQLIndex,
     SQLForeignKey,
     SQLASTNode,
+    SQLCheckConstraint,
 } from '../../common';
 import type {
     TableReference,
@@ -122,10 +123,68 @@ export async function fromSQLite(sqlContent: string): Promise<SQLParserResult> {
             return isValidForeignKeyRelationship(rel, tables);
         });
 
+        // Extract check constraints and add to tables
+        addCheckConstraintsToTables(sqlContent, tables);
+
         return { tables, relationships: validRelationships };
     } catch (error) {
         console.error('Error parsing SQLite SQL:', error);
         throw error;
+    }
+}
+
+/**
+ * Extract check constraints from SQL and add them to existing tables
+ */
+function addCheckConstraintsToTables(
+    sqlContent: string,
+    tables: SQLTable[]
+): void {
+    // Find all CREATE TABLE statements and extract check constraints
+    const createTableRegex =
+        /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:"([^"]+)"|([^\s(]+))\s*\(([\s\S]+?)\)(?:\s*;|\s*$)/gi;
+
+    let match;
+    while ((match = createTableRegex.exec(sqlContent)) !== null) {
+        const tableName = match[1] || match[2];
+        const tableBody = match[3];
+
+        // Find the table in our tables array
+        const table = tables.find(
+            (t) => t.name.toLowerCase() === tableName.toLowerCase()
+        );
+        if (!table) continue;
+
+        // Extract check constraints from this table body
+        const checkPattern =
+            /(?:CONSTRAINT\s+(?:"[^"]+"|[^\s]+)\s+)?CHECK\s*\(/gi;
+        let checkMatch;
+
+        const constraints: SQLCheckConstraint[] = [];
+
+        while ((checkMatch = checkPattern.exec(tableBody)) !== null) {
+            const startIdx = checkMatch.index + checkMatch[0].length;
+            let depth = 1;
+            let endIdx = startIdx;
+
+            // Find the matching closing parenthesis
+            for (let i = startIdx; i < tableBody.length && depth > 0; i++) {
+                if (tableBody[i] === '(') depth++;
+                else if (tableBody[i] === ')') depth--;
+                endIdx = i;
+            }
+
+            if (depth === 0) {
+                const expression = tableBody.substring(startIdx, endIdx).trim();
+                if (expression) {
+                    constraints.push({ expression });
+                }
+            }
+        }
+
+        if (constraints.length > 0) {
+            table.checkConstraints = constraints;
+        }
     }
 }
 

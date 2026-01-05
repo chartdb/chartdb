@@ -16,6 +16,7 @@ import { escapeSQLComment } from './export-per-type/common';
 import {
     databaseTypesWithCommentSupport,
     supportsCustomTypes,
+    supportsCheckConstraints,
 } from '@/lib/domain/database-capabilities';
 
 // Function to format default values with proper quoting
@@ -523,10 +524,10 @@ export const exportBaseSQL = ({
         const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
         // Only use CONSTRAINT syntax if PK index has a non-empty name
         const useNamedConstraint = !!pkIndex?.name;
-        if (
+        const needsPKConstraint =
             hasCompositePrimaryKey ||
-            (primaryKeyFields.length === 1 && useNamedConstraint)
-        ) {
+            (primaryKeyFields.length === 1 && useNamedConstraint);
+        if (needsPKConstraint) {
             const pkFieldNames = primaryKeyFields
                 .map((f) => getQuotedFieldName(f.name, isDBMLFlow))
                 .join(', ');
@@ -535,6 +536,26 @@ export const exportBaseSQL = ({
             } else {
                 sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
             }
+        }
+
+        // Add CHECK constraints (only for databases that support them, filter out empty)
+        const dbSupportsChecks = supportsCheckConstraints(targetDatabaseType);
+        const validCheckConstraints = (table.checkConstraints ?? []).filter(
+            (c) => c.expression && c.expression.trim()
+        );
+        if (validCheckConstraints.length > 0 && dbSupportsChecks) {
+            validCheckConstraints.forEach((checkConstraint, idx) => {
+                // Add comma if needed (after fields or PK constraint)
+                if (
+                    idx === 0 &&
+                    (table.fields.length > 0 || needsPKConstraint)
+                ) {
+                    sqlScript += ',';
+                } else if (idx > 0) {
+                    sqlScript += ',';
+                }
+                sqlScript += `\n  CHECK (${checkConstraint.expression})`;
+            });
         }
 
         sqlScript += '\n);\n';

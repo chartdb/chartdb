@@ -1,4 +1,8 @@
 import { z } from 'zod';
+import {
+    CheckConstraintInfoSchema,
+    type CheckConstraintInfo,
+} from './check-constraint-info';
 import { ForeignKeyInfoSchema, type ForeignKeyInfo } from './foreign-key-info';
 import { PrimaryKeyInfoSchema, type PrimaryKeyInfo } from './primary-key-info';
 import { ColumnInfoSchema, type ColumnInfo } from './column-info';
@@ -17,6 +21,7 @@ export interface DatabaseMetadata {
     indexes: IndexInfo[];
     tables: TableInfo[];
     views: ViewInfo[];
+    check_constraints?: CheckConstraintInfo[];
     custom_types?: DBCustomTypeInfo[];
     database_name: string;
     version: string;
@@ -29,6 +34,7 @@ export const DatabaseMetadataSchema: z.ZodType<DatabaseMetadata> = z.object({
     indexes: z.array(IndexInfoSchema),
     tables: z.array(TableInfoSchema),
     views: z.array(ViewInfoSchema),
+    check_constraints: z.array(CheckConstraintInfoSchema).optional(),
     custom_types: z.array(DBCustomTypeInfoSchema).optional(),
     database_name: z.string(),
     version: z.string(),

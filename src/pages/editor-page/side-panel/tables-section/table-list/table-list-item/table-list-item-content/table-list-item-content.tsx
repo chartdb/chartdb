@@ -1,5 +1,11 @@
 import React, { useCallback } from 'react';
-import { Plus, FileType2, FileKey2, MessageCircleMore } from 'lucide-react';
+import {
+    Plus,
+    FileType2,
+    FileKey2,
+    MessageCircleMore,
+    ListChecks,
+} from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
     Accordion,
@@ -10,9 +16,11 @@ import {
 import { Separator } from '@/components/separator/separator';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBField } from '@/lib/domain/db-field';
+import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { TableField } from './table-field/table-field';
 import { TableIndex } from './table-index/table-index';
+import { TableCheckConstraint } from './table-check-constraint/table-check-constraint';
 import type { DBIndex } from '@/lib/domain/db-index';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
@@ -31,7 +39,7 @@ import {
 } from '@dnd-kit/sortable';
 import { ColorPicker } from '@/components/color-picker/color-picker';
 
-type AccordionItemValue = 'fields' | 'indexes';
+type AccordionItemValue = 'fields' | 'indexes' | 'checks';
 
 export interface TableListItemContentProps {
     table: DBTable;
@@ -47,6 +55,9 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         createIndex,
         removeIndex,
         updateIndex,
+        createCheckConstraint,
+        removeCheckConstraint,
+        updateCheckConstraint,
         updateTable,
         readonly,
         databaseType,
@@ -120,6 +131,17 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
             createField(table.id);
         },
         [createField, table.id]
+    );
+
+    const createCheckConstraintHandler = useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation();
+            setSelectedItems((prev) =>
+                prev.includes('checks') ? prev : [...prev, 'checks']
+            );
+            createCheckConstraint(table.id);
+        },
+        [createCheckConstraint, table.id, setSelectedItems]
     );
 
     return (
@@ -283,6 +305,80 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </AccordionContent>
                     </AccordionItem>
                 ) : null}
+
+                <AccordionItem value="checks" className="mb-2 border-y-0">
+                    <AccordionTrigger
+                        iconPosition="right"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
+                        asChild
+                    >
+                        <div className="flex flex-1 items-center justify-between">
+                            <div className="flex flex-row items-center gap-1">
+                                <ListChecks className="size-4" />
+                                {t(
+                                    'side_panel.tables_section.table.check_constraints'
+                                )}
+                            </div>
+                            {!readonly ? (
+                                <div className="flex flex-row-reverse">
+                                    <div className="hidden flex-row-reverse group-hover:flex">
+                                        <Button
+                                            variant="ghost"
+                                            className="size-4 p-0 text-xs hover:bg-primary-foreground"
+                                            onClick={
+                                                createCheckConstraintHandler
+                                            }
+                                        >
+                                            <Plus className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            ) : null}
+                        </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-0 pt-1">
+                        <div className="flex flex-col gap-1">
+                            {(table.checkConstraints ?? []).map(
+                                (constraint) => (
+                                    <TableCheckConstraint
+                                        key={constraint.id}
+                                        constraint={constraint}
+                                        removeConstraint={() =>
+                                            removeCheckConstraint(
+                                                table.id,
+                                                constraint.id
+                                            )
+                                        }
+                                        updateConstraint={(
+                                            attrs: Partial<DBCheckConstraint>
+                                        ) =>
+                                            updateCheckConstraint(
+                                                table.id,
+                                                constraint.id,
+                                                attrs
+                                            )
+                                        }
+                                    />
+                                )
+                            )}
+                        </div>
+
+                        {!readonly ? (
+                            <div className="flex justify-start p-1">
+                                <Button
+                                    variant="ghost"
+                                    className="flex h-7 items-center gap-1 px-2 text-xs"
+                                    onClick={createCheckConstraintHandler}
+                                >
+                                    <Plus className="size-4 text-muted-foreground" />
+                                    {t(
+                                        'side_panel.tables_section.table.add_check'
+                                    )}
+                                </Button>
+                            </div>
+                        ) : null}
+                    </AccordionContent>
+                </AccordionItem>
 
                 <AccordionItem value="comments" className="border-y-0">
                     <AccordionTrigger

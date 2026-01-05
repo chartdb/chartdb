@@ -4,6 +4,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
+import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import {
     getPreferredSynonym,
     type DataType,
@@ -35,12 +36,17 @@ export interface SQLColumn {
     increment?: boolean;
 }
 
+export interface SQLCheckConstraint {
+    expression: string;
+}
+
 export interface SQLTable {
     id: string;
     name: string;
     schema?: string;
     columns: SQLColumn[];
     indexes: SQLIndex[];
+    checkConstraints?: SQLCheckConstraint[];
     comment?: string;
     order: number;
     isView?: boolean;
@@ -903,6 +909,16 @@ export function convertToChartDBDiagram(
             })
             .filter((idx): idx is DBIndex => idx !== null);
 
+        // Convert check constraints
+        const checkConstraints: DBCheckConstraint[] | undefined =
+            table.checkConstraints && table.checkConstraints.length > 0
+                ? table.checkConstraints.map((c) => ({
+                      id: generateId(),
+                      expression: c.expression,
+                      createdAt: Date.now(),
+                  }))
+                : undefined;
+
         return {
             id: newId,
             name: table.name,
@@ -910,6 +926,7 @@ export function convertToChartDBDiagram(
             order: index,
             fields,
             indexes,
+            checkConstraints,
             x: col * tableSpacing,
             y: row * tableSpacing,
             color: table.isView ? viewColor : defaultTableColor,

@@ -5,6 +5,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import type { Cardinality, DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBField } from '@/lib/domain/db-field';
+import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import type { DataTypeData } from '@/lib/data/data-types/data-types';
 import {
     findDataTypeDataById,
@@ -19,20 +20,51 @@ import {
     DBCustomTypeKind,
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
-import { validateArrayTypesForDatabase } from './dbml-import-error';
+import {
+    validateArrayTypesForDatabase,
+    DBMLValidationError,
+    getPositionFromIndex,
+} from './dbml-import-error';
+import { validateCheckConstraintWithDetails } from '@/lib/check-constraints/check-constraints-validator';
 
 export const defaultDBMLDiagramName = 'DBML Import';
+
+interface FieldCheckConstraint {
+    expression: string;
+}
+
+interface TableCheckConstraint {
+    expression: string;
+    name?: string;
+}
 
 interface PreprocessDBMLResult {
     content: string;
     arrayFields: Map<string, Set<string>>;
+    fieldChecks: Map<string, Map<string, FieldCheckConstraint>>;
+    tableChecks: Map<string, TableCheckConstraint[]>;
 }
+
+// Helper to find matching closing brace
+const findMatchingBrace = (str: string, startIndex: number): number => {
+    let depth = 1;
+    for (let i = startIndex; i < str.length && depth > 0; i++) {
+        if (str[i] === '{') depth++;
+        else if (str[i] === '}') depth--;
+        if (depth === 0) return i;
+    }
+    return -1;
+};
 
 export const preprocessDBML = (content: string): PreprocessDBMLResult => {
     let processed = content;
 
     // Track array fields found during preprocessing
     const arrayFields = new Map<string, Set<string>>();
+    // Track field-level check constraints: Map<tableName, Map<fieldName, constraint>>
+    const fieldChecks = new Map<string, Map<string, FieldCheckConstraint>>();
+    // Track table-level check constraints: Map<tableName, constraints[]>
+    const tableChecks = new Map<string, TableCheckConstraint[]>();
 
     // Remove TableGroup blocks (not supported by parser)
     processed = processed.replace(/TableGroup\s+[^{]*\{[^}]*\}/gs, '');
@@ -47,22 +79,31 @@ export const preprocessDBML = (content: string): PreprocessDBMLResult => {
     // Note: DBML doesn't officially support array syntax, so we convert type[] to type
     // but track which fields should be arrays
 
-    // First, find all array field declarations and track them
-    const tablePattern =
-        /Table\s+(?:"([^"]+)"\.)?(?:"([^"]+)"|(\w+))\s*(?:\[[^\]]*\])?\s*\{([^}]+)\}/gs;
-    let match;
+    // First, find all Table declarations and extract their bodies properly
+    // Pattern matches: Table "schema"."name" { or Table name { or Table "name" {
+    const tableStartPattern =
+        /Table\s+(?:(?:"([^"]+)"\.)?(?:"([^"]+)"|([a-zA-Z_]\w*)))\s*(?:\[[^\]]*\])?\s*\{/g;
+    let tableMatch;
 
-    while ((match = tablePattern.exec(content)) !== null) {
-        const schema = match[1] || '';
-        const tableName = match[2] || match[3];
-        const tableBody = match[4];
+    while ((tableMatch = tableStartPattern.exec(content)) !== null) {
+        const schema = tableMatch[1] || '';
+        const tableName = tableMatch[2] || tableMatch[3];
+        const openBraceIndex = tableMatch.index + tableMatch[0].length - 1;
+        const closeBraceIndex = findMatchingBrace(content, openBraceIndex + 1);
+
+        if (closeBraceIndex === -1) continue;
+
+        const tableBody = content.substring(
+            openBraceIndex + 1,
+            closeBraceIndex
+        );
         const fullTableName = schema ? `${schema}.${tableName}` : tableName;
 
         // Find array field declarations within this table
-        const fieldPattern = /"?(\w+)"?\s+(\w+(?:\([^)]+\))?)\[\]/g;
+        const arrayFieldPattern = /"?(\w+)"?\s+(\w+(?:\([^)]+\))?)\[\]/g;
         let fieldMatch;
 
-        while ((fieldMatch = fieldPattern.exec(tableBody)) !== null) {
+        while ((fieldMatch = arrayFieldPattern.exec(tableBody)) !== null) {
             const fieldName = fieldMatch[1];
 
             if (!arrayFields.has(fullTableName)) {
@@ -70,10 +111,110 @@ export const preprocessDBML = (content: string): PreprocessDBMLResult => {
             }
             arrayFields.get(fullTableName)!.add(fieldName);
         }
+
+        // Extract field-level check constraints: check: `expression`
+        // Pattern matches lines like: price decimal [not null, check: `price > 0`]
+        const fieldCheckPattern =
+            /^\s*"?(\w+)"?\s+\w+[^\n[]*\[[^\]]*check:\s*`([^`]+)`/gm;
+        let checkMatch;
+
+        while ((checkMatch = fieldCheckPattern.exec(tableBody)) !== null) {
+            const fieldName = checkMatch[1];
+            const expression = checkMatch[2];
+
+            // Validate the check constraint expression
+            const validationResult =
+                validateCheckConstraintWithDetails(expression);
+            if (!validationResult.isValid) {
+                // Calculate position in original content
+                const expressionStartInTableBody =
+                    checkMatch.index + checkMatch[0].indexOf(expression);
+                const expressionStartInContent =
+                    openBraceIndex + 1 + expressionStartInTableBody;
+                const { line, column } = getPositionFromIndex(
+                    content,
+                    expressionStartInContent
+                );
+                throw new DBMLValidationError(
+                    `Invalid check constraint expression "${expression}" on field "${fieldName}": ${validationResult.error}`,
+                    line,
+                    column
+                );
+            }
+
+            if (!fieldChecks.has(fullTableName)) {
+                fieldChecks.set(fullTableName, new Map());
+            }
+            fieldChecks.get(fullTableName)!.set(fieldName, { expression });
+        }
+
+        // Extract table-level checks block: checks { `expression` [name: 'name'] }
+        const checksBlockPattern = /checks\s*\{([^}]*)\}/gs;
+        const checksBlockMatch = checksBlockPattern.exec(tableBody);
+
+        if (checksBlockMatch) {
+            const checksContent = checksBlockMatch[1];
+            const checksBlockStartInTableBody = checksBlockMatch.index;
+
+            // Parse individual check constraints within the block
+            // Pattern: `expression` or `expression` [name: 'name']
+            const checkItemPattern =
+                /`([^`]+)`(?:\s*\[(?:[^\]]*name:\s*['"]([^'"]+)['"])?[^\]]*\])?/g;
+            let checkItemMatch;
+
+            const constraints: TableCheckConstraint[] = [];
+            while (
+                (checkItemMatch = checkItemPattern.exec(checksContent)) !== null
+            ) {
+                const expression = checkItemMatch[1];
+
+                // Validate the check constraint expression
+                const validationResult =
+                    validateCheckConstraintWithDetails(expression);
+                if (!validationResult.isValid) {
+                    // Calculate position in original content
+                    // checksContent starts after "checks {"
+                    const checksBlockHeaderLength =
+                        checksBlockMatch[0].indexOf(checksContent);
+                    const expressionStartInChecksContent =
+                        checkItemMatch.index + 1; // +1 to skip the opening backtick
+                    const expressionStartInContent =
+                        openBraceIndex +
+                        1 +
+                        checksBlockStartInTableBody +
+                        checksBlockHeaderLength +
+                        expressionStartInChecksContent;
+                    const { line, column } = getPositionFromIndex(
+                        content,
+                        expressionStartInContent
+                    );
+                    throw new DBMLValidationError(
+                        `Invalid check constraint expression "${expression}": ${validationResult.error}`,
+                        line,
+                        column
+                    );
+                }
+
+                constraints.push({
+                    expression,
+                    name: checkItemMatch[2] || undefined,
+                });
+            }
+
+            if (constraints.length > 0) {
+                tableChecks.set(fullTableName, constraints);
+            }
+        }
     }
 
     // Now convert array syntax for DBML parser (keep the base type, remove [])
     processed = processed.replace(/(\w+(?:\(\d+(?:,\s*\d+)?\))?)\[\]/g, '$1');
+
+    // Remove check: `...` from field attributes (not supported by parser)
+    processed = processed.replace(/,?\s*check:\s*`[^`]+`/g, '');
+
+    // Remove checks { ... } blocks (not supported by parser)
+    processed = processed.replace(/\s*checks\s*\{[^}]*\}/gs, '');
 
     // Handle inline enum types without values by converting to varchar
     processed = processed.replace(
@@ -88,7 +229,7 @@ export const preprocessDBML = (content: string): PreprocessDBMLResult => {
         'Table $1 {'
     );
 
-    return { content: processed, arrayFields };
+    return { content: processed, arrayFields, fieldChecks, tableChecks };
 };
 
 // Simple function to replace Spanish special characters
@@ -256,8 +397,12 @@ export const importDBMLToDiagram = async (
 
         const parser = new Parser();
         // Preprocess and sanitize DBML content
-        const { content: preprocessedContent, arrayFields } =
-            preprocessDBML(dbmlContent);
+        const {
+            content: preprocessedContent,
+            arrayFields,
+            fieldChecks,
+            tableChecks,
+        } = preprocessDBML(dbmlContent);
         const sanitizedContent = sanitizeDBML(preprocessedContent);
 
         // Handle content that becomes empty after preprocessing
@@ -748,6 +893,48 @@ export const importDBMLToDiagram = async (
                 isStringEmpty(rawSchema) || rawSchema === 'public';
             const tableSchema = isSchemaEmpty ? defaultSchema : rawSchema;
 
+            // Build check constraints (all as table-level)
+            // Try with schema first, then without (since original DBML might not have schema)
+            const rawTableSchemaForChecks = rawSchema || '';
+            const fullTableNameForTableChecks = rawTableSchemaForChecks
+                ? `${rawTableSchemaForChecks}.${table.name}`
+                : table.name;
+
+            const allCheckConstraints: DBCheckConstraint[] = [];
+
+            // Convert field-level check constraints to table-level
+            const fieldChecksDefs =
+                fieldChecks.get(fullTableNameForTableChecks) ||
+                fieldChecks.get(table.name);
+            if (fieldChecksDefs) {
+                fieldChecksDefs.forEach((check) => {
+                    allCheckConstraints.push({
+                        id: generateId(),
+                        expression: check.expression,
+                        createdAt: Date.now(),
+                    });
+                });
+            }
+
+            // Add table-level check constraints
+            const tableCheckConstraintsDefs =
+                tableChecks.get(fullTableNameForTableChecks) ||
+                tableChecks.get(table.name);
+            if (tableCheckConstraintsDefs) {
+                tableCheckConstraintsDefs.forEach((check) => {
+                    allCheckConstraints.push({
+                        id: generateId(),
+                        expression: check.expression,
+                        createdAt: Date.now(),
+                    });
+                });
+            }
+
+            const checkConstraints: DBCheckConstraint[] | undefined =
+                allCheckConstraints.length > 0
+                    ? allCheckConstraints
+                    : undefined;
+
             const tableToReturn: DBTable = {
                 id: generateId(),
                 name: table.name.replace(/['"]/g, ''),
@@ -755,6 +942,9 @@ export const importDBMLToDiagram = async (
                 order: index,
                 fields,
                 indexes,
+                ...(checkConstraints && checkConstraints.length > 0
+                    ? { checkConstraints }
+                    : {}),
                 x: col * tableSpacing,
                 y: row * tableSpacing,
                 color: defaultTableColor,

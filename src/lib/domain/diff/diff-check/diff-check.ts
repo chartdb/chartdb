@@ -4,6 +4,7 @@ import {
     defaultIndexTypeForDatabase,
     type DBIndex,
 } from '@/lib/domain/db-index';
+import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Area } from '@/lib/domain/area';
@@ -17,6 +18,10 @@ import type { TableDiff, TableDiffAttribute } from '../table-diff';
 import type { AreaDiff, AreaDiffAttribute } from '../area-diff';
 import type { NoteDiff, NoteDiffAttribute } from '../note-diff';
 import type { IndexDiff, IndexDiffAttribute } from '../index-diff';
+import type {
+    CheckConstraintDiff,
+    CheckConstraintDiffAttribute,
+} from '../check-constraint-diff';
 import type {
     RelationshipDiff,
     RelationshipDiffAttribute,
@@ -115,6 +120,7 @@ export interface GenerateDiffOptions {
     includeTables?: boolean;
     includeFields?: boolean;
     includeIndexes?: boolean;
+    includeCheckConstraints?: boolean;
     includeRelationships?: boolean;
     includeAreas?: boolean;
     includeNotes?: boolean;
@@ -122,6 +128,7 @@ export interface GenerateDiffOptions {
         tables?: TableDiffAttribute[];
         fields?: FieldDiffAttribute[];
         indexes?: IndexDiffAttribute[];
+        checkConstraints?: CheckConstraintDiffAttribute[];
         relationships?: RelationshipDiffAttribute[];
         areas?: AreaDiffAttribute[];
         notes?: NoteDiffAttribute[];
@@ -130,6 +137,7 @@ export interface GenerateDiffOptions {
         changedTablesAttributes?: TableDiffAttribute[];
         changedFieldsAttributes?: FieldDiffAttribute[];
         changedIndexesAttributes?: IndexDiffAttribute[];
+        changedCheckConstraintsAttributes?: CheckConstraintDiffAttribute[];
         changedRelationshipsAttributes?: RelationshipDiffAttribute[];
         changedAreasAttributes?: AreaDiffAttribute[];
         changedNotesAttributes?: NoteDiffAttribute[];
@@ -138,6 +146,7 @@ export interface GenerateDiffOptions {
         tables?: TableDiff['type'][];
         fields?: FieldDiff['type'][];
         indexes?: IndexDiff['type'][];
+        checkConstraints?: CheckConstraintDiff['type'][];
         relationships?: RelationshipDiff['type'][];
         areas?: AreaDiff['type'][];
         notes?: NoteDiff['type'][];
@@ -146,6 +155,10 @@ export interface GenerateDiffOptions {
         table?: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
         field?: (field: DBField, fields: DBField[]) => DBField | undefined;
         index?: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
+        checkConstraint?: (
+            constraint: DBCheckConstraint,
+            constraints: DBCheckConstraint[]
+        ) => DBCheckConstraint | undefined;
         relationship?: (
             relationship: DBRelationship,
             relationships: DBRelationship[]
@@ -168,6 +181,7 @@ export function generateDiff({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     changedIndexes: Map<string, boolean>;
+    changedCheckConstraints: Map<string, boolean>;
     changedRelationships: Map<string, boolean>;
     changedAreas: Map<string, boolean>;
     changedNotes: Map<string, boolean>;
@@ -178,6 +192,7 @@ export function generateDiff({
         includeTables: options.includeTables ?? true,
         includeFields: options.includeFields ?? true,
         includeIndexes: options.includeIndexes ?? true,
+        includeCheckConstraints: options.includeCheckConstraints ?? true,
         includeRelationships: options.includeRelationships ?? true,
         includeAreas: options.includeAreas ?? false,
         includeNotes: options.includeNotes ?? false,
@@ -191,6 +206,7 @@ export function generateDiff({
     const changedTables = new Map<string, boolean>();
     const changedFields = new Map<string, boolean>();
     const changedIndexes = new Map<string, boolean>();
+    const changedCheckConstraints = new Map<string, boolean>();
     const changedRelationships = new Map<string, boolean>();
     const changedAreas = new Map<string, boolean>();
     const changedNotes = new Map<string, boolean>();
@@ -200,6 +216,9 @@ export function generateDiff({
     const tableMatcher = mergedOptions.matchers?.table ?? defaultTableMatcher;
     const fieldMatcher = mergedOptions.matchers?.field ?? defaultFieldMatcher;
     const indexMatcher = mergedOptions.matchers?.index ?? defaultIndexMatcher;
+    const checkConstraintMatcher =
+        mergedOptions.matchers?.checkConstraint ??
+        defaultCheckConstraintMatcher;
     const relationshipMatcher =
         mergedOptions.matchers?.relationship ?? defaultRelationshipMatcher;
     const areaMatcher = mergedOptions.matchers?.area ?? defaultAreaMatcher;
@@ -220,7 +239,7 @@ export function generateDiff({
         });
     }
 
-    // Compare fields and indexes for matching tables
+    // Compare fields, indexes, and check constraints for matching tables
     compareTableContents({
         diagram,
         newDiagram,
@@ -228,6 +247,7 @@ export function generateDiff({
         changedTables,
         changedFields,
         changedIndexes,
+        changedCheckConstraints,
         options: mergedOptions,
         changedTablesAttributes:
             mergedOptions.changedMaps?.changedTablesAttributes,
@@ -235,9 +255,12 @@ export function generateDiff({
             mergedOptions.changedMaps?.changedFieldsAttributes,
         changedIndexesAttributes:
             mergedOptions.changedMaps?.changedIndexesAttributes,
+        changedCheckConstraintsAttributes:
+            mergedOptions.changedMaps?.changedCheckConstraintsAttributes,
         tableMatcher,
         fieldMatcher,
         indexMatcher,
+        checkConstraintMatcher,
         databaseType: diagram.databaseType,
     });
 
@@ -292,6 +315,7 @@ export function generateDiff({
         changedTables,
         changedFields,
         changedIndexes,
+        changedCheckConstraints,
         changedRelationships,
         changedAreas,
         changedNotes,
@@ -539,7 +563,7 @@ function compareTables({
     }
 }
 
-// Compare fields and indexes for matching tables
+// Compare fields, indexes, and check constraints for matching tables
 function compareTableContents({
     diagram,
     newDiagram,
@@ -547,13 +571,16 @@ function compareTableContents({
     changedTables,
     changedFields,
     changedIndexes,
+    changedCheckConstraints,
     options,
     changedTablesAttributes,
     changedFieldsAttributes,
     changedIndexesAttributes,
+    changedCheckConstraintsAttributes,
     tableMatcher,
     fieldMatcher,
     indexMatcher,
+    checkConstraintMatcher,
     databaseType,
 }: {
     diagram: Diagram;
@@ -562,13 +589,19 @@ function compareTableContents({
     changedTables: Map<string, boolean>;
     changedFields: Map<string, boolean>;
     changedIndexes: Map<string, boolean>;
+    changedCheckConstraints: Map<string, boolean>;
     options?: GenerateDiffOptions;
     changedTablesAttributes?: TableDiffAttribute[];
     changedFieldsAttributes?: FieldDiffAttribute[];
     changedIndexesAttributes?: IndexDiffAttribute[];
+    changedCheckConstraintsAttributes?: CheckConstraintDiffAttribute[];
     tableMatcher: (table: DBTable, tables: DBTable[]) => DBTable | undefined;
     fieldMatcher: (field: DBField, fields: DBField[]) => DBField | undefined;
     indexMatcher: (index: DBIndex, indexes: DBIndex[]) => DBIndex | undefined;
+    checkConstraintMatcher: (
+        constraint: DBCheckConstraint,
+        constraints: DBCheckConstraint[]
+    ) => DBCheckConstraint | undefined;
     databaseType: DatabaseType;
 }) {
     const oldTables = diagram.tables || [];
@@ -611,6 +644,23 @@ function compareTableContents({
                 changeTypes: options?.changeTypes?.indexes,
                 indexMatcher,
                 databaseType,
+            });
+        }
+
+        // Compare check constraints
+        if (options?.includeCheckConstraints) {
+            compareCheckConstraints({
+                tableId: oldTable.id,
+                oldCheckConstraints: oldTable.checkConstraints ?? [],
+                newCheckConstraints: newTable.checkConstraints ?? [],
+                diffMap,
+                changedTables,
+                changedCheckConstraints,
+                attributes: options?.attributes?.checkConstraints,
+                changedTablesAttributes,
+                changedCheckConstraintsAttributes,
+                changeTypes: options?.changeTypes?.checkConstraints,
+                checkConstraintMatcher,
             });
         }
     }
@@ -1108,6 +1158,150 @@ function compareIndexProperties({
             }
 
             changedIndexes.set(oldIndex.id, true);
+        }
+    }
+}
+
+// Compare check constraints between tables
+function compareCheckConstraints({
+    tableId,
+    oldCheckConstraints,
+    newCheckConstraints,
+    diffMap,
+    changedTables,
+    changedCheckConstraints,
+    attributes,
+    changedTablesAttributes,
+    changedCheckConstraintsAttributes,
+    changeTypes,
+    checkConstraintMatcher,
+}: {
+    tableId: string;
+    oldCheckConstraints: DBCheckConstraint[];
+    newCheckConstraints: DBCheckConstraint[];
+    diffMap: DiffMap;
+    changedTables: Map<string, boolean>;
+    changedCheckConstraints: Map<string, boolean>;
+    attributes?: CheckConstraintDiffAttribute[];
+    changedTablesAttributes?: TableDiffAttribute[];
+    changedCheckConstraintsAttributes?: CheckConstraintDiffAttribute[];
+    changeTypes?: CheckConstraintDiff['type'][];
+    checkConstraintMatcher: (
+        constraint: DBCheckConstraint,
+        constraints: DBCheckConstraint[]
+    ) => DBCheckConstraint | undefined;
+}) {
+    // If changeTypes is empty array, don't check any changes
+    if (changeTypes && changeTypes.length === 0) {
+        return;
+    }
+
+    // If changeTypes is undefined, check all types
+    const typesToCheck = changeTypes ?? ['added', 'removed', 'changed'];
+
+    // For structural changes (added/removed constraints), add to changedTables unless
+    // changedTablesAttributes is explicitly set to empty array
+    const shouldAddToChangedTables =
+        changedTablesAttributes === undefined ||
+        changedTablesAttributes.length > 0;
+
+    // Check for added check constraints
+    if (typesToCheck.includes('added')) {
+        for (const newConstraint of newCheckConstraints) {
+            if (!checkConstraintMatcher(newConstraint, oldCheckConstraints)) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'checkConstraint',
+                        objectId: newConstraint.id,
+                    }),
+                    {
+                        object: 'checkConstraint',
+                        type: 'added',
+                        newCheckConstraint: newConstraint,
+                        tableId,
+                    }
+                );
+                if (shouldAddToChangedTables) {
+                    changedTables.set(tableId, true);
+                }
+                changedCheckConstraints.set(newConstraint.id, true);
+            }
+        }
+    }
+
+    // Check for removed check constraints
+    if (typesToCheck.includes('removed')) {
+        for (const oldConstraint of oldCheckConstraints) {
+            if (!checkConstraintMatcher(oldConstraint, newCheckConstraints)) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'checkConstraint',
+                        objectId: oldConstraint.id,
+                    }),
+                    {
+                        object: 'checkConstraint',
+                        type: 'removed',
+                        checkConstraintId: oldConstraint.id,
+                        tableId,
+                    }
+                );
+                if (shouldAddToChangedTables) {
+                    changedTables.set(tableId, true);
+                }
+                changedCheckConstraints.set(oldConstraint.id, true);
+            }
+        }
+    }
+
+    // Check for check constraint changes (expression changes)
+    if (typesToCheck.includes('changed')) {
+        for (const oldConstraint of oldCheckConstraints) {
+            const newConstraint = checkConstraintMatcher(
+                oldConstraint,
+                newCheckConstraints
+            );
+            if (!newConstraint) continue;
+
+            // If attributes are specified, only check those attributes
+            const attributesToCheck: CheckConstraintDiffAttribute[] =
+                attributes ?? ['expression'];
+
+            if (
+                attributesToCheck.includes('expression') &&
+                oldConstraint.expression !== newConstraint.expression
+            ) {
+                diffMap.set(
+                    getDiffMapKey({
+                        diffObject: 'checkConstraint',
+                        objectId: oldConstraint.id,
+                        attribute: 'expression',
+                    }),
+                    {
+                        object: 'checkConstraint',
+                        type: 'changed',
+                        checkConstraintId: oldConstraint.id,
+                        newCheckConstraintId: newConstraint.id,
+                        tableId,
+                        attribute: 'expression',
+                        oldValue: oldConstraint.expression,
+                        newValue: newConstraint.expression,
+                    }
+                );
+
+                if (
+                    shouldAddToChangedMap(
+                        'expression',
+                        changedCheckConstraintsAttributes
+                    )
+                ) {
+                    if (changedTablesAttributes === undefined) {
+                        changedTables.set(tableId, true);
+                    } else if (changedTablesAttributes.length > 0) {
+                        changedTables.set(tableId, true);
+                    }
+                    changedCheckConstraints.set(oldConstraint.id, true);
+                }
+            }
         }
     }
 }
@@ -1875,6 +2069,29 @@ const defaultIndexMatcher = (
     );
     if (byFieldIds.length === 1) {
         return byFieldIds[0];
+    }
+
+    return undefined;
+};
+
+const defaultCheckConstraintMatcher = (
+    constraint: DBCheckConstraint,
+    constraints: DBCheckConstraint[]
+): DBCheckConstraint | undefined => {
+    // Priority 1: Match by ID
+    const byId = constraints.find((c) => c.id === constraint.id);
+    if (byId) {
+        return byId;
+    }
+
+    // Priority 2: Match by expression (only if unique match)
+    if (constraint.expression) {
+        const byExpression = constraints.filter(
+            (c) => c.expression === constraint.expression
+        );
+        if (byExpression.length === 1) {
+            return byExpression[0];
+        }
     }
 
     return undefined;

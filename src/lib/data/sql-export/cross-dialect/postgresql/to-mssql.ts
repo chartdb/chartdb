@@ -148,10 +148,14 @@ function findCustomType(
 
 /**
  * Map a PostgreSQL type to SQL Server type with size/precision handling
+ * @param field - The field to map
+ * @param customTypes - Custom types defined in the schema
+ * @param isIndexed - Whether this field is used in an index (affects MAX type handling)
  */
 function mapPostgresTypeToMSSQL(
     field: DBField,
-    customTypes: DBCustomType[]
+    customTypes: DBCustomType[],
+    isIndexed: boolean = false
 ): {
     typeName: string;
     inlineComment: string | null;
@@ -159,11 +163,17 @@ function mapPostgresTypeToMSSQL(
     const originalType = field.type.name.toLowerCase();
     let inlineComment: string | null = null;
 
+    // SQL Server has a 900-byte limit for index keys. NVARCHAR uses 2 bytes per char,
+    // so 450 chars is the max for indexed NVARCHAR columns.
+    const indexSafeNvarcharSize = 'NVARCHAR(450)';
+
     // Handle array types
     if (field.isArray || originalType.endsWith('[]')) {
+        // Arrays used in indexes need bounded size (though this is unusual)
+        const arrayType = isIndexed ? indexSafeNvarcharSize : 'NVARCHAR(MAX)';
         return {
-            typeName: 'NVARCHAR(MAX)',
-            inlineComment: `Was: ${field.type.name} (PostgreSQL array, stored as JSON)`,
+            typeName: arrayType,
+            inlineComment: `Was: ${field.type.name} (PostgreSQL array${isIndexed ? ', size limited for index' : ', stored as JSON'})`,
         };
     }
 
@@ -177,10 +187,13 @@ function mapPostgresTypeToMSSQL(
                 inlineComment: null, // Inline comment handled separately via getEnumValuesComment
             };
         } else if (customType.kind === 'composite') {
-            // Composite types become NVARCHAR(MAX) as JSON
+            // Composite types become NVARCHAR(MAX) as JSON (shouldn't be indexed normally)
+            const compositeType = isIndexed
+                ? indexSafeNvarcharSize
+                : 'NVARCHAR(MAX)';
             return {
-                typeName: 'NVARCHAR(MAX)',
-                inlineComment: `Was: ${field.type.name} (PostgreSQL composite type)`,
+                typeName: compositeType,
+                inlineComment: `Was: ${field.type.name} (PostgreSQL composite type${isIndexed ? ', size limited for index' : ''})`,
             };
         }
     }
@@ -190,6 +203,13 @@ function mapPostgresTypeToMSSQL(
     const effectiveMapping = mapping || getFallbackTypeMapping('sqlserver');
 
     let typeName = effectiveMapping.targetType;
+
+    // If indexed and type contains (MAX), replace with bounded size for index compatibility
+    // SQL Server cannot use MAX types as index keys
+    if (isIndexed && typeName.includes('(MAX)')) {
+        typeName = typeName.replace('(MAX)', '(450)');
+        inlineComment = `Was: ${field.type.name} (size limited for index)`;
+    }
 
     // Handle size/precision
     if (field.characterMaximumLength) {
@@ -240,8 +260,8 @@ function mapPostgresTypeToMSSQL(
         typeName = `${typeName}(${effectiveMapping.defaultPrecision}, ${effectiveMapping.defaultScale || 0})`;
     }
 
-    // Set inline comment if conversion note exists
-    if (effectiveMapping.includeInlineComment) {
+    // Set inline comment if conversion note exists (but don't override index-related comment)
+    if (effectiveMapping.includeInlineComment && !inlineComment) {
         inlineComment = `Was: ${field.type.name}`;
     }
 
@@ -362,17 +382,47 @@ export function exportPostgreSQLToMSSQL({
                     (f) => f.primaryKey
                 );
 
-                return `${
-                    table.comments
-                        ? formatMSSQLTableComment(table.comments)
-                        : ''
-                }CREATE TABLE ${tableName} (\n${table.fields
-                    .map((field: DBField) => {
+                // Check if we have following constraints (for comma placement)
+                const validCheckConstraints = (
+                    table.checkConstraints ?? []
+                ).filter((c) => c.expression && c.expression.trim());
+                const hasFollowingConstraints =
+                    primaryKeyFields.length > 0 ||
+                    validCheckConstraints.length > 0;
+
+                // Compute which fields are used in indexes (for type size limiting)
+                // SQL Server has a 900-byte limit for index keys
+                const indexedFieldIds = new Set<string>();
+                table.indexes.forEach((idx) => {
+                    idx.fieldIds.forEach((fieldId) => {
+                        indexedFieldIds.add(fieldId);
+                    });
+                });
+                // Also add primary key fields as they are indexed
+                primaryKeyFields.forEach((f) => {
+                    indexedFieldIds.add(f.id);
+                });
+                // Also add unique fields as they create implicit indexes
+                table.fields.forEach((f) => {
+                    if (f.unique) {
+                        indexedFieldIds.add(f.id);
+                    }
+                });
+
+                const fieldDefinitions = table.fields.map(
+                    (field: DBField, index: number, allFields: DBField[]) => {
                         const fieldName = `[${field.name}]`;
+
+                        // Check if this field is used in an index
+                        const isIndexed = indexedFieldIds.has(field.id);
 
                         // Map type to SQL Server
                         const { typeName, inlineComment } =
-                            mapPostgresTypeToMSSQL(field, customTypes);
+                            mapPostgresTypeToMSSQL(
+                                field,
+                                customTypes,
+                                isIndexed
+                            );
 
                         // Check for enum type and get values
                         const enumComment = getEnumValuesComment(
@@ -407,12 +457,23 @@ export function exportPostgreSQLToMSSQL({
                             ? ` -- ${fullInlineComment}`
                             : '';
 
-                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeName}${notNull}${identity}${unique}${defaultValue}${sqlInlineComment}`;
-                    })
-                    .join(',\n')}${
+                        // Determine if this field needs a trailing comma
+                        const isLastField = index === allFields.length - 1;
+                        const needsComma =
+                            !isLastField || hasFollowingConstraints;
+
+                        return `${exportFieldComment(field.comments ?? '')}    ${fieldName} ${typeName}${notNull}${identity}${unique}${defaultValue}${needsComma ? ',' : ''}${sqlInlineComment}`;
+                    }
+                );
+
+                return `${
+                    table.comments
+                        ? formatMSSQLTableComment(table.comments)
+                        : ''
+                }CREATE TABLE ${tableName} (\n${fieldDefinitions.join('\n')}${
                     // Add PRIMARY KEY as table constraint
                     primaryKeyFields.length > 0
-                        ? `,\n    ${(() => {
+                        ? `\n    ${(() => {
                               const pkIndex = table.indexes.find(
                                   (idx) => idx.isPrimaryKey
                               );
@@ -421,7 +482,19 @@ export function exportPostgreSQLToMSSQL({
                                   : '';
                           })()}PRIMARY KEY (${primaryKeyFields
                               .map((f) => `[${f.name}]`)
-                              .join(', ')})`
+                              .join(
+                                  ', '
+                              )})${validCheckConstraints.length > 0 ? ',' : ''}`
+                        : ''
+                }${
+                    // Add check constraints (already computed above as validCheckConstraints)
+                    validCheckConstraints.length > 0
+                        ? validCheckConstraints
+                              .map(
+                                  (constraint, index) =>
+                                      `${index > 0 ? ',' : ''}\n    CHECK (${constraint.expression})`
+                              )
+                              .join('')
                         : ''
                 }\n);\nGO${
                     // Add indexes
@@ -489,7 +562,7 @@ export function exportPostgreSQLToMSSQL({
                                     : '';
 
                                 return indexFieldNames.length > 0
-                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}${indexTypeMapping?.targetType === 'CLUSTERED' ? 'CLUSTERED ' : 'NONCLUSTERED '}INDEX ${indexName}\nON ${tableName} (${indexFieldNames.join(', ')});${commentStr}`
+                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}${indexTypeMapping?.targetType === 'CLUSTERED' ? 'CLUSTERED ' : 'NONCLUSTERED '}INDEX ${indexName} ON ${tableName} (${indexFieldNames.join(', ')});${commentStr}`
                                     : '';
                             })
                             .filter(Boolean)

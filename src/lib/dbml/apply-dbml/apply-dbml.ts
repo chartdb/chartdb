@@ -354,6 +354,7 @@ const updateTables = ({
             ...sourceTable,
             fields: updatedFields,
             indexes: updatedIndexes,
+            checkConstraints: targetTable.checkConstraints,
             comments: targetTable.comments,
         };
 
