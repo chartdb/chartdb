@@ -1064,65 +1064,6 @@ export const ChartDBProvider: React.FC<
         [db, diagramId, setTables, addUndoAction, resetRedoStack, getIndex]
     );
 
-    const createCheckConstraint: ChartDBContext['createCheckConstraint'] =
-        useCallback(
-            async (tableId: string) => {
-                const constraint: DBCheckConstraint = {
-                    id: generateId(),
-                    expression: '',
-                    createdAt: Date.now(),
-                };
-
-                setTables((tables) =>
-                    tables.map((t) =>
-                        t.id === tableId
-                            ? {
-                                  ...t,
-                                  checkConstraints: [
-                                      ...(t.checkConstraints ?? []),
-                                      constraint,
-                                  ],
-                              }
-                            : t
-                    )
-                );
-
-                const dbTable = await db.getTable({ diagramId, id: tableId });
-                if (!dbTable) {
-                    return constraint;
-                }
-
-                const updatedAt = new Date();
-                setDiagramUpdatedAt(updatedAt);
-                await Promise.all([
-                    db.updateDiagram({
-                        id: diagramId,
-                        attributes: { updatedAt },
-                    }),
-                    db.updateTable({
-                        id: tableId,
-                        attributes: {
-                            ...dbTable,
-                            checkConstraints: [
-                                ...(dbTable.checkConstraints ?? []),
-                                constraint,
-                            ],
-                        },
-                    }),
-                ]);
-
-                addUndoAction({
-                    action: 'addCheckConstraint',
-                    redoData: { tableId, constraint },
-                    undoData: { tableId, constraintId: constraint.id },
-                });
-                resetRedoStack();
-
-                return constraint;
-            },
-            [db, diagramId, setTables, addUndoAction, resetRedoStack]
-        );
-
     const addCheckConstraint: ChartDBContext['addCheckConstraint'] =
         useCallback(
             async (
@@ -1178,6 +1119,22 @@ export const ChartDBProvider: React.FC<
                 }
             },
             [db, diagramId, setTables, addUndoAction, resetRedoStack]
+        );
+
+    const createCheckConstraint: ChartDBContext['createCheckConstraint'] =
+        useCallback(
+            async (tableId: string) => {
+                const constraint: DBCheckConstraint = {
+                    id: generateId(),
+                    expression: '',
+                    createdAt: Date.now(),
+                };
+
+                await addCheckConstraint(tableId, constraint);
+
+                return constraint;
+            },
+            [addCheckConstraint]
         );
 
     const removeCheckConstraint: ChartDBContext['removeCheckConstraint'] =
