@@ -135,11 +135,13 @@ export const exportBaseSQL = ({
     targetDatabaseType,
     isDBMLFlow = false,
     onlyRelationships = false,
+    skipFKGeneration = false,
 }: {
     diagram: Diagram;
     targetDatabaseType: DatabaseType;
     isDBMLFlow?: boolean;
     onlyRelationships?: boolean;
+    skipFKGeneration?: boolean;
 }): string => {
     const { tables, relationships } = diagram;
 
@@ -637,77 +639,80 @@ export const exportBaseSQL = ({
         }
     });
 
-    if (nonViewTables.length > 0 && (relationships?.length ?? 0) > 0) {
-        sqlScript += '\n';
-    }
+    // Skip FK generation when requested (e.g., for DBML export which generates Refs directly)
+    if (!skipFKGeneration) {
+        if (nonViewTables.length > 0 && (relationships?.length ?? 0) > 0) {
+            sqlScript += '\n';
+        }
 
-    // Handle relationships (foreign keys)
-    relationships?.forEach((relationship) => {
-        const sourceTable = nonViewTables.find(
-            (table) => table.id === relationship.sourceTableId
-        );
-        const targetTable = nonViewTables.find(
-            (table) => table.id === relationship.targetTableId
-        );
+        // Handle relationships (foreign keys)
+        relationships?.forEach((relationship) => {
+            const sourceTable = nonViewTables.find(
+                (table) => table.id === relationship.sourceTableId
+            );
+            const targetTable = nonViewTables.find(
+                (table) => table.id === relationship.targetTableId
+            );
 
-        const sourceTableField = sourceTable?.fields.find(
-            (field) => field.id === relationship.sourceFieldId
-        );
-        const targetTableField = targetTable?.fields.find(
-            (field) => field.id === relationship.targetFieldId
-        );
-
-        if (
-            sourceTable &&
-            targetTable &&
-            sourceTableField &&
-            targetTableField
-        ) {
-            // Determine which table should have the foreign key based on cardinality
-            // - FK goes on the "many" side when cardinalities differ
-            // - FK goes on target when cardinalities are the same (one:one, many:many)
-            // - Many-to-many needs a junction table, skip for SQL export
-            let fkTable, fkField, refTable, refField;
+            const sourceTableField = sourceTable?.fields.find(
+                (field) => field.id === relationship.sourceFieldId
+            );
+            const targetTableField = targetTable?.fields.find(
+                (field) => field.id === relationship.targetFieldId
+            );
 
             if (
-                relationship.sourceCardinality === 'many' &&
-                relationship.targetCardinality === 'many'
+                sourceTable &&
+                targetTable &&
+                sourceTableField &&
+                targetTableField
             ) {
-                // Many-to-many relationships need a junction table, skip
-                return;
-            } else if (
-                relationship.sourceCardinality === 'many' &&
-                relationship.targetCardinality === 'one'
-            ) {
-                // FK goes on source table (the many side)
-                fkTable = sourceTable;
-                fkField = sourceTableField;
-                refTable = targetTable;
-                refField = targetTableField;
-            } else {
-                // All other cases: FK goes on target table
-                // - one:one (same cardinality → target)
-                // - one:many (target is many side → target)
-                fkTable = targetTable;
-                fkField = targetTableField;
-                refTable = sourceTable;
-                refField = sourceTableField;
+                // Determine which table should have the foreign key based on cardinality
+                // - FK goes on the "many" side when cardinalities differ
+                // - FK goes on target when cardinalities are the same (one:one, many:many)
+                // - Many-to-many needs a junction table, skip for SQL export
+                let fkTable, fkField, refTable, refField;
+
+                if (
+                    relationship.sourceCardinality === 'many' &&
+                    relationship.targetCardinality === 'many'
+                ) {
+                    // Many-to-many relationships need a junction table, skip
+                    return;
+                } else if (
+                    relationship.sourceCardinality === 'many' &&
+                    relationship.targetCardinality === 'one'
+                ) {
+                    // FK goes on source table (the many side)
+                    fkTable = sourceTable;
+                    fkField = sourceTableField;
+                    refTable = targetTable;
+                    refField = targetTableField;
+                } else {
+                    // All other cases: FK goes on target table
+                    // - one:one (same cardinality → target)
+                    // - one:many (target is many side → target)
+                    fkTable = targetTable;
+                    fkField = targetTableField;
+                    refTable = sourceTable;
+                    refField = sourceTableField;
+                }
+
+                const fkTableName = getQuotedTableName(fkTable, isDBMLFlow);
+                const refTableName = getQuotedTableName(refTable, isDBMLFlow);
+                const quotedFkFieldName = getQuotedFieldName(
+                    fkField.name,
+                    isDBMLFlow
+                );
+                const quotedRefFieldName = getQuotedFieldName(
+                    refField.name,
+                    isDBMLFlow
+                );
+
+                sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${quotedFkFieldName}) REFERENCES ${refTableName} (${quotedRefFieldName});\n`;
             }
-
-            const fkTableName = getQuotedTableName(fkTable, isDBMLFlow);
-            const refTableName = getQuotedTableName(refTable, isDBMLFlow);
-            const quotedFkFieldName = getQuotedFieldName(
-                fkField.name,
-                isDBMLFlow
-            );
-            const quotedRefFieldName = getQuotedFieldName(
-                refField.name,
-                isDBMLFlow
-            );
-
-            sqlScript += `ALTER TABLE ${fkTableName} ADD CONSTRAINT ${relationship.name} FOREIGN KEY (${quotedFkFieldName}) REFERENCES ${refTableName} (${quotedRefFieldName});\n`;
-        }
-    });
+        });
+    }
 
     return sqlScript;
 };

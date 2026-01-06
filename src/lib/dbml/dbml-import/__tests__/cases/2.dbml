@@ -3,5 +3,5 @@ Table "table_3" {
 }
 
 Table "table_2" {
-  "id" bigint [pk, not null, ref: < "table_3"."id"]
+  "id" bigint [pk, not null, ref: - "table_3"."id"]
 }

@@ -455,6 +455,7 @@ const updateRelationships = (
     sourceRelationships.forEach((sourceRel) => {
         // Find matching target relationship by checking if the target has a relationship
         // between the same tables and fields (using the ID mappings)
+        let isReverseMatch = false;
         const targetRel = targetRelationships.find((tgtRel) => {
             const mappedSourceTableId = idMappings.tables[tgtRel.sourceTableId];
             const mappedTargetTableId = idMappings.tables[tgtRel.targetTableId];
@@ -474,16 +475,25 @@ const updateRelationships = (
                 sourceRel.sourceFieldId === mappedTargetFieldId &&
                 sourceRel.targetFieldId === mappedSourceFieldId;
 
+            if (reverseMatch && !directMatch) {
+                isReverseMatch = true;
+            }
+
             return directMatch || reverseMatch;
         });
 
         if (targetRel) {
             matchedTargetRelIds.add(targetRel.id);
             // Preserve source relationship but update cardinalities from target
+            // If the relationship is matched in reverse direction, swap the cardinalities
             const result: DBRelationship = {
                 ...sourceRel,
-                sourceCardinality: targetRel.sourceCardinality,
-                targetCardinality: targetRel.targetCardinality,
+                sourceCardinality: isReverseMatch
+                    ? targetRel.targetCardinality
+                    : targetRel.sourceCardinality,
+                targetCardinality: isReverseMatch
+                    ? targetRel.sourceCardinality
+                    : targetRel.targetCardinality,
             };
 
             // Only include schema fields if they exist in the source relationship

@@ -6,6 +6,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 import { validateCheckConstraint } from '@/lib/check-constraints/check-constraints-validator';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
 
 // Use DBCustomType for generating Enum DBML
 const generateEnumsDBML = (customTypes: DBCustomType[] | undefined): string => {
@@ -258,8 +259,9 @@ const findClosingBracket = (str: string, openBracketIndex: number): number => {
 const convertToInlineRefs = (dbml: string): string => {
     // Extract all Ref statements - Updated pattern to handle schema.table.field format
     // Matches both "table"."field" and "schema"."table"."field" formats
+    // Now supports cardinality symbols: < (one-to-many), > (many-to-one), - (one-to-one), <> (many-to-many)
     const refPattern =
-        /Ref\s+"([^"]+)"\s*:\s*(?:"([^"]+)"\.)?"([^"]+)"\."([^"]+)"\s*([<>*])\s*(?:"([^"]+)"\.)?"([^"]+)"\."([^"]+)"/g;
+        /Ref\s+"([^"]+)"\s*:\s*(?:"([^"]+)"\.)?"([^"]+)"\."([^"]+)"\s*(<>|[<>\-*])\s*(?:"([^"]+)"\.)?"([^"]+)"\."([^"]+)"/g;
     const refs: Array<{
         refName: string;
         sourceSchema?: string;
@@ -373,24 +375,71 @@ const convertToInlineRefs = (dbml: string): string => {
     refs.forEach((ref) => {
         let targetTableName, fieldNameToModify, inlineRefSyntax, relatedTable;
 
+        // Build the reference strings for both sides
+        const sourceRef = ref.sourceSchema
+            ? `"${ref.sourceSchema}"."${ref.sourceTable}"."${ref.sourceField}"`
+            : `"${ref.sourceTable}"."${ref.sourceField}"`;
+        const targetRef = ref.targetSchema
+            ? `"${ref.targetSchema}"."${ref.targetTable}"."${ref.targetField}"`
+            : `"${ref.targetTable}"."${ref.targetField}"`;
+
+        // After parsing Ref "name":LEFT [symbol] RIGHT:
+        // ref.sourceTable = LEFT, ref.targetTable = RIGHT
+        //
+        // For Ref A < B: A is one, B is many, B has FK pointing to A
+        // For Ref A > B: A is many, B is one, A has FK pointing to B
+        //
+        // Inline ref semantics:
+        // - ref: > other = "I reference other" (I have FK pointing to other)
+        // - ref: < other = "other references me" (other has FK pointing to me)
+        //
+        // Both one-to-many and many-to-one Refs use '<' symbol (A < B format)
+        // where A=one, B=many. FK is always on B (the many side).
+
         if (ref.direction === '<') {
+            // Ref: A < B where A=one, B=many. FK is on B.
+            // In parsed: ref.sourceTable=A (one), ref.targetTable=B (many)
+            // Inline ref goes on B (many side) with: ref: > A (B references A)
             targetTableName = ref.targetSchema
                 ? `${ref.targetSchema}.${ref.targetTable}`
                 : ref.targetTable;
             fieldNameToModify = ref.targetField;
-            const sourceRef = ref.sourceSchema
-                ? `"${ref.sourceSchema}"."${ref.sourceTable}"."${ref.sourceField}"`
-                : `"${ref.sourceTable}"."${ref.sourceField}"`;
-            inlineRefSyntax = `ref: < ${sourceRef}`;
+            inlineRefSyntax = `ref: > ${sourceRef}`; // B references A
             relatedTable = ref.sourceTable;
-        } else {
+        } else if (ref.direction === '>') {
+            // Ref: A > B where A=many, B=one. FK is on A.
+            // In parsed: ref.sourceTable=A (many), ref.targetTable=B (one)
+            // Inline ref goes on A (many side) with: ref: > B (A references B)
             targetTableName = ref.sourceSchema
                 ? `${ref.sourceSchema}.${ref.sourceTable}`
                 : ref.sourceTable;
             fieldNameToModify = ref.sourceField;
-            const targetRef = ref.targetSchema
-                ? `"${ref.targetSchema}"."${ref.targetTable}"."${ref.targetField}"`
-                : `"${ref.targetTable}"."${ref.targetField}"`;
+            inlineRefSyntax = `ref: > ${targetRef}`; // A references B
+            relatedTable = ref.targetTable;
+        } else if (ref.direction === '-') {
+            // one-to-one: A - B
+            // Convention: inline ref on B pointing to A
+            targetTableName = ref.targetSchema
+                ? `${ref.targetSchema}.${ref.targetTable}`
+                : ref.targetTable;
+            fieldNameToModify = ref.targetField;
+            inlineRefSyntax = `ref: - ${sourceRef}`;
+            relatedTable = ref.sourceTable;
+        } else if (ref.direction === '<>') {
+            // many-to-many: A <> B
+            // Convention: inline ref on B pointing to A
+            targetTableName = ref.targetSchema
+                ? `${ref.targetSchema}.${ref.targetTable}`
+                : ref.targetTable;
+            fieldNameToModify = ref.targetField;
+            inlineRefSyntax = `ref: <> ${sourceRef}`;
+            relatedTable = ref.sourceTable;
+        } else {
+            // Default fallback (e.g., '*' or unknown)
+            targetTableName = ref.sourceSchema
+                ? `${ref.sourceSchema}.${ref.sourceTable}`
+                : ref.sourceTable;
+            fieldNameToModify = ref.sourceField;
             inlineRefSyntax = `ref: > ${targetRef}`;
             relatedTable = ref.targetTable;
         }
@@ -982,6 +1031,118 @@ const extractRelationshipsDbml = (dbml: string): string => {
     return refLines.join('\n').trim();
 };
 
+// Generate Ref statements from diagram relationships with correct cardinality symbols
+// Note: relationships should already be processed with sanitized names (fk_N_name format)
+// Format: referenced_table [symbol] fk_table (matches @dbml/core order)
+// - For many-to-one (source has FK): target [symbol] source
+// - For one-to-many (target has FK): source [symbol] target
+// - For one-to-one: target [symbol] source (convention)
+// - For many-to-many: target [symbol] source (convention)
+const generateRelationshipsDbmlFromDiagram = (
+    relationships: DBRelationship[],
+    tables: DBTable[]
+): string => {
+    if (!relationships || relationships.length === 0) {
+        return '';
+    }
+
+    // Build lookup maps once for O(1) access - improves performance for large diagrams
+    const tableMap = new Map<string, DBTable>();
+    const fieldMap = new Map<string, { table: DBTable; fieldName: string }>();
+
+    for (const table of tables) {
+        tableMap.set(table.id, table);
+        for (const field of table.fields) {
+            fieldMap.set(field.id, { table, fieldName: field.name });
+        }
+    }
+
+    const refStatements: string[] = [];
+
+    for (const rel of relationships) {
+        const sourceTable = tableMap.get(rel.sourceTableId);
+        const targetTable = tableMap.get(rel.targetTableId);
+        const sourceFieldInfo = fieldMap.get(rel.sourceFieldId);
+        const targetFieldInfo = fieldMap.get(rel.targetFieldId);
+
+        // Skip invalid relationships (missing table or field)
+        if (
+            !sourceTable ||
+            !targetTable ||
+            !sourceFieldInfo ||
+            !targetFieldInfo
+        ) {
+            continue;
+        }
+
+        // Build quoted table.field references
+        const sourceRef = sourceTable.schema
+            ? `"${sourceTable.schema}"."${sourceTable.name}"."${sourceFieldInfo.fieldName}"`
+            : `"${sourceTable.name}"."${sourceFieldInfo.fieldName}"`;
+
+        const targetRef = targetTable.schema
+            ? `"${targetTable.schema}"."${targetTable.name}"."${targetFieldInfo.fieldName}"`
+            : `"${targetTable.name}"."${targetFieldInfo.fieldName}"`;
+
+        // Determine order and symbol based on cardinality
+        // To preserve @dbml/core output format while adding correct symbols:
+        // - @dbml/core always outputs: referenced_table < fk_table (regardless of actual cardinality)
+        // - We preserve the order but use correct symbol based on actual cardinality
+        //
+        // DBML semantics:
+        // - `A < B` means: A is ONE, B is MANY
+        // - `A > B` means: A is MANY, B is ONE
+        // - `A - B` means: one-to-one
+        // - `A <> B` means: many-to-many
+        let leftRef: string;
+        let rightRef: string;
+        let symbol: string;
+
+        if (
+            rel.sourceCardinality === 'one' &&
+            rel.targetCardinality === 'many'
+        ) {
+            // one-to-many: source (one) has many target
+            // Format: source < target (source is one, target is many)
+            leftRef = sourceRef;
+            rightRef = targetRef;
+            symbol = '<';
+        } else if (
+            rel.sourceCardinality === 'many' &&
+            rel.targetCardinality === 'one'
+        ) {
+            // many-to-one: source (many) belongs to target (one)
+            // Format: target < source (to match @dbml/core order, target is one, source is many)
+            leftRef = targetRef;
+            rightRef = sourceRef;
+            symbol = '<';
+        } else if (
+            rel.sourceCardinality === 'one' &&
+            rel.targetCardinality === 'one'
+        ) {
+            // one-to-one
+            // Format: source - target
+            leftRef = sourceRef;
+            rightRef = targetRef;
+            symbol = '-';
+        } else {
+            // many-to-many
+            // Format: source <> target
+            leftRef = sourceRef;
+            rightRef = targetRef;
+            symbol = '<>';
+        }
+
+        // rel.name is already sanitized (fk_N_name format) by generateDBMLFromDiagram
+        refStatements.push(
+            `Ref "${rel.name}":${leftRef} ${symbol} ${rightRef}`
+        );
+    }
+
+    // Join with blank lines to match @dbml/core format
+    return refStatements.join('\n\n');
+};
+
 export interface DBMLExportResult {
     standardDbml: string;
     inlineDbml: string;
@@ -1126,6 +1287,7 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
             diagram: finalDiagramForExport, // Use final diagram
             targetDatabaseType: diagram.databaseType,
             isDBMLFlow: true,
+            skipFKGeneration: true, // We generate Refs directly with correct cardinality
         });
 
         baseScript = sanitizeSQLforDBML(baseScript);
@@ -1157,6 +1319,20 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         // Restore check constraints that may have been lost during DBML export
         standard = restoreCheckConstraints(standard, tablesWithFields);
+
+        // Generate cardinality-aware Ref statements from the diagram relationships
+        // (FK generation is skipped in SQL, so @dbml/core doesn't generate any Refs)
+        const cardinalityAwareRefs = generateRelationshipsDbmlFromDiagram(
+            finalDiagramForExport.relationships ?? [],
+            finalDiagramForExport.tables ?? []
+        );
+
+        // Append our Ref statements if we have relationships
+        if (cardinalityAwareRefs) {
+            // Clean up trailing whitespace/newlines and add proper spacing
+            standard =
+                standard.trimEnd() + '\n\n' + cardinalityAwareRefs + '\n';
+        }
 
         // Prepend Enum DBML to the standard output
         if (enumsDBML) {
