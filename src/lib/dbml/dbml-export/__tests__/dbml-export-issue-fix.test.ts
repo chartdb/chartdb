@@ -1266,12 +1266,14 @@ describe('DBML Export - Issue Fixes', () => {
 
         const result = generateDBMLFromDiagram(diagram);
 
+        // For 1:1 relationships, FK goes on target table (table_1)
+        // Source (table_2) references target (table_1), so table_1 has FK pointing to table_2
         const expectedInlineDBML = `Table "table_1" {
-  "id" bigint [pk, not null]
+  "id" bigint [pk, not null, ref: < "table_2"."id"]
 }
 
 Table "table_2" {
-  "id" bigint [pk, not null, ref: < "table_1"."id"]
+  "id" bigint [pk, not null]
 }
 `;
 
@@ -1283,7 +1285,7 @@ Table "table_2" {
   "id" bigint [pk, not null]
 }
 
-Ref "fk_0_table_2_id_fk":"table_1"."id" < "table_2"."id"
+Ref "fk_0_table_2_id_fk":"table_2"."id" < "table_1"."id"
 `;
 
         expect(result.inlineDbml).toBe(expectedInlineDBML);

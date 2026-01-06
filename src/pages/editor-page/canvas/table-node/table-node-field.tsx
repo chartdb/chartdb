@@ -130,11 +130,28 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         }, [relationships, tableNodeId, field.id]);
 
         const isForeignKey = useMemo(() => {
-            return relationships.some(
-                (rel) =>
+            return relationships.some((rel) => {
+                // FK placement logic:
+                // - FK goes on the "many" side when cardinalities differ
+                // - FK goes on target when cardinalities are the same (one:one, many:many)
+                // The only case where FK goes on source is many:one
+                const fkOnSource =
+                    rel.sourceCardinality === 'many' &&
+                    rel.targetCardinality === 'one';
+
+                if (fkOnSource) {
+                    return (
+                        rel.sourceTableId === tableNodeId &&
+                        rel.sourceFieldId === field.id
+                    );
+                }
+
+                // All other cases: FK on target
+                return (
                     rel.targetTableId === tableNodeId &&
                     rel.targetFieldId === field.id
-            );
+                );
+            });
         }, [relationships, tableNodeId, field.id]);
 
         const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);

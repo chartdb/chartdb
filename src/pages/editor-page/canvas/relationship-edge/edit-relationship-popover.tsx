@@ -1,13 +1,15 @@
-import React, { useRef } from 'react';
-import { Trash2, ArrowLeftRight } from 'lucide-react';
+import React, { useCallback, useRef } from 'react';
+import { Trash2, ArrowLeftRight, CircleDotDashed } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import type { Cardinality } from '@/lib/domain/db-relationship';
 import { cn } from '@/lib/utils';
 import { useClickAway } from 'react-use';
 import { useCanvas } from '@/hooks/use-canvas';
+import { useLayout } from '@/hooks/use-layout';
 
 export interface EditRelationshipPopoverProps {
     anchorPosition: { x: number; y: number };
+    relationshipId: string;
     sourceCardinality: Cardinality;
     targetCardinality: Cardinality;
     onCardinalityChange: (
@@ -27,13 +29,13 @@ type RelationshipTypeOption = {
 const relationshipTypes: RelationshipTypeOption[] = [
     { label: '1:1', sourceCardinality: 'one', targetCardinality: 'one' },
     { label: '1:N', sourceCardinality: 'one', targetCardinality: 'many' },
-    { label: 'N:1', sourceCardinality: 'many', targetCardinality: 'one' },
 ];
 
 export const EditRelationshipPopover: React.FC<
     EditRelationshipPopoverProps
 > = ({
     anchorPosition,
+    relationshipId,
     sourceCardinality,
     targetCardinality,
     onCardinalityChange,
@@ -42,8 +44,20 @@ export const EditRelationshipPopover: React.FC<
 }) => {
     const popoverRef = useRef<HTMLDivElement>(null);
     const { closeRelationshipPopover } = useCanvas();
+    const { selectSidebarSection, openRelationshipFromSidebar } = useLayout();
 
     useClickAway(popoverRef, closeRelationshipPopover);
+
+    const openRelationshipInSidebar = useCallback(() => {
+        selectSidebarSection('refs');
+        openRelationshipFromSidebar(relationshipId);
+        closeRelationshipPopover();
+    }, [
+        selectSidebarSection,
+        openRelationshipFromSidebar,
+        relationshipId,
+        closeRelationshipPopover,
+    ]);
 
     return (
         <div
@@ -95,6 +109,19 @@ export const EditRelationshipPopover: React.FC<
                     title="Switch tables"
                 >
                     <ArrowLeftRight className="!size-3.5" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="size-7 p-0 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openRelationshipInSidebar();
+                    }}
+                    title="Open in sidebar"
+                >
+                    <CircleDotDashed className="!size-3.5" />
                 </Button>
                 <Button
                     variant="ghost"

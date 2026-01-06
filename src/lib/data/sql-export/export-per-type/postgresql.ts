@@ -484,39 +484,31 @@ export function exportPostgreSQL({
                 }
 
                 // Determine which table should have the foreign key based on cardinality
+                // - FK goes on the "many" side when cardinalities differ
+                // - FK goes on target when cardinalities are the same (one:one, many:many)
                 let fkTable, fkField, refTable, refField;
 
                 if (
-                    r.sourceCardinality === 'one' &&
+                    r.sourceCardinality === 'many' &&
                     r.targetCardinality === 'many'
                 ) {
-                    // FK goes on target table
-                    fkTable = targetTable;
-                    fkField = targetField;
-                    refTable = sourceTable;
-                    refField = sourceField;
+                    // Many-to-many relationships need a junction table, skip
+                    return '';
                 } else if (
                     r.sourceCardinality === 'many' &&
                     r.targetCardinality === 'one'
                 ) {
-                    // FK goes on source table
+                    // FK goes on source table (the many side)
                     fkTable = sourceTable;
                     fkField = sourceField;
                     refTable = targetTable;
                     refField = targetField;
-                } else if (
-                    r.sourceCardinality === 'one' &&
-                    r.targetCardinality === 'one'
-                ) {
-                    // For 1:1, FK goes on target table (the table with the FK column)
-                    // Source represents the referenced (parent) table, target is the referencing (child) table
+                } else {
+                    // All other cases: FK goes on target table
                     fkTable = targetTable;
                     fkField = targetField;
                     refTable = sourceTable;
                     refField = sourceField;
-                } else {
-                    // Many-to-many relationships need a junction table, skip for now
-                    return '';
                 }
 
                 const fkTableName = fkTable.schema

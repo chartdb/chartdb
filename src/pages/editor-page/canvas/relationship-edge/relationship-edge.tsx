@@ -93,18 +93,48 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
 
             const handleSwitchTables = useCallback(async () => {
                 if (!relationship) return;
-                await updateRelationship(
-                    id,
-                    {
-                        sourceTableId: relationship.targetTableId,
-                        targetTableId: relationship.sourceTableId,
-                        sourceFieldId: relationship.targetFieldId,
-                        targetFieldId: relationship.sourceFieldId,
-                        sourceCardinality: relationship.targetCardinality,
-                        targetCardinality: relationship.sourceCardinality,
-                    },
-                    { updateHistory: true }
-                );
+
+                const sameCardinality =
+                    relationship.sourceCardinality ===
+                    relationship.targetCardinality;
+
+                if (sameCardinality) {
+                    // Equal cardinalities: swap everything (tables, fields, cardinalities)
+                    await updateRelationship(
+                        id,
+                        {
+                            sourceTableId: relationship.targetTableId,
+                            targetTableId: relationship.sourceTableId,
+                            sourceFieldId: relationship.targetFieldId,
+                            targetFieldId: relationship.sourceFieldId,
+                            sourceCardinality: relationship.targetCardinality,
+                            targetCardinality: relationship.sourceCardinality,
+                        },
+                        { updateHistory: true }
+                    );
+                } else if (relationship.sourceCardinality === 'many') {
+                    // many:one → one:many (swap cardinalities so "many" moves to target)
+                    await updateRelationship(
+                        id,
+                        {
+                            sourceCardinality: 'one',
+                            targetCardinality: 'many',
+                        },
+                        { updateHistory: true }
+                    );
+                } else {
+                    // one:many → swap tables/fields (keeps one:many with different tables)
+                    await updateRelationship(
+                        id,
+                        {
+                            sourceTableId: relationship.targetTableId,
+                            targetTableId: relationship.sourceTableId,
+                            sourceFieldId: relationship.targetFieldId,
+                            targetFieldId: relationship.sourceFieldId,
+                        },
+                        { updateHistory: true }
+                    );
+                }
 
                 closeRelationshipPopover();
             }, [
@@ -120,14 +150,37 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                     newTargetCardinality: Cardinality
                 ) => {
                     if (!relationship) return;
-                    await updateRelationship(
-                        id,
-                        {
-                            sourceCardinality: newSourceCardinality,
-                            targetCardinality: newTargetCardinality,
-                        },
-                        { updateHistory: true }
-                    );
+
+                    // Ensure "many" is always on target side when cardinalities differ
+                    // If trying to set many:one (N:1), swap tables and set one:many
+                    if (
+                        newSourceCardinality === 'many' &&
+                        newTargetCardinality === 'one'
+                    ) {
+                        await updateRelationship(
+                            id,
+                            {
+                                // Swap tables/fields
+                                sourceTableId: relationship.targetTableId,
+                                targetTableId: relationship.sourceTableId,
+                                sourceFieldId: relationship.targetFieldId,
+                                targetFieldId: relationship.sourceFieldId,
+                                // Set one:many (many on target)
+                                sourceCardinality: 'one',
+                                targetCardinality: 'many',
+                            },
+                            { updateHistory: true }
+                        );
+                    } else {
+                        await updateRelationship(
+                            id,
+                            {
+                                sourceCardinality: newSourceCardinality,
+                                targetCardinality: newTargetCardinality,
+                            },
+                            { updateHistory: true }
+                        );
+                    }
                     closeRelationshipPopover();
                 },
                 [id, relationship, updateRelationship, closeRelationshipPopover]
@@ -371,6 +424,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                                 anchorPosition={
                                     editRelationshipPopover.position
                                 }
+                                relationshipId={id}
                                 sourceCardinality={
                                     relationship.sourceCardinality ?? 'one'
                                 }

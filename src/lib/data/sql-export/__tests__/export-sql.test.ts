@@ -315,5 +315,139 @@ ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "fk_user_profiles_user_id_us
 
             expect(sql.trim()).toBe(expectedSql.trim());
         });
+
+        it('should place FK on target table for 1:1 relationships in DBML flow', () => {
+            // This tests the generic code path used by DBML export (isDBMLFlow: true)
+            const usersTableId = 'users-table-id';
+            const profilesTableId = 'profiles-table-id';
+            const usersIdFieldId = 'users-id-field';
+            const profilesUserIdFieldId = 'profiles-user-id-field';
+
+            const diagram = createDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        id: usersTableId,
+                        name: 'users',
+                        schema: 'public',
+                        fields: [
+                            createField({
+                                id: usersIdFieldId,
+                                name: 'id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                primaryKey: true,
+                                nullable: false,
+                            }),
+                        ],
+                    }),
+                    createTable({
+                        id: profilesTableId,
+                        name: 'profiles',
+                        schema: 'public',
+                        fields: [
+                            createField({
+                                id: profilesUserIdFieldId,
+                                name: 'user_id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                nullable: true,
+                            }),
+                        ],
+                    }),
+                ],
+                relationships: [
+                    {
+                        id: 'rel-1',
+                        name: 'profiles_user_fk',
+                        sourceSchema: 'public',
+                        sourceTableId: usersTableId, // users is source (parent)
+                        targetSchema: 'public',
+                        targetTableId: profilesTableId, // profiles is target (child with FK)
+                        sourceFieldId: usersIdFieldId,
+                        targetFieldId: profilesUserIdFieldId,
+                        sourceCardinality: 'one',
+                        targetCardinality: 'one',
+                        createdAt: testTime,
+                    },
+                ],
+            });
+
+            const sql = exportBaseSQL({
+                diagram,
+                targetDatabaseType: DatabaseType.POSTGRESQL,
+                isDBMLFlow: true, // Use the generic code path
+            });
+
+            // For 1:1 relationships, FK should be on target table (profiles)
+            // The ALTER TABLE should be on profiles, referencing users
+            expect(sql).toContain(
+                'ALTER TABLE "public"."profiles" ADD CONSTRAINT profiles_user_fk FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id")'
+            );
+        });
+
+        it('should place FK on many side for one-to-many relationships', () => {
+            const ordersTableId = 'orders-table-id';
+            const customersTableId = 'customers-table-id';
+            const ordersCustomerIdFieldId = 'orders-customer-id-field';
+            const customersIdFieldId = 'customers-id-field';
+
+            const diagram = createDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        id: customersTableId,
+                        name: 'customers',
+                        schema: 'public',
+                        fields: [
+                            createField({
+                                id: customersIdFieldId,
+                                name: 'id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                primaryKey: true,
+                                nullable: false,
+                            }),
+                        ],
+                    }),
+                    createTable({
+                        id: ordersTableId,
+                        name: 'orders',
+                        schema: 'public',
+                        fields: [
+                            createField({
+                                id: ordersCustomerIdFieldId,
+                                name: 'customer_id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                nullable: true,
+                            }),
+                        ],
+                    }),
+                ],
+                relationships: [
+                    {
+                        id: 'rel-2',
+                        name: 'orders_customer_fk',
+                        sourceSchema: 'public',
+                        sourceTableId: customersTableId, // customers is one
+                        targetSchema: 'public',
+                        targetTableId: ordersTableId, // orders is many
+                        sourceFieldId: customersIdFieldId,
+                        targetFieldId: ordersCustomerIdFieldId,
+                        sourceCardinality: 'one',
+                        targetCardinality: 'many',
+                        createdAt: testTime,
+                    },
+                ],
+            });
+
+            const sql = exportBaseSQL({
+                diagram,
+                targetDatabaseType: DatabaseType.POSTGRESQL,
+                isDBMLFlow: true,
+            });
+
+            // For one:many, FK should be on the many side (orders)
+            expect(sql).toContain(
+                'ALTER TABLE "public"."orders" ADD CONSTRAINT orders_customer_fk FOREIGN KEY ("customer_id") REFERENCES "public"."customers" ("id")'
+            );
+        });
     });
 });

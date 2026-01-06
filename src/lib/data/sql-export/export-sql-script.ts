@@ -664,42 +664,34 @@ export const exportBaseSQL = ({
             targetTableField
         ) {
             // Determine which table should have the foreign key based on cardinality
-            // In a 1:many relationship, the foreign key goes on the "many" side
-            // If source is "one" and target is "many", FK goes on target table
-            // If source is "many" and target is "one", FK goes on source table
+            // - FK goes on the "many" side when cardinalities differ
+            // - FK goes on target when cardinalities are the same (one:one, many:many)
+            // - Many-to-many needs a junction table, skip for SQL export
             let fkTable, fkField, refTable, refField;
 
             if (
-                relationship.sourceCardinality === 'one' &&
+                relationship.sourceCardinality === 'many' &&
                 relationship.targetCardinality === 'many'
             ) {
-                // FK goes on target table
-                fkTable = targetTable;
-                fkField = targetTableField;
-                refTable = sourceTable;
-                refField = sourceTableField;
+                // Many-to-many relationships need a junction table, skip
+                return;
             } else if (
                 relationship.sourceCardinality === 'many' &&
                 relationship.targetCardinality === 'one'
             ) {
-                // FK goes on source table
-                fkTable = sourceTable;
-                fkField = sourceTableField;
-                refTable = targetTable;
-                refField = targetTableField;
-            } else if (
-                relationship.sourceCardinality === 'one' &&
-                relationship.targetCardinality === 'one'
-            ) {
-                // For 1:1, FK can go on either side, but typically goes on the table that references the other
-                // We'll keep the current behavior for 1:1
+                // FK goes on source table (the many side)
                 fkTable = sourceTable;
                 fkField = sourceTableField;
                 refTable = targetTable;
                 refField = targetTableField;
             } else {
-                // Many-to-many relationships need a junction table, skip for now
-                return;
+                // All other cases: FK goes on target table
+                // - one:one (same cardinality → target)
+                // - one:many (target is many side → target)
+                fkTable = targetTable;
+                fkField = targetTableField;
+                refTable = sourceTable;
+                refField = sourceTableField;
             }
 
             const fkTableName = getQuotedTableName(fkTable, isDBMLFlow);
