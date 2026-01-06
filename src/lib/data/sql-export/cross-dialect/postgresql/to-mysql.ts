@@ -577,35 +577,31 @@ export function exportPostgreSQLToMySQL({
                 }
 
                 // Determine which table should have the foreign key based on cardinality
+                // - FK goes on the "many" side when cardinalities differ
+                // - FK goes on target when cardinalities are the same (one:one, many:many)
                 let fkTable, fkField, refTable, refField;
 
                 if (
-                    r.sourceCardinality === 'one' &&
+                    r.sourceCardinality === 'many' &&
                     r.targetCardinality === 'many'
                 ) {
-                    fkTable = targetTable;
-                    fkField = targetField;
-                    refTable = sourceTable;
-                    refField = sourceField;
+                    // Many-to-many relationships need a junction table, skip
+                    return '';
                 } else if (
                     r.sourceCardinality === 'many' &&
                     r.targetCardinality === 'one'
                 ) {
-                    fkTable = sourceTable;
-                    fkField = sourceField;
-                    refTable = targetTable;
-                    refField = targetField;
-                } else if (
-                    r.sourceCardinality === 'one' &&
-                    r.targetCardinality === 'one'
-                ) {
+                    // FK goes on source table (the many side)
                     fkTable = sourceTable;
                     fkField = sourceField;
                     refTable = targetTable;
                     refField = targetField;
                 } else {
-                    // Many-to-many relationships need a junction table, skip
-                    return '';
+                    // All other cases: FK goes on target table
+                    fkTable = targetTable;
+                    fkField = targetField;
+                    refTable = sourceTable;
+                    refField = sourceField;
                 }
 
                 const fkTableName = fkTable.schema
