@@ -301,7 +301,7 @@ interface DBMLTable {
 interface DBMLEndpoint {
     tableName: string;
     fieldNames: string[];
-    relation: string;
+    relation: '1' | '*'; // '1' = one, '*' = many (from @dbml/core parser)
 }
 
 interface DBMLRef {
@@ -355,21 +355,10 @@ const mapDBMLTypeToDataType = (
     } satisfies DataTypeData;
 };
 
-const determineCardinality = (
-    field: DBField,
-    referencedField: DBField
-): { sourceCardinality: string; targetCardinality: string } => {
-    const isSourceUnique = field.unique || field.primaryKey;
-    const isTargetUnique = referencedField.unique || referencedField.primaryKey;
-    if (isSourceUnique && isTargetUnique) {
-        return { sourceCardinality: 'one', targetCardinality: 'one' };
-    } else if (isSourceUnique) {
-        return { sourceCardinality: 'one', targetCardinality: 'many' };
-    } else if (isTargetUnique) {
-        return { sourceCardinality: 'many', targetCardinality: 'one' };
-    } else {
-        return { sourceCardinality: 'many', targetCardinality: 'many' };
-    }
+// Convert @dbml/core relation values to cardinality
+// The parser uses '1' for "one" side and '*' for "many" side
+const relationToCardinality = (relation: '1' | '*'): Cardinality => {
+    return relation === '1' ? 'one' : 'many';
 };
 
 export const importDBMLToDiagram = async (
@@ -993,8 +982,14 @@ export const importDBMLToDiagram = async (
                     throw new Error('Invalid relationship: fields not found');
                 }
 
-                const { sourceCardinality, targetCardinality } =
-                    determineCardinality(sourceField, targetField);
+                // Use the relation values from @dbml/core parser
+                // These directly represent the cardinality: '1' = one, '*' = many
+                const sourceCardinality = relationToCardinality(
+                    source.relation
+                );
+                const targetCardinality = relationToCardinality(
+                    target.relation
+                );
 
                 return {
                     id: generateId(),
@@ -1005,8 +1000,8 @@ export const importDBMLToDiagram = async (
                     targetTableId: targetTable.id,
                     sourceFieldId: sourceField.id,
                     targetFieldId: targetField.id,
-                    sourceCardinality: sourceCardinality as Cardinality,
-                    targetCardinality: targetCardinality as Cardinality,
+                    sourceCardinality,
+                    targetCardinality,
                     createdAt: Date.now(),
                 };
             }

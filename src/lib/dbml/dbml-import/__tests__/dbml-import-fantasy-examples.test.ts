@@ -1074,7 +1074,7 @@ Table "public_2"."posts" {
   "id" varchar(500) [pk]
   "title" varchar(500)
   "content" text
-  "user_id" varchar(500) [ref: < "public"."users"."id"]
+  "user_id" varchar(500) [ref: > "public"."users"."id"]
   "created_at" timestamp
 
   Indexes {
@@ -1086,8 +1086,8 @@ Table "public_2"."posts" {
 Table "public_3"."comments" {
   "id" varchar(500) [pk]
   "content" text
-  "post_id" varchar(500) [ref: < "public_2"."posts"."id"]
-  "user_id" varchar(500) [ref: < "public"."users"."id"]
+  "post_id" varchar(500) [ref: > "public_2"."posts"."id"]
+  "user_id" varchar(500) [ref: > "public"."users"."id"]
   "created_at" timestamp
 
   Indexes {

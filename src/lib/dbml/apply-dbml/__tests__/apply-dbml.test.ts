@@ -1908,4 +1908,510 @@ describe('Apply DBML Changes - relationships', () => {
         // Check that the new field is added correctly
         expect(result).toEqual(expectedResult);
     });
+
+    it('should handle cardinality update when relationship direction is reversed', () => {
+        // Source has relationship: table_2.id -> table_1.id (one-to-one)
+        // Target has relationship: table_1.id -> table_2.id (one-to-many) - reversed direction
+        // Result should: preserve source direction but swap cardinalities from target
+        const sourceDiagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T18:18:02.016Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: 'table1-source-id',
+                    name: 'table_1',
+                    schema: 'public',
+                    x: 260,
+                    y: 80,
+                    fields: [
+                        {
+                            id: 'field1-source-id',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753890297335,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753890297335,
+                    isView: false,
+                    order: 0,
+                },
+                {
+                    id: 'table2-source-id',
+                    name: 'table_2',
+                    schema: 'public',
+                    x: -163.75,
+                    y: -5,
+                    fields: [
+                        {
+                            id: 'field2-source-id',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753899478715,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#9ef07a',
+                    createdAt: 1753899478715,
+                    isView: false,
+                    order: 1,
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel-source-id',
+                    name: 'table_2_id_fk',
+                    sourceTableId: 'table2-source-id',
+                    targetTableId: 'table1-source-id',
+                    sourceFieldId: 'field2-source-id',
+                    targetFieldId: 'field1-source-id',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'one',
+                    createdAt: 1753899482016,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+            customTypes: [],
+        };
+
+        // Target has the relationship in reverse direction with different cardinalities
+        const targetDiagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T18:18:02.016Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: 'table1-target-id',
+                    name: 'table_1',
+                    schema: 'public',
+                    order: 0,
+                    fields: [
+                        {
+                            id: 'field1-target-id',
+                            name: 'id',
+                            type: { name: 'bigint', id: 'bigint' },
+                            nullable: false,
+                            primaryKey: true,
+                            unique: true,
+                            createdAt: 1753899628831,
+                        },
+                    ],
+                    indexes: [],
+                    x: 0,
+                    y: 0,
+                    color: '#b067e9',
+                    isView: false,
+                    createdAt: 1753899628831,
+                },
+                {
+                    id: 'table2-target-id',
+                    name: 'table_2',
+                    schema: 'public',
+                    order: 1,
+                    fields: [
+                        {
+                            id: 'field2-target-id',
+                            name: 'id',
+                            type: { name: 'bigint', id: 'bigint' },
+                            nullable: false,
+                            primaryKey: true,
+                            unique: true,
+                            createdAt: 1753899628831,
+                        },
+                    ],
+                    indexes: [],
+                    x: 300,
+                    y: 0,
+                    color: '#ff9f74',
+                    isView: false,
+                    createdAt: 1753899628831,
+                },
+            ],
+            relationships: [
+                {
+                    // Relationship defined in reverse direction: table_1 -> table_2
+                    // with cardinalities: source='one', target='many'
+                    id: 'rel-target-id',
+                    name: 'table_1_id_table_2_id',
+                    sourceSchema: 'public',
+                    targetSchema: 'public',
+                    sourceTableId: 'table1-target-id',
+                    targetTableId: 'table2-target-id',
+                    sourceFieldId: 'field1-target-id',
+                    targetFieldId: 'field2-target-id',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                    createdAt: 1753899628831,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+        };
+
+        const result = applyDBMLChanges({
+            sourceDiagram,
+            targetDiagram,
+        });
+
+        // Result should preserve source's direction (table_2 -> table_1)
+        // but with SWAPPED cardinalities from target
+        // Target: table_1(source='one') -> table_2(target='many')
+        // After swap for reverse match: table_2(source='many') -> table_1(target='one')
+        expect(result.relationships).toHaveLength(1);
+        expect(result.relationships![0].id).toBe('rel-source-id');
+        expect(result.relationships![0].sourceTableId).toBe('table2-source-id');
+        expect(result.relationships![0].targetTableId).toBe('table1-source-id');
+        expect(result.relationships![0].sourceCardinality).toBe('many');
+        expect(result.relationships![0].targetCardinality).toBe('one');
+    });
+
+    it('should update cardinality when relationship direction matches (direct match)', () => {
+        // Source has relationship: table_2.id -> table_1.id (one-to-one)
+        // Target has same direction with different cardinalities (many-to-one)
+        // Result should: preserve source IDs with updated cardinalities from target
+        const sourceDiagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T18:18:02.016Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: 'table1-source-id',
+                    name: 'table_1',
+                    schema: 'public',
+                    x: 260,
+                    y: 80,
+                    fields: [
+                        {
+                            id: 'field1-source-id',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753890297335,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753890297335,
+                    isView: false,
+                    order: 0,
+                },
+                {
+                    id: 'table2-source-id',
+                    name: 'table_2',
+                    schema: 'public',
+                    x: -163.75,
+                    y: -5,
+                    fields: [
+                        {
+                            id: 'field2-source-id',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: false,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753899478715,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#9ef07a',
+                    createdAt: 1753899478715,
+                    isView: false,
+                    order: 1,
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel-source-id',
+                    name: 'table_2_id_fk',
+                    sourceTableId: 'table2-source-id',
+                    targetTableId: 'table1-source-id',
+                    sourceFieldId: 'field2-source-id',
+                    targetFieldId: 'field1-source-id',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'one',
+                    createdAt: 1753899482016,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+            customTypes: [],
+        };
+
+        // Target has same direction with different cardinalities
+        const targetDiagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T18:18:02.016Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: 'table1-target-id',
+                    name: 'table_1',
+                    schema: 'public',
+                    order: 0,
+                    fields: [
+                        {
+                            id: 'field1-target-id',
+                            name: 'id',
+                            type: { name: 'bigint', id: 'bigint' },
+                            nullable: false,
+                            primaryKey: true,
+                            unique: true,
+                            createdAt: 1753899628831,
+                        },
+                    ],
+                    indexes: [],
+                    x: 0,
+                    y: 0,
+                    color: '#b067e9',
+                    isView: false,
+                    createdAt: 1753899628831,
+                },
+                {
+                    id: 'table2-target-id',
+                    name: 'table_2',
+                    schema: 'public',
+                    order: 1,
+                    fields: [
+                        {
+                            id: 'field2-target-id',
+                            name: 'id',
+                            type: { name: 'bigint', id: 'bigint' },
+                            nullable: false,
+                            primaryKey: true,
+                            unique: false,
+                            createdAt: 1753899628831,
+                        },
+                    ],
+                    indexes: [],
+                    x: 300,
+                    y: 0,
+                    color: '#ff9f74',
+                    isView: false,
+                    createdAt: 1753899628831,
+                },
+            ],
+            relationships: [
+                {
+                    // Same direction as source: table_2 -> table_1
+                    // with different cardinalities: source='many', target='one'
+                    id: 'rel-target-id',
+                    name: 'table_2_id_table_1_id',
+                    sourceSchema: 'public',
+                    targetSchema: 'public',
+                    sourceTableId: 'table2-target-id',
+                    targetTableId: 'table1-target-id',
+                    sourceFieldId: 'field2-target-id',
+                    targetFieldId: 'field1-target-id',
+                    sourceCardinality: 'many',
+                    targetCardinality: 'one',
+                    createdAt: 1753899628831,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+        };
+
+        const result = applyDBMLChanges({
+            sourceDiagram,
+            targetDiagram,
+        });
+
+        // Result should preserve source's IDs and direction
+        // with cardinalities directly from target (no swap needed)
+        expect(result.relationships).toHaveLength(1);
+        expect(result.relationships![0].id).toBe('rel-source-id');
+        expect(result.relationships![0].sourceTableId).toBe('table2-source-id');
+        expect(result.relationships![0].targetTableId).toBe('table1-source-id');
+        expect(result.relationships![0].sourceCardinality).toBe('many');
+        expect(result.relationships![0].targetCardinality).toBe('one');
+    });
+
+    it('should preserve cardinalities for new relationships', () => {
+        // Source has no relationships
+        // Target has a new relationship with specific cardinalities
+        const sourceDiagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T18:18:02.016Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: 'table1-source-id',
+                    name: 'orders',
+                    schema: 'public',
+                    x: 260,
+                    y: 80,
+                    fields: [
+                        {
+                            id: 'orders-id-source',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753890297335,
+                        },
+                        {
+                            id: 'orders-customer-id-source',
+                            name: 'customer_id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: false,
+                            nullable: true,
+                            primaryKey: false,
+                            createdAt: 1753890297336,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#4dee8a',
+                    createdAt: 1753890297335,
+                    isView: false,
+                    order: 0,
+                },
+                {
+                    id: 'table2-source-id',
+                    name: 'customers',
+                    schema: 'public',
+                    x: -163.75,
+                    y: -5,
+                    fields: [
+                        {
+                            id: 'customers-id-source',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            unique: true,
+                            nullable: false,
+                            primaryKey: true,
+                            createdAt: 1753899478715,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#9ef07a',
+                    createdAt: 1753899478715,
+                    isView: false,
+                    order: 1,
+                },
+            ],
+            relationships: [],
+            dependencies: [],
+            areas: [],
+            customTypes: [],
+        };
+
+        // Target has a new many-to-one relationship
+        const targetDiagram: Diagram = {
+            id: 'mqqwkkodrxxd',
+            name: 'Diagram 9',
+            createdAt: new Date('2025-07-30T15:44:53.967Z'),
+            updatedAt: new Date('2025-07-30T18:18:02.016Z'),
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: 'table1-target-id',
+                    name: 'orders',
+                    schema: 'public',
+                    order: 0,
+                    fields: [
+                        {
+                            id: 'orders-id-target',
+                            name: 'id',
+                            type: { name: 'bigint', id: 'bigint' },
+                            nullable: false,
+                            primaryKey: true,
+                            unique: true,
+                            createdAt: 1753899628831,
+                        },
+                        {
+                            id: 'orders-customer-id-target',
+                            name: 'customer_id',
+                            type: { name: 'bigint', id: 'bigint' },
+                            nullable: true,
+                            primaryKey: false,
+                            unique: false,
+                            createdAt: 1753899628832,
+                        },
+                    ],
+                    indexes: [],
+                    x: 0,
+                    y: 0,
+                    color: '#b067e9',
+                    isView: false,
+                    createdAt: 1753899628831,
+                },
+                {
+                    id: 'table2-target-id',
+                    name: 'customers',
+                    schema: 'public',
+                    order: 1,
+                    fields: [
+                        {
+                            id: 'customers-id-target',
+                            name: 'id',
+                            type: { name: 'bigint', id: 'bigint' },
+                            nullable: false,
+                            primaryKey: true,
+                            unique: true,
+                            createdAt: 1753899628831,
+                        },
+                    ],
+                    indexes: [],
+                    x: 300,
+                    y: 0,
+                    color: '#ff9f74',
+                    isView: false,
+                    createdAt: 1753899628831,
+                },
+            ],
+            relationships: [
+                {
+                    // New relationship: customers.id (one) <- orders.customer_id (many)
+                    id: 'new-rel-id',
+                    name: 'orders_customer_id_fk',
+                    sourceSchema: 'public',
+                    targetSchema: 'public',
+                    sourceTableId: 'table2-target-id',
+                    targetTableId: 'table1-target-id',
+                    sourceFieldId: 'customers-id-target',
+                    targetFieldId: 'orders-customer-id-target',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                    createdAt: 1753899628831,
+                },
+            ],
+            dependencies: [],
+            areas: [],
+        };
+
+        const result = applyDBMLChanges({
+            sourceDiagram,
+            targetDiagram,
+        });
+
+        // Result should have the new relationship with correct cardinalities
+        expect(result.relationships).toHaveLength(1);
+        expect(result.relationships![0].sourceCardinality).toBe('one');
+        expect(result.relationships![0].targetCardinality).toBe('many');
+        // IDs should be mapped to source IDs
+        expect(result.relationships![0].sourceTableId).toBe('table2-source-id');
+        expect(result.relationships![0].targetTableId).toBe('table1-source-id');
+    });
 });
