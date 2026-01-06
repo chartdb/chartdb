@@ -4,8 +4,8 @@ Table "pokemon"."abilities" {
 }
 
 Table "pokemon"."pokemon_abilities" {
-  "pok_id" int [not null, ref: < "pokemon"."pokemon"."pok_id"]
-  "abil_id" int [not null, ref: < "pokemon"."abilities"."abil_id"]
+  "pok_id" int [not null, ref: > "pokemon"."pokemon"."pok_id"]
+  "abil_id" int [not null, ref: > "pokemon"."abilities"."abil_id"]
   "is_hidden" int [not null]
   "slot" int [not null]
   "music" bigint

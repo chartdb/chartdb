@@ -79,8 +79,9 @@ describe('DBML Export - Issue Fixes', () => {
         const result = generateDBMLFromDiagram(diagram);
 
         // Check that inline DBML has merged attributes in a single bracket
+        // Relationship is many-to-one (source=many, target=one), so source field gets ref: >
         expect(result.inlineDbml).toContain(
-            '"id" bigint [pk, not null, ref: < "service_tenant"."tenant_id"]'
+            '"id" bigint [pk, not null, ref: > "service_tenant"."tenant_id"]'
         );
 
         // Should NOT have separate brackets like [pk, not null] [ref: < ...]
@@ -210,8 +211,9 @@ describe('DBML Export - Issue Fixes', () => {
         const result = generateDBMLFromDiagram(diagram);
 
         // Check inline DBML preserves schema in references
-        // The foreign key is on the users.tenant_id field, referencing service.tenant.id
-        expect(result.inlineDbml).toContain('ref: < "service"."tenant"."id"');
+        // Relationship is many-to-one (source=many, target=one)
+        // The inline ref goes on users.tenant_id (source) with ref: > pointing to service.tenant.id (target)
+        expect(result.inlineDbml).toContain('ref: > "service"."tenant"."id"');
     });
 
     it('should wrap table and field names with spaces in quotes instead of replacing with underscores', () => {
@@ -344,8 +346,9 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.standardDbml).not.toContain('idx_user_name');
 
         // Check inline DBML as well - the ref is on the order details table
+        // Relationship is many-to-one (source=many, target=one), so source field gets ref: >
         expect(result.inlineDbml).toContain(
-            '"user id" bigint [not null, ref: < "user profile"."user id"]'
+            '"user id" bigint [not null, ref: > "user profile"."user id"]'
         );
     });
 
@@ -495,8 +498,9 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.inlineDbml).toContain(
             '"email" varchar(255) [unique, not null, note: \'User email address\']'
         );
+        // Relationship is many-to-one (source=many, target=one), so source field gets ref: >
         expect(result.inlineDbml).toContain(
-            '"user_id" bigint [not null, note: \'Reference to the user who created the post\', ref: < "users"."id"]'
+            '"user_id" bigint [not null, note: \'Reference to the user who created the post\', ref: > "users"."id"]'
         );
 
         // In standard DBML, field comments should use the note attribute syntax
@@ -1266,10 +1270,10 @@ describe('DBML Export - Issue Fixes', () => {
 
         const result = generateDBMLFromDiagram(diagram);
 
-        // For 1:1 relationships, FK goes on target table (table_1)
-        // Source (table_2) references target (table_1), so table_1 has FK pointing to table_2
+        // For 1:1 relationships, symbol is '-' (one-to-one)
+        // Inline ref goes on target side (table_1) with ref: - pointing to source (table_2)
         const expectedInlineDBML = `Table "table_1" {
-  "id" bigint [pk, not null, ref: < "table_2"."id"]
+  "id" bigint [pk, not null, ref: - "table_2"."id"]
 }
 
 Table "table_2" {
@@ -1277,6 +1281,7 @@ Table "table_2" {
 }
 `;
 
+        // Standard DBML: source - target (one-to-one relationship)
         const expectedStandardDBML = `Table "table_1" {
   "id" bigint [pk, not null]
 }
@@ -1285,7 +1290,7 @@ Table "table_2" {
   "id" bigint [pk, not null]
 }
 
-Ref "fk_0_table_2_id_fk":"table_2"."id" < "table_1"."id"
+Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
 `;
 
         expect(result.inlineDbml).toBe(expectedInlineDBML);
@@ -1505,12 +1510,14 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" < "table_1"."id"
         expect(result.standardDbml).toContain('Table "user_activities" {');
 
         // Check that the entity_id field in user_activities has multiple relationships in inline DBML
+        // All relationships are many-to-one (source=many, target=one), so source field gets ref: >
         // The field should have both references in a single bracket
         expect(result.inlineDbml).toContain(
-            '"entity_id" integer [not null, ref: < "posts"."id", ref: < "reviews"."id"]'
+            '"entity_id" integer [not null, ref: > "posts"."id", ref: > "reviews"."id"]'
         );
 
         // Check that standard DBML has separate Ref entries for each relationship
+        // Format: target < source for many-to-one relationships (target is one, source is many)
         expect(result.standardDbml).toContain(
             'Ref "fk_0_fk_posts_user":"users"."id" < "posts"."user_id"'
         );
@@ -1623,8 +1630,9 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" < "table_1"."id"
   "id" bigint [pk, not null]
 }`);
 
+        // Relationship is many-to-one (source=many, target=one), so source field gets ref: >
         expect(result.inlineDbml).toContain(`Table "table_2" {
-  "id" bigint [pk, not null, ref: < "table_1"."id"]
+  "id" bigint [pk, not null, ref: > "table_1"."id"]
 }`);
 
         // The issue was that it would generate:

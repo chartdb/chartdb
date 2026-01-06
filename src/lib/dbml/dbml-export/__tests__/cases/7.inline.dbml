@@ -8,7 +8,7 @@ Table "clean"."wms_item" {
 }
 
 Table "reporting"."wms_dim_products_history" {
-  "iai_id_prod" int64 [ref: < "clean"."wms_item"."symbol"]
-  "wms_id_prod" int64 [ref: < "clean"."wms_item"."id"]
-  "ean" int64 [ref: < "clean"."wms_item"."ean_code"]
+  "iai_id_prod" int64 [ref: - "clean"."wms_item"."symbol"]
+  "wms_id_prod" int64 [ref: - "clean"."wms_item"."id"]
+  "ean" int64 [ref: - "clean"."wms_item"."ean_code"]
 }

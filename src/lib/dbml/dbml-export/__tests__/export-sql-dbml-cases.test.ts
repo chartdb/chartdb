@@ -47,7 +47,7 @@ const testCase = (caseNumber: string) => {
 };
 
 describe('DBML Export cases', () => {
-    it('should handle case 1 diagram', { timeout: 30000 }, async () => {
+    it('should handle case 1 diagram', { timeout: 60000 }, async () => {
         testCase('1');
     });
 

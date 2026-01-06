@@ -37,9 +37,9 @@ Table "finance"."general_ledger" {
 
             // Check inline format
             expect(exportResult.inlineDbml).toContain('reversal_id');
-            // The DBML parser correctly interprets FK as: target < source
+            // FK fields use ref: > to indicate "I reference other"
             expect(exportResult.inlineDbml).toMatch(
-                /ref:\s*<\s*"finance"\."general_ledger"\."ledger_id"/
+                /ref:\s*>\s*"finance"\."general_ledger"\."ledger_id"/
             );
 
             // Check standard format
@@ -75,8 +75,8 @@ Table "employees" {
 
         // Check that the self-reference is preserved
         expect(exportResult.inlineDbml).toContain('manager_id');
-        // The DBML parser correctly interprets FK as: target < source
-        expect(exportResult.inlineDbml).toMatch(/ref:\s*<\s*"employees"\."id"/);
+        // FK fields use ref: > to indicate "I reference other"
+        expect(exportResult.inlineDbml).toMatch(/ref:\s*>\s*"employees"\."id"/);
     });
 
     it('should handle multiple self-referencing relationships', async () => {
@@ -110,8 +110,8 @@ Table "categories" {
         expect(exportResult.inlineDbml).toContain('related_id');
 
         // Count the number of ref: statements
-        // The DBML parser correctly interprets FK as: target < source
-        const refMatches = exportResult.inlineDbml.match(/ref:\s*</g);
+        // FK fields use ref: > to indicate "I reference other"
+        const refMatches = exportResult.inlineDbml.match(/ref:\s*>/g);
         expect(refMatches?.length).toBe(2);
     });
 
@@ -135,9 +135,9 @@ Table "hr"."staff" {
         const exportResult = generateDBMLFromDiagram(diagram);
 
         // Should preserve the schema in the reference
-        // The DBML parser correctly interprets FK as: target < source
+        // FK fields use ref: > to indicate "I reference other"
         expect(exportResult.inlineDbml).toMatch(
-            /ref:\s*<\s*"hr"\."staff"\."staff_id"/
+            /ref:\s*>\s*"hr"\."staff"\."staff_id"/
         );
     });
 

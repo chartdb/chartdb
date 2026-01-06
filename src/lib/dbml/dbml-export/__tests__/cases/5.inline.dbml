@@ -121,7 +121,7 @@ Enum "tipo_status_agendamento" {
 }
 
 Table "public"."organizacao_cfg_impressos" {
-  "id_organizacao" integer [pk, not null, ref: < "public"."organizacao"."id"]
+  "id_organizacao" integer [pk, not null, ref: > "public"."organizacao"."id"]
 }
 
 Table "public"."organizacao" {
