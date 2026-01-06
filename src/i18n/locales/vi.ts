@@ -196,8 +196,8 @@ export const vi: LanguageTranslation = {
                 dependencies: 'Phụ thuộc',
                 relationship: {
                     relationship: 'Quan hệ',
-                    primary: 'Bảng khóa chính',
-                    foreign: 'Bảng khóa ngoại',
+                    primary: 'Bảng chính',
+                    foreign: 'Bảng liên quan',
                     cardinality: 'Quan hệ',
                     delete_relationship: 'Xóa',
                     relationship_actions: {

@@ -199,7 +199,7 @@ export const te: LanguageTranslation = {
                 relationship: {
                     relationship: 'సంబంధం',
                     primary: 'ప్రాథమిక పట్టిక',
-                    foreign: 'సూచించబడిన పట్టిక',
+                    foreign: 'సంబంధిత పట్టిక',
                     cardinality: 'కార్డినాలిటీ',
                     delete_relationship: 'సంబంధం తొలగించు',
                     relationship_actions: {

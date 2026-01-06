@@ -194,7 +194,7 @@ export const zh_TW: LanguageTranslation = {
                 relationship: {
                     relationship: '關聯',
                     primary: '主表格',
-                    foreign: '參照表格',
+                    foreign: '關聯表格',
                     cardinality: '基數',
                     delete_relationship: '刪除',
                     relationship_actions: {

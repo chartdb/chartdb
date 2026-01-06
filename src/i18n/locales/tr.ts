@@ -198,7 +198,7 @@ export const tr: LanguageTranslation = {
                 relationship: {
                     relationship: 'İlişki',
                     primary: 'Birincil Tablo',
-                    foreign: 'Referans Tablo',
+                    foreign: 'İlişkili Tablo',
                     cardinality: 'Kardinalite',
                     delete_relationship: 'Sil',
                     relationship_actions: {

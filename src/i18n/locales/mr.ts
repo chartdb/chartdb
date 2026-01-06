@@ -201,7 +201,7 @@ export const mr: LanguageTranslation = {
                 relationship: {
                     relationship: 'रिलेशनशिप',
                     primary: 'प्राथमिक टेबल',
-                    foreign: 'रेफरंस टेबल',
+                    foreign: 'संबंधित टेबल',
                     cardinality: 'कार्डिनॅलिटी',
                     delete_relationship: 'हटवा',
                     relationship_actions: {

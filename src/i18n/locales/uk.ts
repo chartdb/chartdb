@@ -196,7 +196,7 @@ export const uk: LanguageTranslation = {
                 relationship: {
                     relationship: 'Звʼязок',
                     primary: 'Первинна таблиця',
-                    foreign: 'Посилання на таблицю',
+                    foreign: 'Повʼязана таблиця',
                     cardinality: 'Звʼязок',
                     delete_relationship: 'Видалити',
                     relationship_actions: {

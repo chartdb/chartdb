@@ -192,7 +192,7 @@ export const en = {
                 relationship: {
                     relationship: 'Relationship',
                     primary: 'Primary Table',
-                    foreign: 'Referenced Table',
+                    foreign: 'Related Table',
                     cardinality: 'Cardinality',
                     delete_relationship: 'Delete',
                     relationship_actions: {
