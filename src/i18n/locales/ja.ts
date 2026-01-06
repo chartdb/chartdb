@@ -200,7 +200,7 @@ export const ja: LanguageTranslation = {
                 relationship: {
                     relationship: 'リレーションシップ',
                     primary: '主テーブル',
-                    foreign: '参照テーブル',
+                    foreign: '関連テーブル',
                     cardinality: 'カーディナリティ',
                     delete_relationship: '削除',
                     relationship_actions: {

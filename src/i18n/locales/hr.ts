@@ -193,7 +193,7 @@ export const hr: LanguageTranslation = {
                 relationship: {
                     relationship: 'Veza',
                     primary: 'Primarna tablica',
-                    foreign: 'Referentna tablica',
+                    foreign: 'Povezana tablica',
                     cardinality: 'Kardinalnost',
                     delete_relationship: 'Izbriši',
                     relationship_actions: {

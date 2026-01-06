@@ -199,7 +199,7 @@ export const gu: LanguageTranslation = {
                 relationship: {
                     relationship: 'સંબંધ',
                     primary: 'પ્રાથમિક ટેબલ',
-                    foreign: 'સંદર્ભિત ટેબલ',
+                    foreign: 'સંબંધિત ટેબલ',
                     cardinality: 'કાર્ડિનાલિટી',
                     delete_relationship: 'કાઢી નાખો',
                     relationship_actions: {

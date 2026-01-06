@@ -194,7 +194,7 @@ export const ru: LanguageTranslation = {
                 relationship: {
                     relationship: 'Отношение',
                     primary: 'Основная таблица',
-                    foreign: 'Справочная таблица',
+                    foreign: 'Связанная таблица',
                     cardinality: 'Тип множественной связи',
                     delete_relationship: 'Удалить',
                     relationship_actions: {

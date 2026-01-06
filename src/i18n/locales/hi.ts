@@ -198,7 +198,7 @@ export const hi: LanguageTranslation = {
                 relationship: {
                     relationship: 'संबंध',
                     primary: 'प्राथमिक तालिका',
-                    foreign: 'संदर्भित तालिका',
+                    foreign: 'संबंधित तालिका',
                     cardinality: 'कार्डिनैलिटी',
                     delete_relationship: 'हटाएँ',
                     relationship_actions: {

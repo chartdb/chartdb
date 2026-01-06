@@ -197,7 +197,7 @@ export const es: LanguageTranslation = {
                 relationship: {
                     relationship: 'Relación',
                     primary: 'Tabla Primaria',
-                    foreign: 'Tabla Referenciada',
+                    foreign: 'Tabla Relacionada',
                     cardinality: 'Cardinalidad',
                     delete_relationship: 'Eliminar',
                     relationship_actions: {

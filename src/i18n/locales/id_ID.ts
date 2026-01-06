@@ -197,7 +197,7 @@ export const id_ID: LanguageTranslation = {
                 relationship: {
                     relationship: 'Hubungan',
                     primary: 'Tabel Primer',
-                    foreign: 'Tabel Referensi',
+                    foreign: 'Tabel Terkait',
                     cardinality: 'Kardinalitas',
                     delete_relationship: 'Hapus',
                     relationship_actions: {

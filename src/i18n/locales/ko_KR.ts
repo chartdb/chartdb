@@ -197,7 +197,7 @@ export const ko_KR: LanguageTranslation = {
                 relationship: {
                     relationship: '연관 관계',
                     primary: '주 테이블',
-                    foreign: '참조 테이블',
+                    foreign: '관련 테이블',
                     cardinality: '카디널리티',
                     delete_relationship: '제거',
                     relationship_actions: {

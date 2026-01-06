@@ -99,10 +99,12 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                     relationship.targetCardinality;
 
                 if (sameCardinality) {
-                    // Equal cardinalities: swap everything (tables, fields, cardinalities)
+                    // Equal cardinalities: swap everything (tables, fields, schemas, cardinalities)
                     await updateRelationship(
                         id,
                         {
+                            sourceSchema: relationship.targetSchema,
+                            targetSchema: relationship.sourceSchema,
                             sourceTableId: relationship.targetTableId,
                             targetTableId: relationship.sourceTableId,
                             sourceFieldId: relationship.targetFieldId,
@@ -123,10 +125,12 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         { updateHistory: true }
                     );
                 } else {
-                    // one:many → swap tables/fields (keeps one:many with different tables)
+                    // one:many → swap tables/fields/schemas (keeps one:many with different tables)
                     await updateRelationship(
                         id,
                         {
+                            sourceSchema: relationship.targetSchema,
+                            targetSchema: relationship.sourceSchema,
                             sourceTableId: relationship.targetTableId,
                             targetTableId: relationship.sourceTableId,
                             sourceFieldId: relationship.targetFieldId,
@@ -160,7 +164,9 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         await updateRelationship(
                             id,
                             {
-                                // Swap tables/fields
+                                // Swap tables/fields/schemas
+                                sourceSchema: relationship.targetSchema,
+                                targetSchema: relationship.sourceSchema,
                                 sourceTableId: relationship.targetTableId,
                                 targetTableId: relationship.sourceTableId,
                                 sourceFieldId: relationship.targetFieldId,

@@ -198,7 +198,7 @@ export const ne: LanguageTranslation = {
                 relationship: {
                     relationship: 'सम्बन्ध',
                     primary: 'मुख्य तालिका',
-                    foreign: 'परिचित तालिका',
+                    foreign: 'सम्बन्धित तालिका',
                     cardinality: 'कार्डिन्यालिटी',
                     delete_relationship: 'हटाउनुहोस्',
                     relationship_actions: {

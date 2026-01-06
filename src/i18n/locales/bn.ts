@@ -198,7 +198,7 @@ export const bn: LanguageTranslation = {
                 relationship: {
                     relationship: 'সম্পর্ক',
                     primary: 'প্রাথমিক টেবিল',
-                    foreign: 'রেফারেন্স করা টেবিল',
+                    foreign: 'সম্পর্কিত টেবিল',
                     cardinality: 'কার্ডিনালিটি',
                     delete_relationship: 'মুছুন',
                     relationship_actions: {
