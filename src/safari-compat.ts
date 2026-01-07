@@ -40,7 +40,7 @@ const hasRemarkGfmRegexIssue = (): boolean => {
  */
 let shouldDisableCached: boolean | null = null;
 
-export const getIsSafari = (): boolean => {
+export const getIsOldSafari = (): boolean => {
     if (shouldDisableCached === null) {
         shouldDisableCached = isSafari() && hasRemarkGfmRegexIssue();
     }

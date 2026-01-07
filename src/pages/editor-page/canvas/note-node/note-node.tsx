@@ -13,7 +13,7 @@ import { useTheme } from '@/hooks/use-theme';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { getIsSafari } from '@/lib/safari-compat';
+import { getIsOldSafari } from '@/safari-compat';
 
 export interface NoteNodeProps extends NodeProps {
     data: {
@@ -194,7 +194,9 @@ export const NoteNode: React.FC<NoteNodeProps> = ({
                     <div className="h-full overflow-auto break-words text-sm leading-relaxed text-gray-700 dark:text-gray-300">
                         {note.content ? (
                             <ReactMarkdown
-                                remarkPlugins={getIsSafari() ? [] : [remarkGfm]}
+                                remarkPlugins={
+                                    getIsOldSafari() ? [] : [remarkGfm]
+                                }
                                 rehypePlugins={[rehypeRaw]}
                                 components={{
                                     h1: (props) => (
