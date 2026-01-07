@@ -167,6 +167,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                 keepOrder
                 disabled={index.isPrimaryKey ?? false}
                 readonly={readonly}
+                modal={false}
             />
             <div className="flex shrink-0 gap-1">
                 {index.isPrimaryKey ? (
