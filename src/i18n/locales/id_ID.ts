@@ -200,6 +200,7 @@ export const id_ID: LanguageTranslation = {
                     foreign: 'Tabel Terkait',
                     cardinality: 'Kardinalitas',
                     delete_relationship: 'Hapus',
+                    switch_tables: 'Tukar Tabel',
                     relationship_actions: {
                         title: 'Aksi',
                         delete_relationship: 'Hapus',

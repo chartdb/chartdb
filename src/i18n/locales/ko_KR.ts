@@ -200,6 +200,7 @@ export const ko_KR: LanguageTranslation = {
                     foreign: '관련 테이블',
                     cardinality: '카디널리티',
                     delete_relationship: '제거',
+                    switch_tables: '테이블 전환',
                     relationship_actions: {
                         title: '연관 관계 작업',
                         delete_relationship: '연관 관계 삭제',

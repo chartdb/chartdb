@@ -196,6 +196,7 @@ export const hr: LanguageTranslation = {
                     foreign: 'Povezana tablica',
                     cardinality: 'Kardinalnost',
                     delete_relationship: 'Izbriši',
+                    switch_tables: 'Zamijeni tablice',
                     relationship_actions: {
                         title: 'Radnje',
                         delete_relationship: 'Izbriši',

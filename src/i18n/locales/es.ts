@@ -200,6 +200,7 @@ export const es: LanguageTranslation = {
                     foreign: 'Tabla Relacionada',
                     cardinality: 'Cardinalidad',
                     delete_relationship: 'Eliminar',
+                    switch_tables: 'Intercambiar tablas',
                     relationship_actions: {
                         title: 'Acciones',
                         delete_relationship: 'Eliminar',

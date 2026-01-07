@@ -203,6 +203,7 @@ export const ja: LanguageTranslation = {
                     foreign: '関連テーブル',
                     cardinality: 'カーディナリティ',
                     delete_relationship: '削除',
+                    switch_tables: 'テーブルを入れ替え',
                     relationship_actions: {
                         title: '操作',
                         delete_relationship: '削除',

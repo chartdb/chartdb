@@ -200,6 +200,7 @@ export const vi: LanguageTranslation = {
                     foreign: 'Bảng liên quan',
                     cardinality: 'Quan hệ',
                     delete_relationship: 'Xóa',
+                    switch_tables: 'Đổi Bảng',
                     relationship_actions: {
                         title: 'Hành động',
                         delete_relationship: 'Xóa',

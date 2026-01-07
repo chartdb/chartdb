@@ -198,6 +198,7 @@ export const fr: LanguageTranslation = {
                     foreign: 'Table Liée',
                     cardinality: 'Cardinalité',
                     delete_relationship: 'Supprimer',
+                    switch_tables: 'Inverser les tables',
                     relationship_actions: {
                         title: 'Actions',
                         delete_relationship: 'Supprimer',

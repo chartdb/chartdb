@@ -201,6 +201,7 @@ export const tr: LanguageTranslation = {
                     foreign: 'İlişkili Tablo',
                     cardinality: 'Kardinalite',
                     delete_relationship: 'Sil',
+                    switch_tables: 'Tabloları Değiştir',
                     relationship_actions: {
                         title: 'İşlemler',
                         delete_relationship: 'Sil',

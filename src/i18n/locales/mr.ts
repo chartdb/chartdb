@@ -204,6 +204,7 @@ export const mr: LanguageTranslation = {
                     foreign: 'संबंधित टेबल',
                     cardinality: 'कार्डिनॅलिटी',
                     delete_relationship: 'हटवा',
+                    switch_tables: 'टेबल बदला',
                     relationship_actions: {
                         title: 'क्रिया',
                         delete_relationship: 'हटवा',

@@ -202,6 +202,7 @@ export const te: LanguageTranslation = {
                     foreign: 'సంబంధిత పట్టిక',
                     cardinality: 'కార్డినాలిటీ',
                     delete_relationship: 'సంబంధం తొలగించు',
+                    switch_tables: 'పట్టికలను మార్చు',
                     relationship_actions: {
                         title: 'చర్యలు',
                         delete_relationship: 'సంబంధం తొలగించు',
