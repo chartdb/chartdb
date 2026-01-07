@@ -119,9 +119,50 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     'defs'
                 );
 
+                // Inline styles for marker elements before copying since skipFonts: true prevents CSS processing
+                const markerCircles = document.querySelectorAll(
+                    '.marker-definitions marker circle'
+                ) as NodeListOf<SVGCircleElement>;
+                const markerTexts = document.querySelectorAll(
+                    '.marker-definitions marker text'
+                ) as NodeListOf<SVGTextElement>;
+
+                const originalMarkerStyles: {
+                    element: SVGElement;
+                    fill: string;
+                    stroke: string;
+                }[] = [];
+
+                markerCircles.forEach((circle) => {
+                    const computedStyle = window.getComputedStyle(circle);
+                    originalMarkerStyles.push({
+                        element: circle,
+                        fill: circle.style.fill,
+                        stroke: circle.style.stroke,
+                    });
+                    circle.style.fill = computedStyle.fill;
+                    circle.style.stroke = computedStyle.stroke;
+                });
+
+                markerTexts.forEach((text) => {
+                    const computedStyle = window.getComputedStyle(text);
+                    originalMarkerStyles.push({
+                        element: text,
+                        fill: text.style.fill,
+                        stroke: text.style.stroke,
+                    });
+                    text.style.fill = computedStyle.fill;
+                });
+
                 if (markerDefs) {
                     defs.innerHTML = markerDefs.innerHTML;
                 }
+
+                // Restore original marker styles
+                originalMarkerStyles.forEach(({ element, fill, stroke }) => {
+                    element.style.fill = fill;
+                    element.style.stroke = stroke;
+                });
 
                 if (includePatternBG) {
                     const pattern = document.createElementNS(
@@ -184,6 +225,27 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     tempSvg,
                     viewportElement.firstChild
                 );
+
+                // Inline stroke styles for edge paths since skipFonts: true prevents CSS processing
+                const edgePaths = viewportElement.querySelectorAll(
+                    '.react-flow__edge-path'
+                ) as NodeListOf<SVGPathElement>;
+                const originalStyles: {
+                    element: SVGPathElement;
+                    stroke: string;
+                    strokeWidth: string;
+                }[] = [];
+
+                edgePaths.forEach((path) => {
+                    const computedStyle = window.getComputedStyle(path);
+                    originalStyles.push({
+                        element: path,
+                        stroke: path.style.stroke,
+                        strokeWidth: path.style.strokeWidth,
+                    });
+                    path.style.stroke = computedStyle.stroke;
+                    path.style.strokeWidth = computedStyle.strokeWidth;
+                });
 
                 try {
                     // Handle SVG export differently
@@ -291,6 +353,13 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         };
                     });
                 } finally {
+                    // Restore original styles
+                    originalStyles.forEach(
+                        ({ element, stroke, strokeWidth }) => {
+                            element.style.stroke = stroke;
+                            element.style.strokeWidth = strokeWidth;
+                        }
+                    );
                     viewportElement.removeChild(tempSvg);
                     hideLoader();
                 }
