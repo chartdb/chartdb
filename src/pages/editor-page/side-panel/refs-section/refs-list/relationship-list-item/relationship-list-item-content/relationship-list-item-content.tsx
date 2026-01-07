@@ -17,16 +17,14 @@ import type {
     DBRelationship,
     RelationshipType,
 } from '@/lib/domain/db-relationship';
-import {
-    determineCardinalities,
-    determineRelationshipType,
-} from '@/lib/domain/db-relationship';
+import { determineRelationshipType } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import {
     FileMinus2,
     FileOutput,
     Trash2,
     ChevronsLeftRightEllipsis,
+    ArrowLeftRight,
 } from 'lucide-react';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -58,15 +56,57 @@ export const RelationshipListItemContent: React.FC<
 
     const updateCardinalities = useCallback(
         (type: RelationshipType) => {
-            const { sourceCardinality, targetCardinality } =
-                determineCardinalities(type);
-            updateRelationship(relationship.id, {
-                sourceCardinality,
-                targetCardinality,
-            });
+            // Only one_to_one and one_to_many are allowed
+            // The "many" side should always be on target
+            if (type === 'one_to_one') {
+                updateRelationship(relationship.id, {
+                    sourceCardinality: 'one',
+                    targetCardinality: 'one',
+                });
+            } else if (type === 'one_to_many') {
+                updateRelationship(relationship.id, {
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                });
+            }
         },
         [relationship.id, updateRelationship]
     );
+
+    const handleSwitchTables = useCallback(() => {
+        const sameCardinality =
+            relationship.sourceCardinality === relationship.targetCardinality;
+
+        if (sameCardinality) {
+            // Equal cardinalities: swap everything (tables, fields, schemas, cardinalities)
+            updateRelationship(relationship.id, {
+                sourceSchema: relationship.targetSchema,
+                targetSchema: relationship.sourceSchema,
+                sourceTableId: relationship.targetTableId,
+                targetTableId: relationship.sourceTableId,
+                sourceFieldId: relationship.targetFieldId,
+                targetFieldId: relationship.sourceFieldId,
+                sourceCardinality: relationship.targetCardinality,
+                targetCardinality: relationship.sourceCardinality,
+            });
+        } else if (relationship.sourceCardinality === 'many') {
+            // many:one → one:many (swap cardinalities so "many" moves to target)
+            updateRelationship(relationship.id, {
+                sourceCardinality: 'one',
+                targetCardinality: 'many',
+            });
+        } else {
+            // one:many → swap tables/fields/schemas (keeps one:many with different tables)
+            updateRelationship(relationship.id, {
+                sourceSchema: relationship.targetSchema,
+                targetSchema: relationship.sourceSchema,
+                sourceTableId: relationship.targetTableId,
+                targetTableId: relationship.sourceTableId,
+                sourceFieldId: relationship.targetFieldId,
+                targetFieldId: relationship.sourceFieldId,
+            });
+        }
+    }, [relationship, updateRelationship]);
 
     const targetTable = getTable(relationship.targetTableId);
     const targetField = getField(
@@ -145,13 +185,34 @@ export const RelationshipListItemContent: React.FC<
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 text-xs">
-                    <div className="flex flex-row items-center gap-1">
-                        <ChevronsLeftRightEllipsis className="size-4 text-subtitle" />
-                        <div className="font-bold text-subtitle">
-                            {t(
-                                'side_panel.refs_section.relationship.cardinality'
-                            )}
+                    <div className="flex flex-row items-center justify-between">
+                        <div className="flex flex-row items-center gap-1">
+                            <ChevronsLeftRightEllipsis className="size-4 text-subtitle" />
+                            <div className="font-bold text-subtitle">
+                                {t(
+                                    'side_panel.refs_section.relationship.cardinality'
+                                )}
+                            </div>
                         </div>
+                        {!readonly && (
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="size-7 p-0 text-sky-600 hover:bg-sky-50 hover:text-sky-700"
+                                        onClick={handleSwitchTables}
+                                    >
+                                        <ArrowLeftRight className="!size-3.5" />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {t(
+                                        'side_panel.refs_section.relationship.switch_tables'
+                                    )}
+                                </TooltipContent>
+                            </Tooltip>
+                        )}
                     </div>
 
                     <Select
@@ -170,14 +231,6 @@ export const RelationshipListItemContent: React.FC<
                                 <SelectItem value="one_to_many">
                                     {t('relationship_type.one_to_many')}
                                 </SelectItem>
-                                <SelectItem value="many_to_one">
-                                    {t('relationship_type.many_to_one')}
-                                </SelectItem>
-                                {relationshipType === 'many_to_many' ? (
-                                    <SelectItem value="many_to_many">
-                                        {t('relationship_type.many_to_many')}
-                                    </SelectItem>
-                                ) : null}
                             </SelectGroup>
                         </SelectContent>
                     </Select>

@@ -197,6 +197,7 @@ export const ru: LanguageTranslation = {
                     foreign: 'Связанная таблица',
                     cardinality: 'Тип множественной связи',
                     delete_relationship: 'Удалить',
+                    switch_tables: 'Поменять таблицы',
                     relationship_actions: {
                         title: 'Действия',
                         delete_relationship: 'Удалить',

@@ -202,6 +202,7 @@ export const gu: LanguageTranslation = {
                     foreign: 'સંબંધિત ટેબલ',
                     cardinality: 'કાર્ડિનાલિટી',
                     delete_relationship: 'કાઢી નાખો',
+                    switch_tables: 'ટેબલ બદલો',
                     relationship_actions: {
                         title: 'ક્રિયાઓ',
                         delete_relationship: 'કાઢી નાખો',

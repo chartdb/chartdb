@@ -199,6 +199,7 @@ export const uk: LanguageTranslation = {
                     foreign: 'Повʼязана таблиця',
                     cardinality: 'Звʼязок',
                     delete_relationship: 'Видалити',
+                    switch_tables: 'Поміняти таблиці',
                     relationship_actions: {
                         title: 'Дії',
                         delete_relationship: 'Видалити',

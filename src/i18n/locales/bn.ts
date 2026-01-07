@@ -201,6 +201,7 @@ export const bn: LanguageTranslation = {
                     foreign: 'সম্পর্কিত টেবিল',
                     cardinality: 'কার্ডিনালিটি',
                     delete_relationship: 'মুছুন',
+                    switch_tables: 'টেবিল বদল করুন',
                     relationship_actions: {
                         title: 'কর্ম',
                         delete_relationship: 'মুছুন',

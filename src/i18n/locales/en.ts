@@ -195,6 +195,7 @@ export const en = {
                     foreign: 'Related Table',
                     cardinality: 'Cardinality',
                     delete_relationship: 'Delete',
+                    switch_tables: 'Switch Tables',
                     relationship_actions: {
                         title: 'Actions',
                         delete_relationship: 'Delete',

@@ -199,6 +199,7 @@ export const ar: LanguageTranslation = {
                     foreign: 'الجدول المرتبط',
                     cardinality: 'الكاردينالية',
                     delete_relationship: 'حذف',
+                    switch_tables: 'تبديل الجداول',
                     relationship_actions: {
                         title: 'إجراءات',
                         delete_relationship: 'حذف',
