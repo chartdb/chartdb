@@ -299,6 +299,7 @@ interface DBMLTable {
 }
 
 interface DBMLEndpoint {
+    schemaName?: string;
     tableName: string;
     fieldNames: string[];
     relation: '1' | '*'; // '1' = one, '*' = many (from @dbml/core parser)
@@ -950,22 +951,36 @@ export const importDBMLToDiagram = async (
             };
         });
 
+        // Helper to find table by name and schema from endpoint
+        const findTableByEndpoint = (
+            endpoint: DBMLEndpoint
+        ): DBTable | undefined => {
+            const tableName = endpoint.tableName.replace(/['"]/g, '');
+            const endpointSchema = endpoint.schemaName?.replace(/['"]/g, '');
+
+            // Normalize endpoint schema the same way tables are normalized:
+            // empty or 'public' → use database default schema
+            const defaultSchema = defaultSchemas[options.databaseType];
+            const isEndpointSchemaEmpty =
+                isStringEmpty(endpointSchema) || endpointSchema === 'public';
+            const normalizedEndpointSchema = isEndpointSchemaEmpty
+                ? defaultSchema
+                : endpointSchema;
+
+            return tables.find(
+                (t) =>
+                    t.name === tableName &&
+                    (normalizedEndpointSchema === undefined ||
+                        t.schema === normalizedEndpointSchema)
+            );
+        };
+
         // Create relationships using the refs
         const relationships: DBRelationship[] = extractedData.refs.map(
             (ref) => {
                 const [source, target] = ref.endpoints;
-                const sourceTable = tables.find(
-                    (t) =>
-                        t.name === source.tableName.replace(/['"]/g, '') &&
-                        (!source.tableName.includes('.') ||
-                            t.schema === source.tableName.split('.')[0])
-                );
-                const targetTable = tables.find(
-                    (t) =>
-                        t.name === target.tableName.replace(/['"]/g, '') &&
-                        (!target.tableName.includes('.') ||
-                            t.schema === target.tableName.split('.')[0])
-                );
+                const sourceTable = findTableByEndpoint(source);
+                const targetTable = findTableByEndpoint(target);
 
                 if (!sourceTable || !targetTable) {
                     throw new Error('Invalid relationship: tables not found');
