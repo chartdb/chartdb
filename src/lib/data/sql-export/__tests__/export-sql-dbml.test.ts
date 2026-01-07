@@ -943,5 +943,77 @@ describe('DBML Export - SQL Generation Tests', () => {
             // Should include precision only when scale is not provided
             expect(sql).toContain('"interest_rate" numeric(5)');
         });
+
+        it('should normalize over-escaped default values', () => {
+            const diagram: Diagram = createDiagram({
+                id: testId(),
+                name: 'Corrupted Defaults Test',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        id: testId(),
+                        name: 'settings',
+                        fields: [
+                            createField({
+                                id: testId(),
+                                name: 'id',
+                                type: { id: 'bigint', name: 'bigint' },
+                                primaryKey: true,
+                                nullable: false,
+                                unique: false,
+                            }),
+                            createField({
+                                id: testId(),
+                                name: 'color',
+                                type: { id: 'text', name: 'text' },
+                                primaryKey: false,
+                                nullable: false,
+                                unique: false,
+                                // Over-escaped: '''#999999'' should become '#999999'
+                                default: "'''#999999''",
+                            }),
+                            createField({
+                                id: testId(),
+                                name: 'status',
+                                type: { id: 'text', name: 'text' },
+                                primaryKey: false,
+                                nullable: false,
+                                unique: false,
+                                // Over-escaped: '''open'' should become 'open'
+                                default: "'''open''",
+                            }),
+                            createField({
+                                id: testId(),
+                                name: 'plan_tier',
+                                type: { id: 'text', name: 'text' },
+                                primaryKey: false,
+                                nullable: false,
+                                unique: false,
+                                // Double-escaped: ''free'' should become 'free'
+                                default: "''free''",
+                            }),
+                        ],
+                        indexes: [],
+                        color: '#888888',
+                    }),
+                ],
+                relationships: [],
+            });
+
+            const sql = exportBaseSQL({
+                diagram,
+                targetDatabaseType: DatabaseType.POSTGRESQL,
+                isDBMLFlow: true,
+            });
+
+            // Should normalize over-escaped quotes to proper single quotes
+            expect(sql).toContain("DEFAULT '#999999'");
+            expect(sql).toContain("DEFAULT 'open'");
+            expect(sql).toContain("DEFAULT 'free'");
+
+            // Should NOT contain the malformed triple/double quotes
+            expect(sql).not.toContain("'''");
+            expect(sql).not.toContain("''free''");
+        });
     });
 });
