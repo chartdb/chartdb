@@ -4,9 +4,8 @@
 
 /**
  * Detect if the current browser is Safari
- * Safari has issues with modern regex features (lookbehind) used by remark-gfm
  */
-export const isSafari = (): boolean => {
+const isSafari = (): boolean => {
     if (typeof window === 'undefined' || typeof navigator === 'undefined') {
         return false;
     }
@@ -21,13 +20,29 @@ export const isSafari = (): boolean => {
 };
 
 /**
- * Cached result to avoid repeated UA checks
+ * Test if the browser supports the regex features used by remark-gfm.
+ * remark-gfm uses unicode property escapes (\p{P}) which older Safari
+ * misinterprets as named capture groups, throwing "invalid group specifier name"
  */
-let isSafariCached: boolean | null = null;
+const hasRemarkGfmRegexIssue = (): boolean => {
+    try {
+        // Test the pattern remark-gfm uses in transformGfmAutolinkLiterals
+        new RegExp('(?<=\\p{P})a', 'u');
+        return false; // Regex works fine
+    } catch {
+        return true; // Regex throws error
+    }
+};
+
+/**
+ * Returns true if remarkGfm should be disabled.
+ * Only disables for Safari browsers that have the regex issue.
+ */
+let shouldDisableCached: boolean | null = null;
 
 export const getIsSafari = (): boolean => {
-    if (isSafariCached === null) {
-        isSafariCached = isSafari();
+    if (shouldDisableCached === null) {
+        shouldDisableCached = isSafari() && hasRemarkGfmRegexIssue();
     }
-    return isSafariCached;
+    return shouldDisableCached;
 };
