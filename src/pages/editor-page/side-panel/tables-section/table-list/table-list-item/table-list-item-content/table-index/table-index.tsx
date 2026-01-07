@@ -1,14 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-    Ellipsis,
-    Trash2,
-    KeyRound,
-    Check,
-    ChevronsUpDown,
-} from 'lucide-react';
+import { Ellipsis, Trash2, KeyRound } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
+    canFieldsUseGinIndex,
     databaseIndexTypes,
+    INDEX_TYPE_CONFIGS,
     type DBIndex,
     type IndexType,
 } from '@/lib/domain/db-index';
@@ -31,7 +27,7 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { cn } from '@/lib/utils';
+import { IndexTypeSelector } from './index-type-selector';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -39,32 +35,6 @@ export interface TableIndexProps {
     removeIndex: () => void;
     fields: DBField[];
 }
-
-interface IndexTypeOption {
-    label: string;
-    value: IndexType;
-    disabledTooltip?: string;
-}
-
-const allIndexTypeOptions: IndexTypeOption[] = [
-    { label: 'B-tree (default)', value: 'btree' },
-    { label: 'Hash', value: 'hash' },
-    {
-        label: 'GIN',
-        value: 'gin',
-        disabledTooltip:
-            'GIN indexes require array, jsonb, json, tsvector, or hstore types',
-    },
-];
-
-// Data types that support GIN indexes in PostgreSQL
-const GIN_SUPPORTED_TYPES = ['jsonb', 'json', 'tsvector', 'hstore'];
-
-const supportsGinIndex = (field: DBField): boolean => {
-    if (field.isArray) return true;
-    const typeLower = field.type.id.toLowerCase();
-    return GIN_SUPPORTED_TYPES.includes(typeLower);
-};
 
 export const TableIndex: React.FC<TableIndexProps> = ({
     fields,
@@ -74,22 +44,38 @@ export const TableIndex: React.FC<TableIndexProps> = ({
 }) => {
     const { t } = useTranslation();
     const { databaseType, readonly } = useChartDB();
-    const fieldOptions = fields.map((field) => ({
-        label: field.name,
-        value: field.id,
-    }));
 
-    // Check if selected fields support GIN index
+    const fieldOptions = useMemo(
+        () =>
+            fields.map((field) => ({
+                label: field.name,
+                value: field.id,
+            })),
+        [fields]
+    );
+
     const selectedFields = useMemo(
         () => fields.filter((f) => index.fieldIds.includes(f.id)),
         [fields, index.fieldIds]
     );
+
     const canUseGin = useMemo(
-        () =>
-            selectedFields.length > 0 &&
-            selectedFields.every((f) => supportsGinIndex(f)),
+        () => canFieldsUseGinIndex(selectedFields),
         [selectedFields]
     );
+
+    const availableIndexTypes = databaseIndexTypes[databaseType];
+
+    const indexTypeOptions = useMemo(() => {
+        if (!availableIndexTypes) return [];
+
+        return INDEX_TYPE_CONFIGS.filter((config) =>
+            availableIndexTypes.includes(config.value)
+        ).map((config) => ({
+            ...config,
+            disabled: config.value === 'gin' && !canUseGin,
+        }));
+    }, [availableIndexTypes, canUseGin]);
 
     const updateIndexFields = useCallback(
         (fieldIds: string | string[]) => {
@@ -98,56 +84,42 @@ export const TableIndex: React.FC<TableIndexProps> = ({
             // For hash indexes, only keep the last selected field
             if (index.type === 'hash' && ids.length > 0) {
                 updateIndex({ fieldIds: [ids[ids.length - 1]] });
-            } else {
-                // Check if GIN is still valid with new field selection
-                const newSelectedFields = fields.filter((f) =>
-                    ids.includes(f.id)
-                );
-                const ginStillValid =
-                    newSelectedFields.length > 0 &&
-                    newSelectedFields.every((f) => supportsGinIndex(f));
+                return;
+            }
 
-                if (index.type === 'gin' && !ginStillValid) {
-                    // Reset to btree if GIN is no longer valid
-                    updateIndex({ fieldIds: ids, type: 'btree' });
-                } else {
-                    updateIndex({ fieldIds: ids });
-                }
+            // Check if GIN is still valid with new field selection
+            const newSelectedFields = fields.filter((f) => ids.includes(f.id));
+            const ginStillValid = canFieldsUseGinIndex(newSelectedFields);
+
+            if (index.type === 'gin' && !ginStillValid) {
+                // Reset to btree if GIN is no longer valid
+                updateIndex({ fieldIds: ids, type: 'btree' });
+            } else {
+                updateIndex({ fieldIds: ids });
             }
         },
         [index.type, updateIndex, fields]
     );
 
-    const indexTypeOptions = useMemo(
-        () =>
-            allIndexTypeOptions
-                .filter((option) =>
-                    databaseIndexTypes[databaseType]?.includes(option.value)
-                )
-                .map((option) => ({
-                    ...option,
-                    disabled: option.value === 'gin' && !canUseGin,
-                })),
-        [databaseType, canUseGin]
-    );
-
     const updateIndexType = useCallback(
-        (value: string | string[]) => {
-            {
-                const newType = value as IndexType;
-                // If switching to hash and multiple fields are selected, keep only the first
-                if (newType === 'hash' && index.fieldIds.length > 1) {
-                    updateIndex({
-                        type: newType,
-                        fieldIds: [index.fieldIds[0]],
-                    });
-                } else {
-                    updateIndex({ type: newType });
-                }
+        (newType: IndexType) => {
+            // If switching to hash and multiple fields are selected, keep only the first
+            if (newType === 'hash' && index.fieldIds.length > 1) {
+                updateIndex({
+                    type: newType,
+                    fieldIds: [index.fieldIds[0]],
+                });
+            } else {
+                updateIndex({ type: newType });
             }
         },
         [updateIndex, index.fieldIds]
     );
+
+    const currentIndexType = index.type || 'btree';
+    const currentTypeLabel =
+        indexTypeOptions.find((opt) => opt.value === currentIndexType)?.label ||
+        'Select type';
 
     return (
         <div className="flex flex-1 flex-row justify-between gap-2 p-1">
@@ -263,112 +235,17 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                         disabled={readonly}
                                     />
                                 </div>
-                                {indexTypeOptions.length > 0 ? (
-                                    <div className="mt-2 flex flex-col gap-2">
-                                        <Label
-                                            htmlFor="indexType"
-                                            className="text-subtitle"
-                                        >
-                                            {t(
-                                                'side_panel.tables_section.table.index_actions.index_type'
-                                            )}
-                                        </Label>
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <Button
-                                                    variant="outline"
-                                                    className="w-full justify-between font-normal"
-                                                    disabled={readonly}
-                                                >
-                                                    {indexTypeOptions.find(
-                                                        (opt) =>
-                                                            opt.value ===
-                                                            (index.type ||
-                                                                'btree')
-                                                    )?.label || 'Select type'}
-                                                    <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-[180px] p-1">
-                                                <div className="flex flex-col">
-                                                    {indexTypeOptions.map(
-                                                        (option) => {
-                                                            const isSelected =
-                                                                (index.type ||
-                                                                    'btree') ===
-                                                                option.value;
-                                                            const itemContent =
-                                                                (
-                                                                    <div
-                                                                        key={
-                                                                            option.value
-                                                                        }
-                                                                        className={cn(
-                                                                            'flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm',
-                                                                            option.disabled
-                                                                                ? 'cursor-not-allowed opacity-50'
-                                                                                : 'hover:bg-accent',
-                                                                            isSelected &&
-                                                                                'bg-accent'
-                                                                        )}
-                                                                        onClick={() => {
-                                                                            if (
-                                                                                !option.disabled
-                                                                            ) {
-                                                                                updateIndexType(
-                                                                                    option.value
-                                                                                );
-                                                                            }
-                                                                        }}
-                                                                    >
-                                                                        <Check
-                                                                            className={cn(
-                                                                                'mr-2 h-4 w-4',
-                                                                                isSelected
-                                                                                    ? 'opacity-100'
-                                                                                    : 'opacity-0'
-                                                                            )}
-                                                                        />
-                                                                        {
-                                                                            option.label
-                                                                        }
-                                                                    </div>
-                                                                );
-
-                                                            if (
-                                                                option.disabled &&
-                                                                option.disabledTooltip
-                                                            ) {
-                                                                return (
-                                                                    <Tooltip
-                                                                        key={
-                                                                            option.value
-                                                                        }
-                                                                    >
-                                                                        <TooltipTrigger
-                                                                            asChild
-                                                                        >
-                                                                            {
-                                                                                itemContent
-                                                                            }
-                                                                        </TooltipTrigger>
-                                                                        <TooltipContent side="right">
-                                                                            {
-                                                                                option.disabledTooltip
-                                                                            }
-                                                                        </TooltipContent>
-                                                                    </Tooltip>
-                                                                );
-                                                            }
-                                                            return itemContent;
-                                                        }
-                                                    )}
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
-                                    </div>
-                                ) : null}
-                                {!readonly ? (
+                                {indexTypeOptions.length > 0 && (
+                                    <IndexTypeSelector
+                                        options={indexTypeOptions}
+                                        value={currentIndexType}
+                                        label={currentTypeLabel}
+                                        onChange={updateIndexType}
+                                        readonly={readonly}
+                                        t={t}
+                                    />
+                                )}
+                                {!readonly && (
                                     <>
                                         <Separator orientation="horizontal" />
                                         <Button
@@ -382,7 +259,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                             )}
                                         </Button>
                                     </>
-                                ) : null}
+                                )}
                             </div>
                         </PopoverContent>
                     </Popover>
