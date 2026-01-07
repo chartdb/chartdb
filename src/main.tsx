@@ -1,3 +1,6 @@
+// Polyfills must be imported first for Safari compatibility
+import './polyfills';
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';

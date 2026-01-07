@@ -57,7 +57,7 @@ export const fixMetadataJson = (metadataJson: string): string => {
 
             /* eslint-disable-next-line no-useless-escape */
             .replace(/\"/g, '___ESCAPED_QUOTE___') // Temporarily replace empty strings
-            .replace(/(?<=:\s*)""(?=\s*[,}])/g, '___EMPTY___') // Temporarily replace empty strings
+            .replace(/(:\s*)""(?=\s*[,}])/g, '$1___EMPTY___') // Temporarily replace empty strings (Safari-compatible)
             .replace(/""/g, '"') // Replace remaining double quotes
             .replace(/___ESCAPED_QUOTE___/g, '"') // Restore empty strings
             .replace(/___EMPTY___/g, '""') // Restore empty strings
