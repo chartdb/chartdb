@@ -19,6 +19,26 @@ import {
     supportsCheckConstraints,
 } from '@/lib/domain/database-capabilities';
 
+// Function to normalize over-escaped default values
+// Handles cases like '''value'' which should be 'value'
+const normalizeQuotedDefault = (value: string): string => {
+    // Check for over-escaped patterns: '''value'', ''value'', etc.
+    // These happen when a quoted string gets re-quoted during import/export cycles
+    const overEscapedMatch = value.match(/^('{2,})(.*?)('{1,})$/);
+    if (overEscapedMatch) {
+        const [, leadingQuotes, innerValue, trailingQuotes] = overEscapedMatch;
+        // If we have more than one leading/trailing quote, it's over-escaped
+        if (leadingQuotes.length > 1 || trailingQuotes.length > 1) {
+            // Extract the actual value and re-quote properly
+            // First, unescape any doubled quotes in the inner value
+            const unescaped = innerValue.replace(/''/g, "'");
+            // Return properly quoted string
+            return `'${unescaped.replace(/'/g, "''")}'`;
+        }
+    }
+    return value;
+};
+
 // Function to format default values with proper quoting
 const formatDefaultValue = (value: string): string => {
     const trimmed = value.trim();
@@ -50,12 +70,13 @@ const formatDefaultValue = (value: string): string => {
         return trimmed;
     }
 
-    // Already quoted strings - keep as is
+    // Already quoted strings - normalize and return
     if (
         (trimmed.startsWith("'") && trimmed.endsWith("'")) ||
         (trimmed.startsWith('"') && trimmed.endsWith('"'))
     ) {
-        return trimmed;
+        // Normalize over-escaped quotes (e.g., '''value'' -> 'value')
+        return normalizeQuotedDefault(trimmed);
     }
 
     // Check if it's a simple identifier (alphanumeric, no spaces) that might be a currency or enum
