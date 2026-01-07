@@ -2,7 +2,9 @@ import React, { useCallback, useMemo } from 'react';
 import { Ellipsis, Trash2, KeyRound } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
+    canFieldsUseGinIndex,
     databaseIndexTypes,
+    INDEX_TYPE_CONFIGS,
     type DBIndex,
     type IndexType,
 } from '@/lib/domain/db-index';
@@ -25,6 +27,7 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { IndexTypeSelector } from './index-type-selector';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -32,11 +35,6 @@ export interface TableIndexProps {
     removeIndex: () => void;
     fields: DBField[];
 }
-
-const allIndexTypeOptions: { label: string; value: IndexType }[] = [
-    { label: 'B-tree (default)', value: 'btree' },
-    { label: 'Hash', value: 'hash' },
-];
 
 export const TableIndex: React.FC<TableIndexProps> = ({
     fields,
@@ -46,10 +44,39 @@ export const TableIndex: React.FC<TableIndexProps> = ({
 }) => {
     const { t } = useTranslation();
     const { databaseType, readonly } = useChartDB();
-    const fieldOptions = fields.map((field) => ({
-        label: field.name,
-        value: field.id,
-    }));
+
+    const fieldOptions = useMemo(
+        () =>
+            fields.map((field) => ({
+                label: field.name,
+                value: field.id,
+            })),
+        [fields]
+    );
+
+    const selectedFields = useMemo(
+        () => fields.filter((f) => index.fieldIds.includes(f.id)),
+        [fields, index.fieldIds]
+    );
+
+    const canUseGin = useMemo(
+        () => canFieldsUseGinIndex(selectedFields),
+        [selectedFields]
+    );
+
+    const availableIndexTypes = databaseIndexTypes[databaseType];
+
+    const indexTypeOptions = useMemo(() => {
+        if (!availableIndexTypes) return [];
+
+        return INDEX_TYPE_CONFIGS.filter((config) =>
+            availableIndexTypes.includes(config.value)
+        ).map((config) => ({
+            ...config,
+            disabled: config.value === 'gin' && !canUseGin,
+        }));
+    }, [availableIndexTypes, canUseGin]);
+
     const updateIndexFields = useCallback(
         (fieldIds: string | string[]) => {
             const ids = Array.isArray(fieldIds) ? fieldIds : [fieldIds];
@@ -57,38 +84,42 @@ export const TableIndex: React.FC<TableIndexProps> = ({
             // For hash indexes, only keep the last selected field
             if (index.type === 'hash' && ids.length > 0) {
                 updateIndex({ fieldIds: [ids[ids.length - 1]] });
+                return;
+            }
+
+            // Check if GIN is still valid with new field selection
+            const newSelectedFields = fields.filter((f) => ids.includes(f.id));
+            const ginStillValid = canFieldsUseGinIndex(newSelectedFields);
+
+            if (index.type === 'gin' && !ginStillValid) {
+                // Reset to btree if GIN is no longer valid
+                updateIndex({ fieldIds: ids, type: 'btree' });
             } else {
                 updateIndex({ fieldIds: ids });
             }
         },
-        [index.type, updateIndex]
-    );
-
-    const indexTypeOptions = useMemo(
-        () =>
-            allIndexTypeOptions.filter((option) =>
-                databaseIndexTypes[databaseType]?.includes(option.value)
-            ),
-        [databaseType]
+        [index.type, updateIndex, fields]
     );
 
     const updateIndexType = useCallback(
-        (value: string | string[]) => {
-            {
-                const newType = value as IndexType;
-                // If switching to hash and multiple fields are selected, keep only the first
-                if (newType === 'hash' && index.fieldIds.length > 1) {
-                    updateIndex({
-                        type: newType,
-                        fieldIds: [index.fieldIds[0]],
-                    });
-                } else {
-                    updateIndex({ type: newType });
-                }
+        (newType: IndexType) => {
+            // If switching to hash and multiple fields are selected, keep only the first
+            if (newType === 'hash' && index.fieldIds.length > 1) {
+                updateIndex({
+                    type: newType,
+                    fieldIds: [index.fieldIds[0]],
+                });
+            } else {
+                updateIndex({ type: newType });
             }
         },
         [updateIndex, index.fieldIds]
     );
+
+    const currentIndexType = index.type || 'btree';
+    const currentTypeLabel =
+        indexTypeOptions.find((opt) => opt.value === currentIndexType)?.label ||
+        'Select type';
 
     return (
         <div className="flex flex-1 flex-row justify-between gap-2 p-1">
@@ -108,6 +139,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                 keepOrder
                 disabled={index.isPrimaryKey ?? false}
                 readonly={readonly}
+                modal={false}
             />
             <div className="flex shrink-0 gap-1">
                 {index.isPrimaryKey ? (
@@ -203,25 +235,17 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                         disabled={readonly}
                                     />
                                 </div>
-                                {indexTypeOptions.length > 0 ? (
-                                    <div className="mt-2 flex flex-col gap-2">
-                                        <Label
-                                            htmlFor="indexType"
-                                            className="text-subtitle"
-                                        >
-                                            {t(
-                                                'side_panel.tables_section.table.index_actions.index_type'
-                                            )}
-                                        </Label>
-                                        <SelectBox
-                                            options={indexTypeOptions}
-                                            value={index.type || 'btree'}
-                                            onChange={updateIndexType}
-                                            readonly={readonly}
-                                        />
-                                    </div>
-                                ) : null}
-                                {!readonly ? (
+                                {indexTypeOptions.length > 0 && (
+                                    <IndexTypeSelector
+                                        options={indexTypeOptions}
+                                        value={currentIndexType}
+                                        label={currentTypeLabel}
+                                        onChange={updateIndexType}
+                                        readonly={readonly}
+                                        t={t}
+                                    />
+                                )}
+                                {!readonly && (
                                     <>
                                         <Separator orientation="horizontal" />
                                         <Button
@@ -235,7 +259,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                             )}
                                         </Button>
                                     </>
-                                ) : null}
+                                )}
                             </div>
                         </PopoverContent>
                     </Popover>

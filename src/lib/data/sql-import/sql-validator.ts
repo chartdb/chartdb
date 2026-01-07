@@ -30,6 +30,8 @@ export function validateSQL(
 ): ValidationResult {
     switch (databaseType) {
         case DatabaseType.POSTGRESQL:
+        case DatabaseType.COCKROACHDB:
+            // CockroachDB uses PostgreSQL-compatible syntax
             return validatePostgreSQLDialect(sql);
 
         case DatabaseType.MYSQL:

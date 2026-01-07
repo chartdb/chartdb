@@ -59,6 +59,7 @@ export interface SelectBoxProps {
     commandOnMouseDown?: (e: React.MouseEvent) => void;
     commandOnClick?: (e: React.MouseEvent) => void;
     onSearchChange?: (search: string) => void;
+    modal?: boolean;
 }
 
 export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
@@ -89,6 +90,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
             commandOnMouseDown,
             commandOnClick,
             onSearchChange,
+            modal = true,
         },
         ref
     ) => {
@@ -312,7 +314,7 @@ export const SelectBox = React.forwardRef<HTMLInputElement, SelectBoxProps>(
         );
 
         return (
-            <Popover open={isOpen} onOpenChange={onOpenChange} modal={true}>
+            <Popover open={isOpen} onOpenChange={onOpenChange} modal={modal}>
                 <PopoverTrigger asChild tabIndex={0} onKeyDown={handleKeyDown}>
                     <div
                         className={cn(
