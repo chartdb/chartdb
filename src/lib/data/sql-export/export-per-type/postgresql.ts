@@ -402,6 +402,16 @@ export function exportPostgreSQL({
                                     return '';
                                 }
 
+                                // Skip unique indexes on single columns that already have inline UNIQUE
+                                // PostgreSQL automatically creates an index for UNIQUE constraints
+                                if (
+                                    index.unique &&
+                                    indexFields.length === 1 &&
+                                    indexFields[0]?.unique
+                                ) {
+                                    return '';
+                                }
+
                                 // Create unique index name using table name and index name
                                 // This ensures index names are unique across the database
                                 const safeTableName = table.name.replace(
