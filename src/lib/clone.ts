@@ -120,6 +120,9 @@ export const cloneTable = (
                     .map((id) => getNewId(id))
                     .filter((fieldId): fieldId is string => fieldId !== null),
                 id,
+                // Clear the name for primary key indexes to avoid duplicate constraint names
+                // when exporting SQL scripts (database will auto-generate unique names)
+                name: index.isPrimaryKey ? '' : index.name,
             };
         })
         .filter((index): index is DBIndex => index !== null);

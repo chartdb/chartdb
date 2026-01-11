@@ -103,6 +103,20 @@ export const useUpdateTableField = (
         setLocalPrimaryKey(field.primaryKey);
     }, [field.nullable, field.primaryKey]);
 
+    // Auto-correct: Primary key fields must be NOT NULL
+    // This fixes any existing data where PK columns were incorrectly set as nullable
+    useEffect(() => {
+        if (field.primaryKey && field.nullable) {
+            chartDBUpdateField(table.id, field.id, { nullable: false });
+        }
+    }, [
+        field.primaryKey,
+        field.nullable,
+        table.id,
+        field.id,
+        chartDBUpdateField,
+    ]);
+
     // Use custom updateField if provided, otherwise use the chartDB one
     const updateField = useMemo(
         () =>
@@ -296,6 +310,7 @@ export const useUpdateTableField = (
                     // When setting as primary key
                     const updates: Partial<DBField> = {
                         primaryKey: true,
+                        nullable: false, // Primary keys must be NOT NULL
                     };
                     // Only auto-set unique if this will be the only primary key
                     if (primaryKeyCount === 0) {
@@ -318,6 +333,10 @@ export const useUpdateTableField = (
     const handlePrimaryKeyToggle = useCallback(
         (value: boolean) => {
             setLocalPrimaryKey(value);
+            // Primary keys must be NOT NULL - update local state immediately for responsive UI
+            if (value) {
+                setLocalNullable(false);
+            }
             debouncedPrimaryKeyUpdate(value, primaryKeyCount);
         },
         [primaryKeyCount, debouncedPrimaryKeyUpdate]
