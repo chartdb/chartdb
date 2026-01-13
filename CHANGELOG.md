@@ -1,5 +1,72 @@
 # Changelog
 
+## [1.20.0](https://github.com/chartdb/chartdb/compare/v1.19.0...v1.20.0) (2026-01-13)
+
+
+### Features
+
+* add check constraint support ([#1046](https://github.com/chartdb/chartdb/issues/1046)) ([6879e19](https://github.com/chartdb/chartdb/commit/6879e19fa57564156d73aee28f9c34910b947e02))
+* add GIN index and array type support for PostgreSQL/CockroachDB ([#1048](https://github.com/chartdb/chartdb/issues/1048)) ([de26f73](https://github.com/chartdb/chartdb/commit/de26f731be2efe6f2157824fef1fdf9a400c8c45))
+* deterministic SQL export for PostgreSQL to MySQL/MSSQL ([#1030](https://github.com/chartdb/chartdb/issues/1030)) ([fb19a7a](https://github.com/chartdb/chartdb/commit/fb19a7ac2f8e5270c1c1dfdc0e32e5004327bc68))
+
+
+### Bug Fixes
+
+* add "New Database" button to Open Diagram dialog ([#1041](https://github.com/chartdb/chartdb/issues/1041)) ([a43cc30](https://github.com/chartdb/chartdb/commit/a43cc30c52810ac7ae82446496944a7e04cdd232))
+* add auto-closing brackets to DBML editor ([#1018](https://github.com/chartdb/chartdb/issues/1018)) ([f140d05](https://github.com/chartdb/chartdb/commit/f140d0528f8de293b463dfa3fd8875774474254e))
+* add dbml autocomplete ([#1017](https://github.com/chartdb/chartdb/issues/1017)) ([fad5adc](https://github.com/chartdb/chartdb/commit/fad5adc048bb0c0fb96bfb2a24beb5b3be33d53a))
+* add defaults in import for all databases ([#1014](https://github.com/chartdb/chartdb/issues/1014)) ([cef9fb6](https://github.com/chartdb/chartdb/commit/cef9fb6e83766c69c87b9f03666ca8cd31d171a2))
+* add import from canvas ([#995](https://github.com/chartdb/chartdb/issues/995)) ([8b31944](https://github.com/chartdb/chartdb/commit/8b31944f67f44ba3c7cd9fa153d41a7c0dbfac05))
+* add index change diff ([#1026](https://github.com/chartdb/chartdb/issues/1026)) ([a6d6482](https://github.com/chartdb/chartdb/commit/a6d6482346cd756099b54679700b134b673ca7e9))
+* add old Safari versions compatibility ([#1058](https://github.com/chartdb/chartdb/issues/1058)) ([5314c88](https://github.com/chartdb/chartdb/commit/5314c88ae13f5133e6bcefe19f48fb7beefaac28))
+* add Oracle database support for SQL import ([#1005](https://github.com/chartdb/chartdb/issues/1005)) ([9ac99d9](https://github.com/chartdb/chartdb/commit/9ac99d928c5d2661006b62e5782cb36b35953fa9))
+* add proper cardinality symbols to DBML ([#1055](https://github.com/chartdb/chartdb/issues/1055)) ([1c46f96](https://github.com/chartdb/chartdb/commit/1c46f96eb3a843ce345b96a628bcb25bd9f1c8af))
+* add SQL viewes support for import via ddl ([#1044](https://github.com/chartdb/chartdb/issues/1044)) ([0502efd](https://github.com/chartdb/chartdb/commit/0502efdc211fa433c9475cd1a9393fd658350871))
+* add text wrapping and max-width to field comment tooltips ([#1004](https://github.com/chartdb/chartdb/issues/1004)) ([ccfd94b](https://github.com/chartdb/chartdb/commit/ccfd94bf779f5d32816b0a1ed56cc868aff53edd))
+* align relationships sidebar with cardinalities update ([#1056](https://github.com/chartdb/chartdb/issues/1056)) ([1dd3c93](https://github.com/chartdb/chartdb/commit/1dd3c93e507ae11cdca07d13837847f6cf42e6c5))
+* cardinality diff handle ([#1038](https://github.com/chartdb/chartdb/issues/1038)) ([a63d2b3](https://github.com/chartdb/chartdb/commit/a63d2b3f7447402038c7b0430bc2d55f46dc428e))
+* change diff new id field ([#1027](https://github.com/chartdb/chartdb/issues/1027)) ([0af7775](https://github.com/chartdb/chartdb/commit/0af777584fe9973ea89f00a7bfaebdb408cdbe15))
+* **comments:** fix comments dbml ([#1013](https://github.com/chartdb/chartdb/issues/1013)) ([ac37848](https://github.com/chartdb/chartdb/commit/ac3784847646d99b893fcafafd6363351db0bb6b))
+* constraints align create function ([#1049](https://github.com/chartdb/chartdb/issues/1049)) ([d000024](https://github.com/chartdb/chartdb/commit/d00002467718f308eeb7850b614da7c98eada841))
+* correct FK placement for 1:1 relationships in PostgreSQL export ([#1036](https://github.com/chartdb/chartdb/issues/1036)) ([f25cd45](https://github.com/chartdb/chartdb/commit/f25cd45e74ef9dae4b5eca72e94f300f5da65a64))
+* correct relationship direction in metadata import ([#1007](https://github.com/chartdb/chartdb/issues/1007)) ([87ac0ed](https://github.com/chartdb/chartdb/commit/87ac0ed7d0b29802978a46e5aa89993247537388))
+* correct relationship direction in SQL import ([#1003](https://github.com/chartdb/chartdb/issues/1003)) ([9b6d6db](https://github.com/chartdb/chartdb/commit/9b6d6dbb3cc15a1fb53f867b3f665aa7d0bb6b8c))
+* correctly match DBML relationships when same table name exists in multiple schemas ([#1057](https://github.com/chartdb/chartdb/issues/1057)) ([63febde](https://github.com/chartdb/chartdb/commit/63febde3f7e30f6f7b8b5b6ea787df9c282c56f7))
+* dbml editor spaces + refs on schemas ([#1023](https://github.com/chartdb/chartdb/issues/1023)) ([a5d1f40](https://github.com/chartdb/chartdb/commit/a5d1f40b6b300eeaa0f5e27caf305644961f18bb))
+* **dbml-import:** use defaultSchemas instead of hardcoded schema values ([#1012](https://github.com/chartdb/chartdb/issues/1012)) ([d3205f7](https://github.com/chartdb/chartdb/commit/d3205f778b9ed78d60e9a90dcb4f41b952f2f66b))
+* ddl import auto increment ([#1035](https://github.com/chartdb/chartdb/issues/1035)) ([c96466e](https://github.com/chartdb/chartdb/commit/c96466e6fbc9532d49fe2b29d9a058d84ce9cf59))
+* ddl import of scale and precision ([#1031](https://github.com/chartdb/chartdb/issues/1031)) ([674ed22](https://github.com/chartdb/chartdb/commit/674ed2249ee46b0dce14b1cc10be45755460b03d))
+* enforce NOT NULL for primary key fields ([#1061](https://github.com/chartdb/chartdb/issues/1061)) ([b21202e](https://github.com/chartdb/chartdb/commit/b21202e6c7ecc1807a1ef09853532f1282c6f88e))
+* export ddl index order ([#1028](https://github.com/chartdb/chartdb/issues/1028)) ([2d666ba](https://github.com/chartdb/chartdb/commit/2d666bab0f0f9fdbc44d71c219e9893c1cca0cbf))
+* **export-image:** inline SVG styles for relationship edges and cardinality markers ([#1054](https://github.com/chartdb/chartdb/issues/1054)) ([a908d77](https://github.com/chartdb/chartdb/commit/a908d77db8f440f119039ee5877196e36ef9f9d6))
+* **filter:** improve filter UX - empty states + show all indicators ([#1039](https://github.com/chartdb/chartdb/issues/1039)) ([8db2ddf](https://github.com/chartdb/chartdb/commit/8db2ddff5570b037033dd4112a2cc131938aba8d))
+* **filter:** show visible/total count badge for schema and area groups ([#1045](https://github.com/chartdb/chartdb/issues/1045)) ([84e55f5](https://github.com/chartdb/chartdb/commit/84e55f5df654be47c27f17fac55359d6a454d87d))
+* handle escape sequences and double-quotes in metadata JSON parsing ([#1009](https://github.com/chartdb/chartdb/issues/1009)) ([f9c9dcf](https://github.com/chartdb/chartdb/commit/f9c9dcf56b2dfe4eaecc9241038bc11d71985789))
+* hide check JSON button after 2 failed fix attempts ([#1010](https://github.com/chartdb/chartdb/issues/1010)) ([1688423](https://github.com/chartdb/chartdb/commit/16884233cac3970cc8d64642ccd44d0c63aa4474))
+* improve UI for views ([#1043](https://github.com/chartdb/chartdb/issues/1043)) ([21bbd48](https://github.com/chartdb/chartdb/commit/21bbd48c1509b41e094620353e108966cfa337a3))
+* mark primary key columns as NOT NULL when importing DBML ([#1006](https://github.com/chartdb/chartdb/issues/1006)) ([e5ae46c](https://github.com/chartdb/chartdb/commit/e5ae46c3d742dc1d88c3085d9550870f493a5914))
+* normalize index type comparison using database defaults ([#1029](https://github.com/chartdb/chartdb/issues/1029)) ([d210319](https://github.com/chartdb/chartdb/commit/d210319c3b557e25b73f1f61dcad9a9c91ebc61e))
+* normalize over-escaped default values in DBML export ([#1059](https://github.com/chartdb/chartdb/issues/1059)) ([6aadab1](https://github.com/chartdb/chartdb/commit/6aadab174a9eeca421e91deea60ec429f709d2e2))
+* normalize relationship cardinalities so many is always on target ([#1051](https://github.com/chartdb/chartdb/issues/1051)) ([88f4a28](https://github.com/chartdb/chartdb/commit/88f4a285e4f33b9d851f3b02f938745e28c7472f))
+* nvm version ([#1021](https://github.com/chartdb/chartdb/issues/1021)) ([1804f45](https://github.com/chartdb/chartdb/commit/1804f451fb69c4d9211433e0d724d945b376d05d))
+* pg serial export sql ([#1034](https://github.com/chartdb/chartdb/issues/1034)) ([f10c220](https://github.com/chartdb/chartdb/commit/f10c220699a5f120dabfe17794e42c193119952b))
+* pk indexes sql export ([#1024](https://github.com/chartdb/chartdb/issues/1024)) ([7060532](https://github.com/chartdb/chartdb/commit/70605324ecdd00a05da58438a5f13017a5b5cdf9))
+* **postgres:** detect serial types and hide nextval defaults in smart query ([#1032](https://github.com/chartdb/chartdb/issues/1032)) ([9e4b5a0](https://github.com/chartdb/chartdb/commit/9e4b5a0cc6ed26b43477f85898f35bda1c176045))
+* PostgreSQL serial type parsing ([#1016](https://github.com/chartdb/chartdb/issues/1016)) ([db1cf45](https://github.com/chartdb/chartdb/commit/db1cf45a8a0fddc958661e13b444c9e2aaeeb6b1))
+* PostgreSQL unique/primary key import handling ([#1062](https://github.com/chartdb/chartdb/issues/1062)) ([5754538](https://github.com/chartdb/chartdb/commit/5754538d7ef31d900cf754c68f2a51a0ce7ed54a))
+* primary key index options ([#1025](https://github.com/chartdb/chartdb/issues/1025)) ([83dd5ba](https://github.com/chartdb/chartdb/commit/83dd5ba33d70ca2403fba7c4aec1bcff225f7def))
+* properly merge inline refs with notes in DBML export ([#1019](https://github.com/chartdb/chartdb/issues/1019)) ([e977ba5](https://github.com/chartdb/chartdb/commit/e977ba5ef2b6c4a2b2d11120b7f101a5e131c7d4))
+* rels dbml diffs ([#1037](https://github.com/chartdb/chartdb/issues/1037)) ([c39b699](https://github.com/chartdb/chartdb/commit/c39b699e93b99b1bae1263580949c9d75439baca))
+* rels translations ([#1052](https://github.com/chartdb/chartdb/issues/1052)) ([5bc2593](https://github.com/chartdb/chartdb/commit/5bc2593108b7061cdfdb1c7c1adcc698558ca2ac))
+* scroll navigates back ([#1053](https://github.com/chartdb/chartdb/issues/1053)) ([9fb451e](https://github.com/chartdb/chartdb/commit/9fb451ed04cab5e10aa067b6acd9a44e8b984226))
+* search languages ([#1042](https://github.com/chartdb/chartdb/issues/1042)) ([ded5b14](https://github.com/chartdb/chartdb/commit/ded5b14a62eaf352b372cb5f2f6e225de9d53a44))
+* serial ddl import in pg ([#1033](https://github.com/chartdb/chartdb/issues/1033)) ([6eae4b0](https://github.com/chartdb/chartdb/commit/6eae4b0fc3f1a941ed40431a84c5efedafdb0905))
+* treat PostgreSQL decimal as synonym for numeric ([#1020](https://github.com/chartdb/chartdb/issues/1020)) ([4098524](https://github.com/chartdb/chartdb/commit/4098524b90c16de5941d355ecf2cfe939b25641d))
+* unique with pk on sql import ([#1022](https://github.com/chartdb/chartdb/issues/1022)) ([20208f6](https://github.com/chartdb/chartdb/commit/20208f6a51311635509da1723ddcb81c4c42dc9a))
+* update image export scale options and set as 4x default ([#1040](https://github.com/chartdb/chartdb/issues/1040)) ([6058db4](https://github.com/chartdb/chartdb/commit/6058db47c4e073aaaf19fd82a32fdb5f31fc55ef))
+* update-browserslist-db ([#1001](https://github.com/chartdb/chartdb/issues/1001)) ([b16336b](https://github.com/chartdb/chartdb/commit/b16336bae26e8edb2e6e144a203488835fc73185))
+* upgrade vite ([#1008](https://github.com/chartdb/chartdb/issues/1008)) ([bedc2c8](https://github.com/chartdb/chartdb/commit/bedc2c80905225699c7e1218075d96e0ac4f4b78))
+
 ## [1.19.0](https://github.com/chartdb/chartdb/compare/v1.18.1...v1.19.0) (2025-12-09)
 
 
