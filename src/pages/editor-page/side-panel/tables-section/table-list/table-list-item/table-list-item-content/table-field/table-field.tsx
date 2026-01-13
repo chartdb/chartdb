@@ -161,7 +161,11 @@ export const TableField: React.FC<TableFieldProps> = ({
                             <TableFieldToggle
                                 pressed={nullable}
                                 onPressedChange={handleNullableToggle}
-                                disabled={readonly || typeRequiresNotNull}
+                                disabled={
+                                    readonly ||
+                                    typeRequiresNotNull ||
+                                    primaryKey
+                                }
                             >
                                 N
                             </TableFieldToggle>

@@ -155,7 +155,7 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                                 <TableFieldToggle
                                     pressed={nullable}
                                     onPressedChange={handleNullableToggle}
-                                    disabled={typeRequiresNotNull}
+                                    disabled={typeRequiresNotNull || primaryKey}
                                 >
                                     N
                                 </TableFieldToggle>

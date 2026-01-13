@@ -473,14 +473,7 @@ export function exportPostgreSQLToMSSQL({
                 }CREATE TABLE ${tableName} (\n${fieldDefinitions.join('\n')}${
                     // Add PRIMARY KEY as table constraint
                     primaryKeyFields.length > 0
-                        ? `\n    ${(() => {
-                              const pkIndex = table.indexes.find(
-                                  (idx) => idx.isPrimaryKey
-                              );
-                              return pkIndex?.name
-                                  ? `CONSTRAINT [${pkIndex.name}] `
-                                  : '';
-                          })()}PRIMARY KEY (${primaryKeyFields
+                        ? `\n    PRIMARY KEY (${primaryKeyFields
                               .map((f) => `[${f.name}]`)
                               .join(
                                   ', '

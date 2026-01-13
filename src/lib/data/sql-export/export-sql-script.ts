@@ -511,15 +511,9 @@ export const exportBaseSQL = ({
                 }
             }
 
-            // Handle PRIMARY KEY constraint - only add inline if single PK without named constraint
-            const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
-            // Only use CONSTRAINT syntax if PK index has a non-empty name
-            const useNamedConstraint = !!pkIndex?.name;
-            if (
-                field.primaryKey &&
-                !hasCompositePrimaryKey &&
-                !useNamedConstraint
-            ) {
+            // Handle PRIMARY KEY constraint - add inline for single PK fields
+            // Never use named constraints to avoid duplicate constraint name issues
+            if (field.primaryKey && !hasCompositePrimaryKey) {
                 sqlScript += ' PRIMARY KEY';
 
                 // For SQLite with DBML flow, add AUTOINCREMENT after PRIMARY KEY
@@ -534,31 +528,19 @@ export const exportBaseSQL = ({
                 }
             }
 
-            // Add a comma after each field except the last one (or before PK constraint)
-            const needsPKConstraint =
-                hasCompositePrimaryKey ||
-                (primaryKeyFields.length === 1 && useNamedConstraint);
-            if (index < table.fields.length - 1 || needsPKConstraint) {
+            // Add a comma after each field except the last one (or before composite PK constraint)
+            if (index < table.fields.length - 1 || hasCompositePrimaryKey) {
                 sqlScript += ',\n';
             }
         });
 
-        // Add primary key constraint if needed (for composite PKs or single PK with custom name)
-        const pkIndex = table.indexes.find((idx) => idx.isPrimaryKey);
-        // Only use CONSTRAINT syntax if PK index has a non-empty name
-        const useNamedConstraint = !!pkIndex?.name;
-        const needsPKConstraint =
-            hasCompositePrimaryKey ||
-            (primaryKeyFields.length === 1 && useNamedConstraint);
-        if (needsPKConstraint) {
+        // Add primary key constraint for composite PKs only (single PKs are inline)
+        // Never use named constraints to avoid duplicate constraint name issues
+        if (hasCompositePrimaryKey) {
             const pkFieldNames = primaryKeyFields
                 .map((f) => getQuotedFieldName(f.name, isDBMLFlow))
                 .join(', ');
-            if (useNamedConstraint) {
-                sqlScript += `\n  CONSTRAINT ${pkIndex.name} PRIMARY KEY (${pkFieldNames})`;
-            } else {
-                sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
-            }
+            sqlScript += `\n  PRIMARY KEY (${pkFieldNames})`;
         }
 
         // Add CHECK constraints (only for databases that support them, filter out empty)
@@ -568,10 +550,10 @@ export const exportBaseSQL = ({
         );
         if (validCheckConstraints.length > 0 && dbSupportsChecks) {
             validCheckConstraints.forEach((checkConstraint, idx) => {
-                // Add comma if needed (after fields or PK constraint)
+                // Add comma if needed (after fields or composite PK constraint)
                 if (
                     idx === 0 &&
-                    (table.fields.length > 0 || needsPKConstraint)
+                    (table.fields.length > 0 || hasCompositePrimaryKey)
                 ) {
                     sqlScript += ',';
                 } else if (idx > 0) {
