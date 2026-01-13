@@ -43,6 +43,7 @@ import {
 } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
+import loadNewDbInstructions from '@/assets/load-new-db-instructions.gif';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { detectImportMethod } from '@/lib/import-method/detect-import-method';
 import { verifyDBML } from '@/lib/dbml/dbml-import/verify-dbml';
@@ -615,7 +616,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         </Button>
                     )}
                     {isDesktop ? (
-                        <ZoomableImage src="/load-new-db-instructions.gif">
+                        <ZoomableImage src={loadNewDbInstructions}>
                             <Button type="button" variant="link">
                                 {t(
                                     'new_diagram_dialog.import_database.instructions_link'
@@ -697,7 +698,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                     )}
 
                     {!isDesktop ? (
-                        <ZoomableImage src="/load-new-db-instructions.gif">
+                        <ZoomableImage src={loadNewDbInstructions}>
                             <Button type="button" variant="link">
                                 {t(
                                     'new_diagram_dialog.import_database.instructions_link'
