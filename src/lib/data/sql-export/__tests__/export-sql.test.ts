@@ -198,6 +198,142 @@ describe('SQL Export Tests', () => {
         });
     });
 
+    describe('Unique Constraint Index Export', () => {
+        it('should not generate CREATE UNIQUE INDEX for single-column unique fields in PostgreSQL', () => {
+            const fieldId = testId();
+            const diagram = createDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        name: 'orders_copy',
+                        schema: 'public',
+                        fields: [
+                            createField({
+                                id: fieldId,
+                                name: 'id',
+                                type: { id: 'bigserial', name: 'bigserial' },
+                                primaryKey: false,
+                                nullable: false,
+                                unique: true,
+                            }),
+                            createField({
+                                name: 'created_at',
+                                type: {
+                                    id: 'timestamptz',
+                                    name: 'timestamptz',
+                                },
+                                nullable: false,
+                            }),
+                        ],
+                        indexes: [
+                            {
+                                id: testId(),
+                                name: 'orders_copy_id_key',
+                                fieldIds: [fieldId],
+                                unique: true,
+                                isPrimaryKey: false,
+                                createdAt: testTime,
+                            },
+                        ],
+                    }),
+                ],
+            });
+
+            const sql = exportPostgreSQL({ diagram });
+
+            // Should have inline UNIQUE
+            expect(sql).toContain('"id" bigserial NOT NULL UNIQUE');
+            // Should NOT have separate CREATE UNIQUE INDEX for the unique field
+            expect(sql).not.toContain('CREATE UNIQUE INDEX');
+        });
+
+        it('should still generate CREATE UNIQUE INDEX for multi-column unique indexes in PostgreSQL', () => {
+            const fieldId1 = testId();
+            const fieldId2 = testId();
+            const diagram = createDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        name: 'test_table',
+                        schema: 'public',
+                        fields: [
+                            createField({
+                                id: fieldId1,
+                                name: 'col_a',
+                                type: { id: 'text', name: 'text' },
+                                nullable: false,
+                                unique: false,
+                            }),
+                            createField({
+                                id: fieldId2,
+                                name: 'col_b',
+                                type: { id: 'text', name: 'text' },
+                                nullable: false,
+                                unique: false,
+                            }),
+                        ],
+                        indexes: [
+                            {
+                                id: testId(),
+                                name: 'test_table_unique_idx',
+                                fieldIds: [fieldId1, fieldId2],
+                                unique: true,
+                                isPrimaryKey: false,
+                                createdAt: testTime,
+                            },
+                        ],
+                    }),
+                ],
+            });
+
+            const sql = exportPostgreSQL({ diagram });
+
+            // Should have CREATE UNIQUE INDEX for multi-column unique constraint
+            expect(sql).toContain('CREATE UNIQUE INDEX');
+            expect(sql).toContain('"col_a", "col_b"');
+        });
+
+        it('should generate CREATE UNIQUE INDEX for single-column unique index when field is not marked unique', () => {
+            const fieldId = testId();
+            const diagram = createDiagram({
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [
+                    createTable({
+                        name: 'test_table',
+                        schema: 'public',
+                        fields: [
+                            createField({
+                                id: fieldId,
+                                name: 'email',
+                                type: { id: 'text', name: 'text' },
+                                nullable: false,
+                                unique: false, // Field not marked as unique
+                            }),
+                        ],
+                        indexes: [
+                            {
+                                id: testId(),
+                                name: 'test_table_email_key',
+                                fieldIds: [fieldId],
+                                unique: true,
+                                isPrimaryKey: false,
+                                createdAt: testTime,
+                            },
+                        ],
+                    }),
+                ],
+            });
+
+            const sql = exportPostgreSQL({ diagram });
+
+            // Should NOT have inline UNIQUE (field.unique is false)
+            expect(sql).not.toContain('UNIQUE,');
+            expect(sql).not.toContain('NOT NULL UNIQUE');
+            // Should have CREATE UNIQUE INDEX since the field doesn't have inline UNIQUE
+            expect(sql).toContain('CREATE UNIQUE INDEX');
+        });
+    });
+
     describe('exportBaseSQL with foreign key relationships', () => {
         it('should export PostgreSQL diagram with two tables and a foreign key relationship', () => {
             const diagram = createDiagram({

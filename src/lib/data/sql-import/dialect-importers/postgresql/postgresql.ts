@@ -1191,7 +1191,7 @@ export async function fromPostgres(
                                             ? false
                                             : columnDef.nullable?.type !==
                                               'not null',
-                                    primaryKey: isPrimaryKey || isSerialType,
+                                    primaryKey: isPrimaryKey,
                                     unique: columnDef.unique === 'unique',
                                     typeArgs: getTypeArgs(columnDef.definition),
                                     default: isSerialType
@@ -1652,8 +1652,7 @@ export async function fromPostgres(
                                 nullable: nullable,
                                 primaryKey:
                                     definition?.primary_key === 'primary key' ||
-                                    definition?.constraint === 'primary key' ||
-                                    isSerialType,
+                                    definition?.constraint === 'primary key',
                                 unique: isUnique,
                                 default: defaultValue,
                                 increment:
@@ -1769,8 +1768,7 @@ export async function fromPostgres(
                                         columnDef.primary_key ===
                                             'primary key' ||
                                         columnDef.definition?.constraint ===
-                                            'primary key' ||
-                                        isSerialType,
+                                            'primary key',
                                     unique: columnDef.unique === 'unique',
                                     typeArgs: getTypeArgs(columnDef.definition),
                                     default: isSerialType

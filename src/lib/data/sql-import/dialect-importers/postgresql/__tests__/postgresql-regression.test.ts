@@ -196,4 +196,55 @@ CREATE TABLE patients(
 
         expect(result.relationships).toHaveLength(14);
     });
+
+    it('should preserve UNIQUE constraint and correct PRIMARY KEY on import', async () => {
+        // Regression test: When importing a table with:
+        // 1. A column with inline UNIQUE (not part of PK)
+        // 2. A composite PRIMARY KEY on different columns
+        // The import should correctly identify which fields are PK vs just UNIQUE
+
+        const inputSql = `
+CREATE TABLE "public"."orders_copy" (
+    "id" bigserial NOT NULL UNIQUE,
+    "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "user_id" bigint NOT NULL,
+    "customer_id" bigint,
+    CONSTRAINT "orders_pkey" PRIMARY KEY ("user_id", "customer_id")
+);`;
+
+        const result = await fromPostgres(inputSql);
+
+        expect(result.tables).toHaveLength(1);
+        const table = result.tables[0];
+
+        expect(table.name).toBe('orders_copy');
+        expect(table.columns).toBeDefined();
+
+        // Verify field properties
+        const idField = table.columns.find((f) => f.name === 'id');
+        const userIdField = table.columns.find((f) => f.name === 'user_id');
+        const customerIdField = table.columns.find(
+            (f) => f.name === 'customer_id'
+        );
+
+        expect(idField).toBeDefined();
+        expect(userIdField).toBeDefined();
+        expect(customerIdField).toBeDefined();
+
+        // id should be UNIQUE but NOT a primary key
+        expect(idField!.unique).toBe(true);
+        expect(idField!.primaryKey).toBe(false);
+
+        // user_id and customer_id should be primary keys
+        expect(userIdField!.primaryKey).toBe(true);
+        expect(customerIdField!.primaryKey).toBe(true);
+
+        // Verify no field other than user_id and customer_id is marked as primary key
+        const pkFields = table.columns.filter((f) => f.primaryKey);
+        expect(pkFields).toHaveLength(2);
+        expect(pkFields.map((f) => f.name).sort()).toEqual([
+            'customer_id',
+            'user_id',
+        ]);
+    });
 });
