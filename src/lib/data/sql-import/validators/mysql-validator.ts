@@ -8,6 +8,7 @@ import type {
     ValidationError,
     ValidationWarning,
 } from './postgresql-validator';
+import { detectForeignDialect } from './dialect-detection';
 
 /**
  * Validates MySQL SQL syntax
@@ -34,13 +35,16 @@ export function validateMySQLDialect(sql: string): ValidationResult {
         };
     }
 
-    // TODO: Implement MySQL-specific validation
-    // For now, just do basic checks
-
     // Check for common MySQL syntax patterns
     const lines = sql.split('\n');
     let tableCount = 0;
     let viewCount = 0;
+
+    // Check for foreign SQL dialects
+    const foreignDialectError = detectForeignDialect(lines, 'MySQL');
+    if (foreignDialectError) {
+        errors.push(foreignDialectError);
+    }
 
     lines.forEach((line, index) => {
         const trimmedLine = line.trim();

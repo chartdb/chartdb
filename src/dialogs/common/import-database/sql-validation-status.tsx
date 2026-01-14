@@ -59,11 +59,36 @@ export const SQLValidationStatus: React.FC<SQLValidationStatusProps> = ({
 
     // If we have parser errors (errorMessage) after validation
     if (errorMessage && !hasErrors) {
+        // Check if the error is related to parsing issues
+        const isParsingError =
+            errorMessage.toLowerCase().includes('error parsing') ||
+            errorMessage.toLowerCase().includes('unexpected');
+
         return (
             <>
                 <Separator className="mb-1 mt-2" />
-                <div className="mb-1 flex shrink-0 items-center gap-2">
-                    <p className="text-xs text-red-700">{errorMessage}</p>
+                <div className="rounded-md border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+                    <div className="space-y-3 p-3 pt-2 text-red-700 dark:text-red-300">
+                        <div className="flex items-start gap-2">
+                            <MessageCircleWarning className="mt-0.5 size-4 shrink-0 text-red-700 dark:text-red-300" />
+                            <div className="flex-1 text-sm text-red-700 dark:text-red-300">
+                                <div className="font-medium">
+                                    {isParsingError
+                                        ? 'SQL Parsing Failed'
+                                        : 'SQL Import Error'}
+                                </div>
+                                <div className="mt-1 text-xs">
+                                    {errorMessage}
+                                </div>
+                                {isParsingError && (
+                                    <div className="mt-2 text-xs opacity-90">
+                                        This may indicate incompatible SQL
+                                        syntax for the selected database type.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </>
         );
