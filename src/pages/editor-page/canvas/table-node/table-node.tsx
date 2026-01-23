@@ -65,6 +65,8 @@ export type TableNodeType = Node<
         hasHighlightedCustomType?: boolean;
         highlightTable?: boolean;
         isRelationshipCreatingTarget?: boolean;
+        // Map of fieldId -> number of edges targeting that field (for handle creation)
+        targetEdgeCounts?: Record<string, number>;
     },
     'table'
 >;
@@ -81,6 +83,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             hasHighlightedCustomType,
             highlightTable,
             isRelationshipCreatingTarget,
+            targetEdgeCounts,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -620,6 +623,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 highlighted={highlightedFieldIds.has(field.id)}
                                 visible={true}
                                 isConnectable={!table.isView}
+                                targetEdgeCount={targetEdgeCounts?.[field.id]}
                             />
                         ))}
                     </div>
