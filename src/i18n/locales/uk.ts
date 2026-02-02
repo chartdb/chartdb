@@ -43,6 +43,8 @@ export const uk: LanguageTranslation = {
                 hide_dependencies: 'Приховати залежності',
                 show_minimap: 'Показати мінімапу',
                 hide_minimap: 'Приховати мінімапу',
+                show_full_tables: 'Показати повні таблиці',
+                hide_full_tables: 'Сховати повні таблиці',
             },
             backup: {
                 backup: 'Резервне копіювання',
