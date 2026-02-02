@@ -11,6 +11,7 @@ const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
 const showDBViewsKey = 'show_db_views';
+const showFullTablesKey = 'show_full_tables';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -50,6 +51,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
             (localStorage.getItem(showMiniMapOnCanvasKey) || 'true') === 'true'
         );
 
+    const [showFullTables, setShowFullTables] = React.useState<boolean>(
+        (localStorage.getItem(showFullTablesKey) || 'false') === 'true'
+    );
+
     useEffect(() => {
         localStorage.setItem(
             starUsDialogLastOpenKey,
@@ -84,6 +89,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         );
     }, [showMiniMapOnCanvas]);
 
+    useEffect(() => {
+        localStorage.setItem(showFullTablesKey, showFullTables.toString());
+    }, [showFullTables]);
+
     return (
         <LocalConfigContext.Provider
             value={{
@@ -103,6 +112,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setStarUsDialogLastOpen,
                 showMiniMapOnCanvas,
                 setShowMiniMapOnCanvas,
+                showFullTables,
+                setShowFullTables,
             }}
         >
             {children}
