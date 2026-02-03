@@ -1655,4 +1655,148 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
             (result.inlineDbml.match(/}/g) || []).length;
         expect(braceBalance).toBe(0);
     });
+
+    it('should export GIN index type in DBML', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'test',
+                    schema: 'public',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: true,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field2',
+                            name: 'ginsss',
+                            type: { id: 'int[]', name: 'int[]' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            isArray: true,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [
+                        {
+                            id: 'idx1',
+                            name: 'test_index_2',
+                            fieldIds: ['field2'],
+                            unique: false,
+                            type: 'gin',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // The index should include type: gin
+        expect(result.standardDbml).toContain('type: gin');
+        expect(result.standardDbml).toContain('test_index_2');
+    });
+
+    it('should export composite GIN index type in DBML', () => {
+        const diagram: Diagram = {
+            id: 'test-diagram',
+            name: 'Test',
+            databaseType: DatabaseType.POSTGRESQL,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tables: [
+                {
+                    id: 'table1',
+                    name: 'merchants',
+                    schema: 'public',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field1',
+                            name: 'id',
+                            type: { id: 'bigint', name: 'bigint' },
+                            primaryKey: true,
+                            nullable: false,
+                            unique: true,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field2',
+                            name: 'supported_licenses',
+                            type: { id: 'text[]', name: 'text[]' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            isArray: true,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field3',
+                            name: 'supported_countries',
+                            type: { id: 'text[]', name: 'text[]' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            isArray: true,
+                            createdAt: Date.now(),
+                        },
+                        {
+                            id: 'field4',
+                            name: 'supported_currencies',
+                            type: { id: 'text[]', name: 'text[]' },
+                            primaryKey: false,
+                            nullable: true,
+                            unique: false,
+                            isArray: true,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    indexes: [
+                        {
+                            id: 'idx1',
+                            name: 'index_4',
+                            fieldIds: ['field2', 'field3', 'field4'],
+                            unique: false,
+                            type: 'gin',
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    color: 'blue',
+                    isView: false,
+                    createdAt: Date.now(),
+                },
+            ],
+            relationships: [],
+        };
+
+        const result = generateDBMLFromDiagram(diagram);
+
+        // The composite index should include type: gin
+        expect(result.standardDbml).toContain('type: gin');
+        expect(result.standardDbml).toContain('index_4');
+        // Should have the composite format (col1, col2, col3)
+        expect(result.standardDbml).toContain(
+            'supported_licenses, supported_countries, supported_currencies'
+        );
+    });
 });
