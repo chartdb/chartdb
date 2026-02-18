@@ -3,10 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        VITE_COLLAB_SERVER_URL: "http://localhost:3710"
     ports:
       - "80:80"
+    environment:
+      - COLLAB_SERVER_URL=http://localhost:3710
     depends_on:
       - collab-server
 
