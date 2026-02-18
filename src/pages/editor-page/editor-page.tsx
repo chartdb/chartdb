@@ -26,6 +26,7 @@ import { useDiagramLoader } from './use-diagram-loader';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
+import { CollabProvider } from '@/context/collab-context/collab-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -122,21 +123,23 @@ export const EditorPage: React.FC = () => (
                                 <DiffProvider>
                                     <ChartDBProvider>
                                         <DiagramFilterProvider>
-                                            <HistoryProvider>
-                                                <ReactFlowProvider>
-                                                    <CanvasProvider>
-                                                        <ExportImageProvider>
-                                                            <AlertProvider>
-                                                                <DialogProvider>
-                                                                    <KeyboardShortcutsProvider>
-                                                                        <EditorPageComponent />
-                                                                    </KeyboardShortcutsProvider>
-                                                                </DialogProvider>
-                                                            </AlertProvider>
-                                                        </ExportImageProvider>
-                                                    </CanvasProvider>
-                                                </ReactFlowProvider>
-                                            </HistoryProvider>
+                                            <CollabProvider>
+                                                <HistoryProvider>
+                                                    <ReactFlowProvider>
+                                                        <CanvasProvider>
+                                                            <ExportImageProvider>
+                                                                <AlertProvider>
+                                                                    <DialogProvider>
+                                                                        <KeyboardShortcutsProvider>
+                                                                            <EditorPageComponent />
+                                                                        </KeyboardShortcutsProvider>
+                                                                    </DialogProvider>
+                                                                </AlertProvider>
+                                                            </ExportImageProvider>
+                                                        </CanvasProvider>
+                                                    </ReactFlowProvider>
+                                                </HistoryProvider>
+                                            </CollabProvider>
                                         </DiagramFilterProvider>
                                     </ChartDBProvider>
                                 </DiffProvider>

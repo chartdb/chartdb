@@ -78,6 +78,8 @@ import type { Graph } from '@/lib/graph';
 import { removeVertex } from '@/lib/graph';
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
 import { cn, debounce, getOperatingSystem } from '@/lib/utils';
+import { useCollab } from '@/hooks/use-collab';
+import { CollaboratorCursors } from '../collab/collaborator-cursors';
 import type { DependencyEdgeType } from './dependency-edge/dependency-edge';
 import { DependencyEdge } from './dependency-edge/dependency-edge';
 import {
@@ -271,6 +273,8 @@ export interface CanvasProps {
 
 export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const { getEdge, getInternalNode, getNode } = useReactFlow();
+    const { onPointerUpdate: collabPointerUpdate, isCollaborating } =
+        useCollab();
     const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
     const [selectedRelationshipIds, setSelectedRelationshipIds] = useState<
         string[]
@@ -1471,11 +1475,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         []
     );
 
-    // Handle mouse move to update cursor position for floating edge
+    // Handle mouse move to update cursor position for floating edge + collab
     const { screenToFlowPosition } = useReactFlow();
     const rafIdRef = useRef<number>();
     const handleMouseMove = useCallback(
         (event: React.MouseEvent) => {
+            // Broadcast cursor position for collaboration
+            if (isCollaborating) {
+                const flowPos = screenToFlowPosition({
+                    x: event.clientX,
+                    y: event.clientY,
+                });
+                collabPointerUpdate(flowPos);
+            }
+
             if (tempFloatingEdge) {
                 // Throttle using requestAnimationFrame
                 if (rafIdRef.current) {
@@ -1492,7 +1505,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 });
             }
         },
-        [tempFloatingEdge, screenToFlowPosition]
+        [
+            tempFloatingEdge,
+            screenToFlowPosition,
+            isCollaborating,
+            collabPointerUpdate,
+        ]
     );
 
     // Cleanup RAF on unmount
@@ -1852,6 +1870,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     ) : null}
                 </ReactFlow>
                 <MarkerDefinitions />
+                <CollaboratorCursors />
             </div>
         </CanvasContextMenu>
     );
