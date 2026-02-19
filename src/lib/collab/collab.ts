@@ -26,6 +26,7 @@ import type { Area } from '@/lib/domain/area';
 import type { Note } from '@/lib/domain/note';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { Diagram } from '@/lib/domain/diagram';
+import { COLLAB_SERVER_URL } from '@/lib/env';
 
 export interface CollabCallbacks {
     getDiagram: () => Diagram;
@@ -133,11 +134,19 @@ export class Collab {
         const roomKey =
             existingRoomLinkData?.roomKey ?? (await generateEncryptionKey());
 
-        const serverUrl =
-            (import.meta.env.VITE_COLLAB_SERVER_URL as string) ||
-            'http://localhost:3710';
+        const serverUrl = COLLAB_SERVER_URL || 'http://localhost:3710';
 
-        const socket: Socket = io(serverUrl, {
+        // Parse the URL to extract path prefix for Socket.io
+        // e.g. "https://example.com/collab" → origin "https://example.com", path "/collab/socket.io/"
+        const url = new URL(serverUrl);
+        const basePath = url.pathname.replace(/\/+$/, ''); // strip trailing slashes
+        const socketPath =
+            basePath && basePath !== '/'
+                ? `${basePath}/socket.io/`
+                : '/socket.io/';
+
+        const socket: Socket = io(url.origin, {
+            path: socketPath,
             transports: ['websocket', 'polling'],
         });
 

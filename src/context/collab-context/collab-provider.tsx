@@ -16,6 +16,7 @@ import type {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCollaborationLinkData } from '@/lib/collab/types';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { generateDiagramId } from '@/lib/utils/utils';
 
 export const CollabProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -102,11 +103,14 @@ export const CollabProvider: React.FC<React.PropsWithChildren> = ({
 
                 loadScene: (scene: CollabScene) => {
                     // Apply full scene from remote
+                    const existing = currentDiagramRef.current;
                     const diagram = {
-                        ...currentDiagramRef.current,
+                        id: existing?.id || generateDiagramId(),
                         name: scene.meta.diagramName,
                         databaseType: scene.meta.databaseType,
                         databaseEdition: scene.meta.databaseEdition,
+                        createdAt: existing?.createdAt ?? new Date(),
+                        updatedAt: new Date(),
                         tables: scene.tables.map(stripSyncMetadata),
                         relationships:
                             scene.relationships.map(stripSyncMetadata),

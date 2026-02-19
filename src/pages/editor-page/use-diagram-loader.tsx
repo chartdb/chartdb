@@ -4,6 +4,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { useStorage } from '@/hooks/use-storage';
+import { getCollaborationLinkData } from '@/lib/collab/types';
 import type { Diagram } from '@/lib/domain/diagram';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -22,6 +23,12 @@ export const useDiagramLoader = () => {
     const currentDiagramLoadingRef = useRef<string | undefined>(undefined);
 
     useEffect(() => {
+        // If joining a collaboration room, skip the diagram loader —
+        // the CollabProvider will load the shared scene.
+        if (getCollaborationLinkData(window.location.href)) {
+            return;
+        }
+
         if (!config) {
             return;
         }

@@ -1,0 +1,23 @@
+services:
+  client:
+    image: YOUR_REGISTRY/client:latest
+    ports:
+      - "8080:80"
+    environment:
+      - COLLAB_SERVER_URL=http://chartdb.yourdomain.com/collab
+    depends_on:
+      - collab-server
+    restart: unless-stopped
+
+  collab-server:
+    image: YOUR_REGISTRY/chartdb/collab-server:latest
+    ports:
+      - "3710:3710"
+    volumes:
+      - collab-data:/app/data
+    environment:
+      - PORT=3710
+    restart: unless-stopped
+
+volumes:
+  collab-data:
