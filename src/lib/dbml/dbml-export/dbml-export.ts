@@ -901,6 +901,87 @@ const restoreCompositePKNames = (dbml: string, tables: DBTable[]): string => {
     return result;
 };
 
+// Restore index types (like GIN) that are lost during SQL to DBML conversion
+// The @dbml/core importer doesn't preserve the USING clause from CREATE INDEX statements
+const restoreIndexTypes = (dbml: string, tables: DBTable[]): string => {
+    if (!tables || tables.length === 0) return dbml;
+
+    let result = dbml;
+
+    tables.forEach((table) => {
+        // Find indexes with non-default types (not btree, and not null/undefined)
+        const indexesWithType = table.indexes.filter(
+            (idx) => idx.type && idx.type !== 'btree' && !idx.isPrimaryKey // PK indexes don't need type restoration
+        );
+
+        if (indexesWithType.length === 0) return;
+
+        // Build the table identifier pattern
+        const tableIdentifier = table.schema
+            ? `"${table.schema.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\."${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`
+            : `"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`;
+
+        indexesWithType.forEach((index) => {
+            // Get the field names for this index
+            const fieldNames = index.fieldIds
+                .map((fieldId) => {
+                    const field = table.fields.find((f) => f.id === fieldId);
+                    return field ? field.name : null;
+                })
+                .filter((name): name is string => name !== null);
+
+            if (fieldNames.length === 0) return;
+
+            // Escape the index name for regex
+            const escapedIndexName = index.name.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                '\\$&'
+            );
+
+            // Build pattern to match index line in DBML
+            // For single column: field_name [name: "index_name"] or field_name [unique, name: "index_name"]
+            // For composite: (field1, field2) [name: "index_name"]
+            let indexColumnPattern: string;
+            if (fieldNames.length === 1) {
+                // Single column index
+                indexColumnPattern = fieldNames[0].replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    '\\$&'
+                );
+            } else {
+                // Composite index: (col1, col2, ...)
+                const escapedFields = fieldNames
+                    .map((f) => f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                    .join(',\\s*');
+                indexColumnPattern = `\\(${escapedFields}\\)`;
+            }
+
+            // Pattern to match the index line with its attributes
+            // Captures: 1) the column(s), 2) optional unique/pk attributes, 3) rest of attributes including name
+            const indexLinePattern = new RegExp(
+                `(Table ${tableIdentifier} \\{[\\s\\S]*?Indexes \\{[\\s\\S]*?)(${indexColumnPattern})\\s*\\[([^\\]]*name:\\s*"${escapedIndexName}"[^\\]]*)\\]`,
+                'g'
+            );
+
+            result = result.replace(
+                indexLinePattern,
+                (match, prefix, columns, attributes) => {
+                    // Check if type is already present
+                    if (/type:\s*\w+/.test(attributes)) {
+                        return match;
+                    }
+
+                    // Add type at the beginning of attributes
+                    const newAttributes = `type: ${index.type}, ${attributes}`;
+                    return `${prefix}${columns} [${newAttributes}]`;
+                }
+            );
+        });
+    });
+
+    return result;
+};
+
 // Restore schema information that may have been stripped by the DBML importer
 const restoreTableSchemas = (dbml: string, tables: DBTable[]): string => {
     if (!tables || tables.length === 0) return dbml;
@@ -1319,6 +1400,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         // Restore check constraints that may have been lost during DBML export
         standard = restoreCheckConstraints(standard, tablesWithFields);
+
+        // Restore index types (like GIN) that are lost during SQL to DBML conversion
+        standard = restoreIndexTypes(standard, tablesWithFields);
 
         // Generate cardinality-aware Ref statements from the diagram relationships
         // (FK generation is skipped in SQL, so @dbml/core doesn't generate any Refs)
