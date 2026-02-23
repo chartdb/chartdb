@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import type { ExportImageContext, ImageType } from './export-image-context';
 import { exportImageContext } from './export-image-context';
-import { toJpeg, toPng } from 'html-to-image';
-import { elementToSVG, inlineResources } from 'dom-to-svg';
-import { useReactFlow, getNodesBounds } from '@xyflow/react';
+import { toJpeg, toPng, toSvg } from 'html-to-image';
+import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useTheme } from '@/hooks/use-theme';
@@ -15,7 +14,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { hideLoader, showLoader } = useFullScreenLoader();
-    const { setNodes, getNodes, getViewport } = useReactFlow();
+    const { setNodes, getViewport } = useReactFlow();
     const { effectiveTheme } = useTheme();
     const { diagramName } = useChartDB();
     const [logoBase64, setLogoBase64] = useState<string>('');
@@ -48,12 +47,13 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     const imageCreatorMap: Record<
-        'jpeg' | 'png',
-        typeof toJpeg | typeof toPng
+        ImageType,
+        typeof toJpeg | typeof toPng | typeof toSvg
     > = useMemo(
         () => ({
             jpeg: toJpeg,
             png: toPng,
+            svg: toSvg,
         }),
         []
     );
@@ -76,6 +76,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 nodes.map((node) => ({ ...node, selected: false }))
             );
 
+            const viewport = getViewport();
             const reactFlowBounds = document
                 .querySelector('.react-flow')
                 ?.getBoundingClientRect();
@@ -86,36 +87,12 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 return;
             }
 
+            const imageCreateFn = imageCreatorMap[type];
+
             setTimeout(async () => {
                 const viewportElement = window.document.querySelector(
                     '.react-flow__viewport'
                 ) as HTMLElement;
-
-                // Compute tight bounding box of all nodes and derive
-                // the exact transform to render them into the output
-                // image at 1:1 scale with fixed pixel padding.
-                // Falls back to the live viewport if the canvas is empty.
-                const nodes = getNodes();
-                const nodesBounds = getNodesBounds(nodes);
-                const PADDING_PX = 40;
-                let imageWidth: number;
-                let imageHeight: number;
-                let exportViewport: { x: number; y: number; zoom: number };
-
-                if (nodes.length === 0) {
-                    const viewport = getViewport();
-                    imageWidth = reactFlowBounds.width;
-                    imageHeight = reactFlowBounds.height;
-                    exportViewport = viewport;
-                } else {
-                    imageWidth = nodesBounds.width + 2 * PADDING_PX;
-                    imageHeight = nodesBounds.height + 2 * PADDING_PX;
-                    exportViewport = {
-                        x: -nodesBounds.x + PADDING_PX,
-                        y: -nodesBounds.y + PADDING_PX,
-                        zoom: 1,
-                    };
-                }
 
                 const markerDefs = document.querySelector(
                     '.marker-definitions defs'
@@ -134,7 +111,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 tempSvg.style.zIndex = '-50';
                 tempSvg.setAttribute(
                     'viewBox',
-                    `0 0 ${imageWidth} ${imageHeight}`
+                    `0 0 ${reactFlowBounds.width} ${reactFlowBounds.height}`
                 );
 
                 const defs = document.createElementNS(
@@ -193,18 +170,12 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         'pattern'
                     );
                     pattern.setAttribute('id', 'background-pattern');
-                    pattern.setAttribute(
-                        'width',
-                        String(16 * exportViewport.zoom)
-                    );
-                    pattern.setAttribute(
-                        'height',
-                        String(16 * exportViewport.zoom)
-                    );
+                    pattern.setAttribute('width', String(16 * viewport.zoom));
+                    pattern.setAttribute('height', String(16 * viewport.zoom));
                     pattern.setAttribute('patternUnits', 'userSpaceOnUse');
                     pattern.setAttribute(
                         'patternTransform',
-                        `translate(${exportViewport.x % (16 * exportViewport.zoom)} ${exportViewport.y % (16 * exportViewport.zoom)})`
+                        `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
                     );
 
                     const dot = document.createElementNS(
@@ -212,9 +183,9 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         'circle'
                     );
 
-                    const dotSize = exportViewport.zoom * 0.5;
-                    dot.setAttribute('cx', String(exportViewport.zoom));
-                    dot.setAttribute('cy', String(exportViewport.zoom));
+                    const dotSize = viewport.zoom * 0.5;
+                    dot.setAttribute('cx', String(viewport.zoom));
+                    dot.setAttribute('cy', String(viewport.zoom));
                     dot.setAttribute('r', String(dotSize));
                     const dotColor =
                         effectiveTheme === 'light' ? '#92939C' : '#777777';
@@ -233,19 +204,19 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 const bgPadding = 2000;
                 backgroundRect.setAttribute(
                     'x',
-                    String(-exportViewport.x - bgPadding)
+                    String(-viewport.x - bgPadding)
                 );
                 backgroundRect.setAttribute(
                     'y',
-                    String(-exportViewport.y - bgPadding)
+                    String(-viewport.y - bgPadding)
                 );
                 backgroundRect.setAttribute(
                     'width',
-                    String(imageWidth + 2 * bgPadding)
+                    String(reactFlowBounds.width + 2 * bgPadding)
                 );
                 backgroundRect.setAttribute(
                     'height',
-                    String(imageHeight + 2 * bgPadding)
+                    String(reactFlowBounds.height + 2 * bgPadding)
                 );
                 backgroundRect.setAttribute('fill', 'url(#background-pattern)');
                 tempSvg.appendChild(backgroundRect);
@@ -277,53 +248,25 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 });
 
                 try {
-                    // Handle SVG export using dom-to-svg (no foreignObject)
+                    // Handle SVG export differently
                     if (type === 'svg') {
-                        // Compute the screen-space bounding rect for all nodes
-                        // by applying the current viewport transform to the node bounds.
-                        // This avoids mutating the live viewport transform, which would
-                        // desync React Flow's internal state.
-                        const viewport = getViewport();
-                        const viewportRect =
-                            viewportElement.getBoundingClientRect();
-
-                        const captureX =
-                            viewportRect.left +
-                            (nodesBounds.x * viewport.zoom + viewport.x);
-                        const captureY =
-                            viewportRect.top +
-                            (nodesBounds.y * viewport.zoom + viewport.y);
-                        const captureWidth =
-                            nodesBounds.width * viewport.zoom + 2 * PADDING_PX;
-                        const captureHeight =
-                            nodesBounds.height * viewport.zoom + 2 * PADDING_PX;
-
-                        // Capture the element as a pure SVG (no foreignObject)
-                        const svgDocument = elementToSVG(viewportElement, {
-                            captureArea: new DOMRectReadOnly(
-                                captureX - PADDING_PX,
-                                captureY - PADDING_PX,
-                                captureWidth,
-                                captureHeight
-                            ),
+                        const dataUrl = await imageCreateFn(viewportElement, {
+                            width: reactFlowBounds.width,
+                            height: reactFlowBounds.height,
+                            style: {
+                                width: `${reactFlowBounds.width}px`,
+                                height: `${reactFlowBounds.height}px`,
+                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                            },
+                            quality: 1,
+                            pixelRatio: scale,
+                            skipFonts: true,
                         });
-
-                        // Inline external resources (fonts, images) as data URIs
-                        await inlineResources(svgDocument.documentElement);
-
-                        // Serialize to SVG string and create a download
-                        const svgString = new XMLSerializer().serializeToString(
-                            svgDocument
-                        );
-                        const dataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
-
                         downloadImage(dataUrl, type);
                         return;
                     }
 
                     // For PNG and JPEG, continue with the watermark process
-                    const imageCreateFn =
-                        imageCreatorMap[type as 'png' | 'jpeg'];
                     const initialDataUrl = await imageCreateFn(
                         viewportElement,
                         {
@@ -331,12 +274,12 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                                 effectiveTheme,
                                 transparent
                             ),
-                            width: imageWidth,
-                            height: imageHeight,
+                            width: reactFlowBounds.width,
+                            height: reactFlowBounds.height,
                             style: {
-                                width: `${imageWidth}px`,
-                                height: `${imageHeight}px`,
-                                transform: `translate(${exportViewport.x}px, ${exportViewport.y}px) scale(${exportViewport.zoom})`,
+                                width: `${reactFlowBounds.width}px`,
+                                height: `${reactFlowBounds.height}px`,
+                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
                             },
                             quality: 1,
                             pixelRatio: scale,
@@ -354,8 +297,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     }
 
                     // Set canvas size to match the export size
-                    canvas.width = imageWidth * scale;
-                    canvas.height = imageHeight * scale;
+                    canvas.width = reactFlowBounds.width * scale;
+                    canvas.height = reactFlowBounds.height * scale;
 
                     // Load the exported diagram
                     const diagramImage = new Image();
@@ -425,7 +368,6 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         [
             getBackgroundColor,
             downloadImage,
-            getNodes,
             getViewport,
             hideLoader,
             imageCreatorMap,
