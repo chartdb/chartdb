@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import type { ExportImageContext, ImageType } from './export-image-context';
 import { exportImageContext } from './export-image-context';
-import { toJpeg, toPng, toSvg } from 'html-to-image';
+import { toJpeg, toPng } from 'html-to-image';
+import { elementToSVG, inlineResources } from 'dom-to-svg';
 import { useReactFlow, getNodesBounds } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
@@ -47,13 +48,12 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     const imageCreatorMap: Record<
-        ImageType,
-        typeof toJpeg | typeof toPng | typeof toSvg
+        'jpeg' | 'png',
+        typeof toJpeg | typeof toPng
     > = useMemo(
         () => ({
             jpeg: toJpeg,
             png: toPng,
-            svg: toSvg,
         }),
         []
     );
@@ -85,8 +85,6 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 hideLoader();
                 return;
             }
-
-            const imageCreateFn = imageCreatorMap[type];
 
             setTimeout(async () => {
                 const viewportElement = window.document.querySelector(
@@ -279,26 +277,53 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 });
 
                 try {
-                    // Handle SVG export differently
+                    // Handle SVG export using dom-to-svg (no foreignObject)
                     if (type === 'svg') {
-                        const dataUrl = await imageCreateFn(viewportElement, {
-                            width: imageWidth,
-                            height: imageHeight,
-                            style: {
-                                width: `${imageWidth}px`,
-                                height: `${imageHeight}px`,
-                                transform: `translate(${exportViewport.x}px, ${exportViewport.y}px) scale(${exportViewport.zoom})`,
-                            },
-                            quality: 1,
-                            pixelRatio: scale,
-                            skipFonts: true,
+                        // Compute the screen-space bounding rect for all nodes
+                        // by applying the current viewport transform to the node bounds.
+                        // This avoids mutating the live viewport transform, which would
+                        // desync React Flow's internal state.
+                        const viewport = getViewport();
+                        const viewportRect =
+                            viewportElement.getBoundingClientRect();
+
+                        const captureX =
+                            viewportRect.left +
+                            (nodesBounds.x * viewport.zoom + viewport.x);
+                        const captureY =
+                            viewportRect.top +
+                            (nodesBounds.y * viewport.zoom + viewport.y);
+                        const captureWidth =
+                            nodesBounds.width * viewport.zoom + 2 * PADDING_PX;
+                        const captureHeight =
+                            nodesBounds.height * viewport.zoom + 2 * PADDING_PX;
+
+                        // Capture the element as a pure SVG (no foreignObject)
+                        const svgDocument = elementToSVG(viewportElement, {
+                            captureArea: new DOMRectReadOnly(
+                                captureX - PADDING_PX,
+                                captureY - PADDING_PX,
+                                captureWidth,
+                                captureHeight
+                            ),
                         });
+
+                        // Inline external resources (fonts, images) as data URIs
+                        await inlineResources(svgDocument.documentElement);
+
+                        // Serialize to SVG string and create a download
+                        const svgString = new XMLSerializer().serializeToString(
+                            svgDocument
+                        );
+                        const dataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
 
                         downloadImage(dataUrl, type);
                         return;
                     }
 
                     // For PNG and JPEG, continue with the watermark process
+                    const imageCreateFn =
+                        imageCreatorMap[type as 'png' | 'jpeg'];
                     const initialDataUrl = await imageCreateFn(
                         viewportElement,
                         {
