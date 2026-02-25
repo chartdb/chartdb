@@ -25,4 +25,5 @@ dist-ssr
 
 .env
 stats/
+backups/
 Taskfile.yml
