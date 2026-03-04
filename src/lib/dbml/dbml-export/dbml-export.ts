@@ -200,19 +200,35 @@ export const sanitizeSQLforDBML = (sql: string): string => {
     sanitized = sanitized.replace(/char\s+\(/g, 'char(');
     sanitized = sanitized.replace(/character\s+\(/g, 'character(');
 
-    // Fix DEFAULT EUR and similar cases by quoting them
+    // Fix bare identifier defaults (e.g., DEFAULT EUR, DEFAULT active, DEFAULT all)
+    // by quoting them as string literals, while preserving SQL keywords/functions
+    const sqlDefaultKeywords = new Set([
+        'TRUE',
+        'FALSE',
+        'NULL',
+        'CURRENT_TIMESTAMP',
+        'CURRENT_DATE',
+        'CURRENT_TIME',
+        'NOW',
+        'GETDATE',
+        'NEWID',
+        'UUID',
+    ]);
     sanitized = sanitized.replace(
-        /DEFAULT\s+([A-Z]{3})(?=\s|,|$)/g,
-        "DEFAULT '$1'"
-    );
-    // Also handle single letter defaults
-    sanitized = sanitized.replace(
-        /DEFAULT\s+([A-Z])(?=\s|,|$)/g,
-        "DEFAULT '$1'"
+        /DEFAULT\s+([a-zA-Z_]\w*)(?=[\s,);]|$)/gi,
+        (match, identifier) => {
+            if (sqlDefaultKeywords.has(identifier.toUpperCase())) {
+                return match;
+            }
+            return `DEFAULT '${identifier}'`;
+        }
     );
 
     // Fix DEFAULT NOW by replacing with NOW()
-    sanitized = sanitized.replace(/DEFAULT\s+NOW(?=\s|,|$)/gi, 'DEFAULT NOW()');
+    sanitized = sanitized.replace(
+        /DEFAULT\s+NOW(?=[\s,);]|$)/gi,
+        'DEFAULT NOW()'
+    );
 
     // Replace any remaining problematic characters
     sanitized = sanitized.replace(/\?\?/g, '__');
