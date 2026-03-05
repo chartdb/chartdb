@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -30,15 +31,23 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     const { diagramId } = useChartDB();
     const { deleteDiagram, addDiagram } = useStorage();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const onDelete = useCallback(async () => {
         deleteDiagram(diagram.id);
         refetch();
 
         if (diagram.id === diagramId || numberOfDiagrams <= 1) {
-            window.location.href = '/';
+            navigate('/');
         }
-    }, [deleteDiagram, diagram.id, diagramId, refetch, numberOfDiagrams]);
+    }, [
+        deleteDiagram,
+        diagram.id,
+        diagramId,
+        refetch,
+        numberOfDiagrams,
+        navigate,
+    ]);
 
     const onDuplicate = useCallback(async () => {
         const duplicatedDiagram = cloneDiagram(diagram);
