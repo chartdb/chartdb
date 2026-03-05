@@ -72,6 +72,7 @@
         "react-use": "^17.5.1",
         "rehype-raw": "^7.0.0",
         "remark-gfm": "^4.0.1",
+        "socket.io-client": "^4.8.3",
         "tailwind-merge": "^2.4.0",
         "tailwindcss-animate": "^1.0.7",
         "timeago-react": "^3.0.6",

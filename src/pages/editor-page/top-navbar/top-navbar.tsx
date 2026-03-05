@@ -6,6 +6,8 @@ import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
+import { CollabButton } from '../collab/collab-button';
+import { ConnectionStatus } from '../collab/connection-status';
 
 export interface TopNavbarProps {}
 
@@ -47,6 +49,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             </div>
             <DiagramName />
             <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
+                <ConnectionStatus />
+                <CollabButton />
                 <LastSaved />
                 {renderStars()}
                 <LanguageNav />

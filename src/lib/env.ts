@@ -12,3 +12,7 @@ export const HIDE_CHARTDB_CLOUD: boolean =
 export const DISABLE_ANALYTICS: boolean =
     (window?.env?.DISABLE_ANALYTICS ??
         import.meta.env.VITE_DISABLE_ANALYTICS) === 'true';
+export const COLLAB_SERVER_URL: string =
+    window?.env?.COLLAB_SERVER_URL ??
+    import.meta.env.VITE_COLLAB_SERVER_URL ??
+    '';

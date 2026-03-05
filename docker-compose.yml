@@ -1,0 +1,25 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - COLLAB_SERVER_URL=http://localhost:3710
+    depends_on:
+      - collab-server
+
+  collab-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3710:3710"
+    volumes:
+      - collab-data:/app/data
+    environment:
+      - PORT=3710
+
+volumes:
+  collab-data:
