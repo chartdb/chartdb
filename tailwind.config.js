@@ -16,7 +16,7 @@ module.exports = {
     	extend: {
     		fontFamily: {
     			primary: [
-    				'Raleway"',
+    				'Raleway',
                     ...defaultTheme.fontFamily.sans
                 ]
     		},
