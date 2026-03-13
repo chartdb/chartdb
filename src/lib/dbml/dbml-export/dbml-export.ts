@@ -140,6 +140,12 @@ export const sanitizeSQLforDBML = (sql: string): string => {
     // Replace special characters in identifiers
     let sanitized = sql;
 
+    // Strip COMMENT ON INDEX statements before @dbml/core parsing.
+    // @dbml/core doesn't support COMMENT ON INDEX, so these are restored
+    // afterwards by restoreIndexNotes(). Table/column comments are left
+    // intact since @dbml/core handles them natively with proper escaping.
+    sanitized = sanitized.replace(/^COMMENT ON INDEX .+;$/gm, '');
+
     // Handle duplicate constraint names
     const constraintNames = new Set<string>();
     let constraintCounter = 0;
@@ -151,6 +157,28 @@ export const sanitizeSQLforDBML = (sql: string): string => {
                 return `ADD CONSTRAINT ${name}_${++constraintCounter} FOREIGN KEY`;
             } else {
                 constraintNames.add(name);
+                return match;
+            }
+        }
+    );
+
+    // Handle duplicate index names across tables (e.g. "index_2" on multiple tables)
+    // PostgreSQL requires unique index names within a schema, and the DBML parser
+    // rejects duplicates.
+    const indexNames = new Set<string>();
+    let indexCounter = 0;
+
+    sanitized = sanitized.replace(
+        /CREATE\s+(?:UNIQUE\s+)?INDEX\s+"?(\w+)"?\s+ON/gi,
+        (match, name) => {
+            if (indexNames.has(name.toLowerCase())) {
+                const newName = `${name}_${++indexCounter}`;
+                return match.replace(
+                    new RegExp(`"?${name}"?(?=\\s+ON)`, 'i'),
+                    newName
+                );
+            } else {
+                indexNames.add(name.toLowerCase());
                 return match;
             }
         }
@@ -235,6 +263,19 @@ export const sanitizeSQLforDBML = (sql: string): string => {
     // afterwards by restoreIndexNotes(). Table/column comments are left
     // intact since @dbml/core handles them natively with proper escaping.
     sanitized = sanitized.replace(/^COMMENT ON INDEX .+;$/gm, '');
+
+    // Replace MySQL-specific types with universal equivalents so the DBML
+    // parser can handle them regardless of the target dialect (e.g. when the
+    // diagram mixes MySQL types like longtext/tinyint with PostgreSQL features
+    // like text[], jsonb, or schema-qualified names).
+    sanitized = sanitized.replace(/\blongtext\b/gi, 'text');
+    sanitized = sanitized.replace(/\bmediumtext\b/gi, 'text');
+    sanitized = sanitized.replace(/\btinytext\b/gi, 'text');
+    sanitized = sanitized.replace(/\btinyint\b/gi, 'smallint');
+    sanitized = sanitized.replace(/\bmediumint\b/gi, 'integer');
+    sanitized = sanitized.replace(/\blongblob\b/gi, 'bytea');
+    sanitized = sanitized.replace(/\bmediumblob\b/gi, 'bytea');
+    sanitized = sanitized.replace(/\btinyblob\b/gi, 'bytea');
 
     // Replace any remaining problematic characters
     sanitized = sanitized.replace(/\?\?/g, '__');
