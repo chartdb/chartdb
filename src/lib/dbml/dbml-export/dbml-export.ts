@@ -230,6 +230,12 @@ export const sanitizeSQLforDBML = (sql: string): string => {
         'DEFAULT NOW()'
     );
 
+    // Strip COMMENT ON INDEX statements before @dbml/core parsing.
+    // @dbml/core doesn't support COMMENT ON INDEX, so these are restored
+    // afterwards by restoreIndexNotes(). Table/column comments are left
+    // intact since @dbml/core handles them natively with proper escaping.
+    sanitized = sanitized.replace(/^COMMENT ON INDEX .+;$/gm, '');
+
     // Replace any remaining problematic characters
     sanitized = sanitized.replace(/\?\?/g, '__');
 
@@ -777,6 +783,17 @@ const restoreCheckConstraints = (dbml: string, tables: DBTable[]): string => {
     return result;
 };
 
+// Helper function to escape comments for DBML note attributes
+const escapeDBMLComment = (comment: string): string => {
+    return comment
+        .replace(/\r?\n/g, ' ') // Replace newlines with spaces
+        .replace(/\s+/g, ' ') // Normalize multiple spaces
+        .trim() // Remove leading/trailing whitespace
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"');
+};
+
 // Restore table and field notes/comments that may have been lost during DBML export
 // This handles databases where @dbml/core doesn't recognize the comment syntax
 // (e.g., MySQL's inline COMMENT syntax). For databases like PostgreSQL where
@@ -786,17 +803,6 @@ const restoreNotes = (dbml: string, tables: DBTable[]): string => {
 
     let result = dbml;
 
-    // Helper function to escape comments for DBML
-    const escapeComment = (comment: string): string => {
-        return comment
-            .replace(/\r?\n/g, ' ') // Replace newlines with spaces
-            .replace(/\s+/g, ' ') // Normalize multiple spaces
-            .trim() // Remove leading/trailing whitespace
-            .replace(/\\/g, '\\\\')
-            .replace(/'/g, "\\'")
-            .replace(/"/g, '\\"');
-    };
-
     tables.forEach((table) => {
         // Build the table identifier pattern once for this table
         const tableIdentifier = table.schema
@@ -805,7 +811,7 @@ const restoreNotes = (dbml: string, tables: DBTable[]): string => {
 
         // Restore table-level notes
         if (table.comments) {
-            const escapedComment = escapeComment(table.comments);
+            const escapedComment = escapeDBMLComment(table.comments);
 
             // Pattern to match the entire table block
             const tableBlockPattern = new RegExp(
@@ -839,7 +845,7 @@ const restoreNotes = (dbml: string, tables: DBTable[]): string => {
             );
 
             // Escape the comment text for use in the replacement
-            const escapedComment = escapeComment(field.comments!);
+            const escapedComment = escapeDBMLComment(field.comments!);
 
             // Pattern to match the field line
             // We need to match the complete field definition including array types
@@ -989,6 +995,84 @@ const restoreIndexTypes = (dbml: string, tables: DBTable[]): string => {
 
                     // Add type at the beginning of attributes
                     const newAttributes = `type: ${index.type}, ${attributes}`;
+                    return `${prefix}${columns} [${newAttributes}]`;
+                }
+            );
+        });
+    });
+
+    return result;
+};
+
+// Restore index notes/comments that are lost during SQL to DBML conversion
+// The @dbml/core importer doesn't support COMMENT ON INDEX, so we add note: attributes directly
+const restoreIndexNotes = (dbml: string, tables: DBTable[]): string => {
+    if (!tables || tables.length === 0) return dbml;
+
+    let result = dbml;
+
+    tables.forEach((table) => {
+        // Find indexes with comments
+        const indexesWithComments = table.indexes.filter(
+            (idx) => idx.comments && !idx.isPrimaryKey
+        );
+
+        if (indexesWithComments.length === 0) return;
+
+        // Build the table identifier pattern
+        const tableIdentifier = table.schema
+            ? `"${table.schema.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\."${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`
+            : `"${table.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`;
+
+        indexesWithComments.forEach((index) => {
+            // Get the field names for this index
+            const fieldNames = index.fieldIds
+                .map((fieldId) => {
+                    const field = table.fields.find((f) => f.id === fieldId);
+                    return field ? field.name : null;
+                })
+                .filter((name): name is string => name !== null);
+
+            if (fieldNames.length === 0) return;
+
+            // Escape the index name for regex
+            const escapedIndexName = index.name.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                '\\$&'
+            );
+
+            // Build pattern to match index line in DBML (same approach as restoreIndexTypes)
+            let indexColumnPattern: string;
+            if (fieldNames.length === 1) {
+                indexColumnPattern = fieldNames[0].replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    '\\$&'
+                );
+            } else {
+                const escapedFields = fieldNames
+                    .map((f) => f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                    .join(',\\s*');
+                indexColumnPattern = `\\(${escapedFields}\\)`;
+            }
+
+            // Pattern to match the index line with its attributes
+            const indexLinePattern = new RegExp(
+                `(Table ${tableIdentifier} \\{[\\s\\S]*?Indexes \\{[\\s\\S]*?)(${indexColumnPattern})\\s*\\[([^\\]]*name:\\s*"${escapedIndexName}"[^\\]]*)\\]`,
+                'g'
+            );
+
+            const escapedComment = escapeDBMLComment(index.comments!);
+
+            result = result.replace(
+                indexLinePattern,
+                (match, prefix, columns, attributes) => {
+                    // Check if note is already present
+                    if (/note:\s*'/.test(attributes)) {
+                        return match;
+                    }
+
+                    // Append note at the end of attributes
+                    const newAttributes = `${attributes}, note: '${escapedComment}'`;
                     return `${prefix}${columns} [${newAttributes}]`;
                 }
             );
@@ -1419,6 +1503,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
 
         // Restore index types (like GIN) that are lost during SQL to DBML conversion
         standard = restoreIndexTypes(standard, tablesWithFields);
+
+        // Restore index notes/comments that are lost during SQL to DBML conversion
+        standard = restoreIndexNotes(standard, tablesWithFields);
 
         // Generate cardinality-aware Ref statements from the diagram relationships
         // (FK generation is skipped in SQL, so @dbml/core doesn't generate any Refs)

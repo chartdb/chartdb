@@ -294,6 +294,7 @@ interface DBMLIndex {
     name?: string;
     pk?: boolean; // Primary key index flag
     type?: string; // Index type (e.g., 'gin', 'btree', 'hash')
+    note?: string | { value: string } | null;
 }
 
 interface DBMLTable {
@@ -628,6 +629,7 @@ export const importDBMLToDiagram = async (
                                     name: indexName,
                                     pk: Boolean(dbmlIndex.pk) || false,
                                     type: dbmlIndex.type,
+                                    note: dbmlIndex.note,
                                 };
                             }) || [],
                     });
@@ -840,6 +842,18 @@ export const importDBMLToDiagram = async (
                                 ? (dbmlIndex.type.toLowerCase() as IndexType)
                                 : undefined;
 
+                        let indexComment: string | undefined;
+                        if (dbmlIndex.note) {
+                            if (typeof dbmlIndex.note === 'string') {
+                                indexComment = dbmlIndex.note;
+                            } else if (
+                                typeof dbmlIndex.note === 'object' &&
+                                'value' in dbmlIndex.note
+                            ) {
+                                indexComment = dbmlIndex.note.value;
+                            }
+                        }
+
                         return {
                             id: generateId(),
                             name:
@@ -849,6 +863,7 @@ export const importDBMLToDiagram = async (
                             unique: dbmlIndex.unique || false,
                             createdAt: Date.now(),
                             ...(indexType ? { type: indexType } : {}),
+                            ...(indexComment ? { comments: indexComment } : {}),
                         };
                     }) || [];
 
