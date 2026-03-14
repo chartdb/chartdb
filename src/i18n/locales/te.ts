@@ -44,6 +44,8 @@ export const te: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_full_tables: 'పూర్తి పట్టికలు చూపించు',
+                hide_full_tables: 'పూర్తి పట్టికలు దాచు',
             },
             // TODO: Translate
             backup: {

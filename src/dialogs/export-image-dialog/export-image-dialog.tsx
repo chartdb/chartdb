@@ -28,8 +28,8 @@ export interface ExportImageDialogProps extends BaseDialogProps {
     format: ImageType;
 }
 
-const DEFAULT_INCLUDE_PATTERN_BG = true;
-const DEFAULT_TRANSPARENT = false;
+const DEFAULT_INCLUDE_PATTERN_BG = false;
+const DEFAULT_TRANSPARENT = true;
 const DEFAULT_SCALE = '4';
 export const ExportImageDialog: React.FC<ExportImageDialogProps> = ({
     dialog,
