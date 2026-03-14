@@ -140,11 +140,13 @@ export const sanitizeSQLforDBML = (sql: string): string => {
     // Replace special characters in identifiers
     let sanitized = sql;
 
-    // Strip COMMENT ON INDEX statements before @dbml/core parsing.
-    // @dbml/core doesn't support COMMENT ON INDEX, so these are restored
-    // afterwards by restoreIndexNotes(). Table/column comments are left
-    // intact since @dbml/core handles them natively with proper escaping.
-    sanitized = sanitized.replace(/^COMMENT ON INDEX .+;$/gm, '');
+    // Strip ALL COMMENT ON statements before @dbml/core parsing.
+    // @dbml/core doesn't properly escape single quotes in DBML note output
+    // when SQL comments contain literal quotes (e.g., SQL's '' escape),
+    // producing invalid DBML like: Note: 'we don't need...'.
+    // Comments are restored afterwards by restoreNotes() and
+    // restoreIndexNotes() with proper DBML escaping.
+    sanitized = sanitized.replace(/^COMMENT ON .+;$/gm, '');
 
     // Handle duplicate constraint names
     const constraintNames = new Set<string>();
@@ -257,12 +259,6 @@ export const sanitizeSQLforDBML = (sql: string): string => {
         /DEFAULT\s+NOW(?=[\s,);]|$)/gi,
         'DEFAULT NOW()'
     );
-
-    // Strip COMMENT ON INDEX statements before @dbml/core parsing.
-    // @dbml/core doesn't support COMMENT ON INDEX, so these are restored
-    // afterwards by restoreIndexNotes(). Table/column comments are left
-    // intact since @dbml/core handles them natively with proper escaping.
-    sanitized = sanitized.replace(/^COMMENT ON INDEX .+;$/gm, '');
 
     // Replace MySQL-specific types with universal equivalents so the DBML
     // parser can handle them regardless of the target dialect (e.g. when the
@@ -995,12 +991,6 @@ const restoreIndexTypes = (dbml: string, tables: DBTable[]): string => {
 
             if (fieldNames.length === 0) return;
 
-            // Escape the index name for regex
-            const escapedIndexName = index.name.replace(
-                /[.*+?^${}()|[\]\\]/g,
-                '\\$&'
-            );
-
             // Build pattern to match index line in DBML
             // For single column: field_name [name: "index_name"] or field_name [unique, name: "index_name"]
             // For composite: (field1, field2) [name: "index_name"]
@@ -1019,10 +1009,11 @@ const restoreIndexTypes = (dbml: string, tables: DBTable[]): string => {
                 indexColumnPattern = `\\(${escapedFields}\\)`;
             }
 
-            // Pattern to match the index line with its attributes
-            // Captures: 1) the column(s), 2) optional unique/pk attributes, 3) rest of attributes including name
+            // Pattern to match the index line with its attributes.
+            // Match by table + field columns without requiring an exact index name,
+            // because sanitizeSQLforDBML may rename duplicate index names.
             const indexLinePattern = new RegExp(
-                `(Table ${tableIdentifier} \\{[\\s\\S]*?Indexes \\{[\\s\\S]*?)(${indexColumnPattern})\\s*\\[([^\\]]*name:\\s*"${escapedIndexName}"[^\\]]*)\\]`,
+                `(Table ${tableIdentifier} \\{[\\s\\S]*?Indexes \\{[\\s\\S]*?)(${indexColumnPattern})\\s*\\[([^\\]]*name:\\s*"[^"]*"[^\\]]*)\\]`,
                 'g'
             );
 
@@ -1076,12 +1067,6 @@ const restoreIndexNotes = (dbml: string, tables: DBTable[]): string => {
 
             if (fieldNames.length === 0) return;
 
-            // Escape the index name for regex
-            const escapedIndexName = index.name.replace(
-                /[.*+?^${}()|[\]\\]/g,
-                '\\$&'
-            );
-
             // Build pattern to match index line in DBML (same approach as restoreIndexTypes)
             let indexColumnPattern: string;
             if (fieldNames.length === 1) {
@@ -1096,9 +1081,13 @@ const restoreIndexNotes = (dbml: string, tables: DBTable[]): string => {
                 indexColumnPattern = `\\(${escapedFields}\\)`;
             }
 
-            // Pattern to match the index line with its attributes
+            // Pattern to match the index line with its attributes.
+            // Match by table + field columns without requiring an exact index name,
+            // because sanitizeSQLforDBML may rename duplicate index names (e.g.,
+            // "index_2" → "index_2_3") causing the model name to diverge from
+            // the DBML name. Table + fields is unique enough to identify the index.
             const indexLinePattern = new RegExp(
-                `(Table ${tableIdentifier} \\{[\\s\\S]*?Indexes \\{[\\s\\S]*?)(${indexColumnPattern})\\s*\\[([^\\]]*name:\\s*"${escapedIndexName}"[^\\]]*)\\]`,
+                `(Table ${tableIdentifier} \\{[\\s\\S]*?Indexes \\{[\\s\\S]*?)(${indexColumnPattern})\\s*\\[([^\\]]*name:\\s*"[^"]*"[^\\]]*)\\]`,
                 'g'
             );
 
