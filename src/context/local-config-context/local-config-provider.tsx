@@ -11,6 +11,7 @@ const githubRepoOpenedKey = 'github_repo_opened';
 const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
 const showDBViewsKey = 'show_db_views';
+const showToolbarKey = 'show_toolbar';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -50,6 +51,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
             (localStorage.getItem(showMiniMapOnCanvasKey) || 'true') === 'true'
         );
 
+    const [showToolbar, setShowToolbar] = React.useState<boolean>(
+        (localStorage.getItem(showToolbarKey) || 'true') === 'true'
+    );
+
     useEffect(() => {
         localStorage.setItem(
             starUsDialogLastOpenKey,
@@ -84,6 +89,10 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
         );
     }, [showMiniMapOnCanvas]);
 
+    useEffect(() => {
+        localStorage.setItem(showToolbarKey, showToolbar.toString());
+    }, [showToolbar]);
+
     return (
         <LocalConfigContext.Provider
             value={{
@@ -103,6 +112,8 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setStarUsDialogLastOpen,
                 showMiniMapOnCanvas,
                 setShowMiniMapOnCanvas,
+                showToolbar,
+                setShowToolbar,
             }}
         >
             {children}
