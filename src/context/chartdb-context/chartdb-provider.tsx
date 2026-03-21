@@ -34,6 +34,7 @@ import {
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
 import { getDefaultPrimaryKeyType } from '@/lib/data/data-types/data-types';
+import type { DiagramSchemaSync } from '@/lib/domain/schema-sync';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -53,6 +54,9 @@ export const ChartDBProvider: React.FC<
     const [diagramName, setDiagramName] = useState('');
     const [diagramCreatedAt, setDiagramCreatedAt] = useState<Date>(new Date());
     const [diagramUpdatedAt, setDiagramUpdatedAt] = useState<Date>(new Date());
+    const [diagramSchemaSync, setDiagramSchemaSync] = useState<
+        DiagramSchemaSync | undefined
+    >(diagram?.schemaSync);
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -154,6 +158,7 @@ export const ChartDBProvider: React.FC<
             areas,
             customTypes,
             notes,
+            schemaSync: diagramSchemaSync,
         }),
         [
             diagramId,
@@ -166,6 +171,7 @@ export const ChartDBProvider: React.FC<
             areas,
             customTypes,
             notes,
+            diagramSchemaSync,
             diagramCreatedAt,
             diagramUpdatedAt,
         ]
@@ -180,6 +186,7 @@ export const ChartDBProvider: React.FC<
             setAreas([]);
             setCustomTypes([]);
             setNotes([]);
+            setDiagramSchemaSync(undefined);
             setDiagramUpdatedAt(updatedAt);
 
             resetRedoStack();
@@ -202,6 +209,7 @@ export const ChartDBProvider: React.FC<
             setDiagramName('');
             setDatabaseType(DatabaseType.GENERIC);
             setDatabaseEdition(undefined);
+            setDiagramSchemaSync(undefined);
             setTables([]);
             setRelationships([]);
             setDependencies([]);
@@ -1886,6 +1894,7 @@ export const ChartDBProvider: React.FC<
                 setDiagramName(diagram.name);
                 setDatabaseType(diagram.databaseType);
                 setDatabaseEdition(diagram.databaseEdition);
+                setDiagramSchemaSync(diagram.schemaSync);
                 setTables(diagram.tables ?? []);
                 setRelationships(diagram.relationships ?? []);
                 setDependencies(diagram.dependencies ?? []);
@@ -1906,6 +1915,7 @@ export const ChartDBProvider: React.FC<
                 setDiagramName,
                 setDatabaseType,
                 setDatabaseEdition,
+                setDiagramSchemaSync,
                 setTables,
                 setRelationships,
                 setDependencies,

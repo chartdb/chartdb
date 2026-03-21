@@ -9,6 +9,7 @@ import { deepCopy, findContainingArea } from '../utils';
 import { schemaNameToDomainSchemaName } from './db-schema';
 import { z } from 'zod';
 import type { Area } from './area';
+import { syncSourceRefSchema, type SyncSourceRef } from './schema-sync';
 
 export const MAX_TABLE_SIZE = 450;
 export const MID_TABLE_SIZE = 337;
@@ -33,6 +34,7 @@ export interface DBTable {
     order?: number | null;
     expanded?: boolean | null;
     parentAreaId?: string | null;
+    syncMetadata?: SyncSourceRef;
 }
 
 export const dbTableSchema: z.ZodType<DBTable> = z.object({
@@ -53,6 +55,7 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     order: z.number().or(z.null()).optional(),
     expanded: z.boolean().or(z.null()).optional(),
     parentAreaId: z.string().or(z.null()).optional(),
+    syncMetadata: syncSourceRefSchema.optional(),
 });
 
 export const generateTableKey = ({

@@ -6,6 +6,7 @@ import {
     type DataType,
 } from '../data/data-types/data-types';
 import { DatabaseType } from './database-type';
+import { syncSourceRefSchema, type SyncSourceRef } from './schema-sync';
 
 export interface DBField {
     id: string;
@@ -24,6 +25,7 @@ export interface DBField {
     collation?: string | null;
     comments?: string | null;
     check?: string | null;
+    syncMetadata?: SyncSourceRef;
 }
 
 export const dbFieldSchema: z.ZodType<DBField> = z.object({
@@ -43,6 +45,7 @@ export const dbFieldSchema: z.ZodType<DBField> = z.object({
     collation: z.string().or(z.null()).optional(),
     comments: z.string().or(z.null()).optional(),
     check: z.string().or(z.null()).optional(),
+    syncMetadata: syncSourceRefSchema.optional(),
 });
 
 export const generateDBFieldSuffix = (

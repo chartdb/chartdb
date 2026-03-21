@@ -631,6 +631,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     name: diagram.name,
                     databaseType: diagram.databaseType,
                     databaseEdition: diagram.databaseEdition,
+                    schemaSync: diagram.schemaSync,
                     createdAt: diagram.createdAt,
                     updatedAt: diagram.updatedAt,
                 })
