@@ -239,7 +239,9 @@ describe('canonical adapters', () => {
             ],
         };
 
-        const diagram = canonicalSchemaToDiagram({ canonicalSchema: canonical });
+        const diagram = canonicalSchemaToDiagram({
+            canonicalSchema: canonical,
+        });
         const canonicalRoundtrip = diagramToCanonicalSchema(diagram);
         const ayahsTable = canonicalRoundtrip.tables.find(
             (table) => table.name === 'ayahs'

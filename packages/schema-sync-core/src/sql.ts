@@ -16,7 +16,10 @@ const normalizeTypeReference = (value: string) =>
 
 const buildCustomTypeMap = (schema?: CanonicalSchema) =>
     new Map(
-        (schema?.customTypes ?? []).map((customType) => [customType.id, customType])
+        (schema?.customTypes ?? []).map((customType) => [
+            customType.id,
+            customType,
+        ])
     );
 
 const renderTypeReference = ({
@@ -65,7 +68,9 @@ const renderColumnDefinition = (
     column: CanonicalColumn,
     customTypesById: Map<string, CanonicalSchema['customTypes'][number]>
 ) => {
-    const parts = [`${quoteIdent(column.name)} ${renderType(column, customTypesById)}`];
+    const parts = [
+        `${quoteIdent(column.name)} ${renderType(column, customTypesById)}`,
+    ];
     if (!column.nullable) {
         parts.push('NOT NULL');
     }
@@ -123,11 +128,13 @@ const alterColumnType = (
     change: Extract<SchemaChange, { kind: 'alter_column_type' }>,
     customTypesById: Map<string, CanonicalSchema['customTypes'][number]>
 ) =>
-    `ALTER TABLE ${qualify(change.schemaName, change.tableName)} ALTER COLUMN ${quoteIdent(change.columnName)} TYPE ${renderTypeReference({
-        typeName: change.toType,
-        customTypeId: change.customTypeId,
-        customTypesById,
-    })} USING ${quoteIdent(change.columnName)}::${renderTypeReference({
+    `ALTER TABLE ${qualify(change.schemaName, change.tableName)} ALTER COLUMN ${quoteIdent(change.columnName)} TYPE ${renderTypeReference(
+        {
+            typeName: change.toType,
+            customTypeId: change.customTypeId,
+            customTypesById,
+        }
+    )} USING ${quoteIdent(change.columnName)}::${renderTypeReference({
         typeName: change.toType,
         customTypeId: change.customTypeId,
         customTypesById,

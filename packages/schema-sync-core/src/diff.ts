@@ -4,7 +4,6 @@ import {
     type CanonicalCheckConstraint,
     type CanonicalColumn,
     type CanonicalCustomType,
-    type CanonicalEnumType,
     type CanonicalForeignKey,
     type CanonicalIndex,
     type CanonicalSchema,
@@ -342,16 +341,16 @@ const hasMatchingUniqueReference = (
 
     if (
         primaryKeyColumns &&
-        valuesEqual(
-            primaryKeyColumns.map(normalizeName),
-            normalizedReference
-        )
+        valuesEqual(primaryKeyColumns.map(normalizeName), normalizedReference)
     ) {
         return true;
     }
 
     return table.uniqueConstraints.some((constraint) => {
-        const constraintColumns = resolveColumnNames(table, constraint.columnIds);
+        const constraintColumns = resolveColumnNames(
+            table,
+            constraint.columnIds
+        );
         return (
             !!constraintColumns &&
             valuesEqual(
@@ -410,21 +409,22 @@ export const createChangePlan = ({
 }): ChangePlan => {
     const changes: SchemaChange[] = [];
     const warnings = [...additionalWarnings];
-    const allKnownCustomTypes = [...baseline.customTypes, ...target.customTypes];
-    const baselineKnownTypes = new Set(
-        [
-            ...baseline.tables.flatMap((table) =>
-                table.columns.flatMap((column) => [
-                    normalizeTypeName(column.dataType),
-                    normalizeTypeName(column.dataType).split('.').at(-1) ?? '',
-                ])
-            ),
-            ...baseline.customTypes.flatMap((customType) => [
-                getCustomTypeMatchKey(customType),
-                customType.name.toLowerCase(),
-            ]),
-        ]
-    );
+    const allKnownCustomTypes = [
+        ...baseline.customTypes,
+        ...target.customTypes,
+    ];
+    const baselineKnownTypes = new Set([
+        ...baseline.tables.flatMap((table) =>
+            table.columns.flatMap((column) => [
+                normalizeTypeName(column.dataType),
+                normalizeTypeName(column.dataType).split('.').at(-1) ?? '',
+            ])
+        ),
+        ...baseline.customTypes.flatMap((customType) => [
+            getCustomTypeMatchKey(customType),
+            customType.name.toLowerCase(),
+        ]),
+    ]);
 
     const baselineSchemas = new Set(baseline.schemaNames);
     for (const schemaName of uniqueBy(target.schemaNames, (schema) => schema)) {
@@ -478,7 +478,8 @@ export const createChangePlan = ({
 
             if (
                 baselinePrefixMatches &&
-                targetCustomType.values.length > baselineCustomType.values.length
+                targetCustomType.values.length >
+                    baselineCustomType.values.length
             ) {
                 for (const value of targetCustomType.values.slice(
                     baselineCustomType.values.length
@@ -929,9 +930,7 @@ export const createChangePlan = ({
                                 change.foreignKey.referencedSchemaName
                             ) &&
                         normalizeName(table.name) ===
-                            normalizeName(
-                                change.foreignKey.referencedTableName
-                            )
+                            normalizeName(change.foreignKey.referencedTableName)
                 );
 
                 if (!referencedTable) {

@@ -152,7 +152,8 @@ const relationshipFromForeignKey = ({
         return null;
     }
 
-    const isLocalColumnSetUnique = !!localField.primaryKey || !!localField.unique;
+    const isLocalColumnSetUnique =
+        !!localField.primaryKey || !!localField.unique;
 
     return {
         id: generateId(),
@@ -399,7 +400,9 @@ export const diagramToCanonicalSchema = (diagram: Diagram): CanonicalSchema => {
                 ...(diagram.tables ?? []).map(
                     (table) => table.schema ?? defaultSchemaName
                 ),
-                ...canonicalCustomTypes.map((customType) => customType.schemaName),
+                ...canonicalCustomTypes.map(
+                    (customType) => customType.schemaName
+                ),
             ].filter(Boolean) as string[]
         ),
     ];

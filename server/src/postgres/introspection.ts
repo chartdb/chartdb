@@ -410,9 +410,9 @@ export const introspectPostgresSchema = async ({
                     dataTypeDisplay: column.formatted_type,
                     customTypeId:
                         column.type_kind === 'e'
-                            ? customTypesByKey.get(
+                            ? (customTypesByKey.get(
                                   `${column.type_schema_name}.${column.type_name}`
-                              )?.id ?? null
+                              )?.id ?? null)
                             : null,
                     nullable: column.nullable,
                     defaultValue:
