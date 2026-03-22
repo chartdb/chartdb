@@ -14,10 +14,6 @@ pnpm-debug.log*
 .env.local
 .env.*.local
 
-# Ignore Dockerfile and Docker Compose files
-Dockerfile
-docker-compose.yml
-
 # Ignore git files
 .git
 .gitignore
@@ -25,13 +21,6 @@ docker-compose.yml
 # Ignore IDE and editor settings
 .vscode/
 .idea/
-
-# Ignore tests and documentation
-__tests__/
-test/
-tests/
-spec/
-*.md
 
 # Ignore temporary files
 *.swp

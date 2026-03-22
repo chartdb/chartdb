@@ -48,4 +48,13 @@ export default defineConfig({
             },
         },
     },
+    server: {
+        proxy: {
+            '/api': {
+                target:
+                    process.env.CHARTDB_API_PROXY ?? 'http://localhost:4010',
+                changeOrigin: true,
+            },
+        },
+    },
 });
