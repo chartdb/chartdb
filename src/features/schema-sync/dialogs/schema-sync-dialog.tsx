@@ -115,8 +115,9 @@ export const SchemaSyncDialog: React.FC = () => {
             (warning) => warning.level === 'destructive'
         ) ?? [];
     const blockedWarnings =
-        previewPlan?.warnings.filter((warning) => warning.level === 'blocked') ??
-        [];
+        previewPlan?.warnings.filter(
+            (warning) => warning.level === 'blocked'
+        ) ?? [];
 
     const run = async (key: string, fn: () => Promise<void>) => {
         setBusyAction(key);
