@@ -10,7 +10,7 @@
 
 <p align="center">
   <b>Open-source database diagrams editor and schema synchronization platform</b> <br />
-  <b>Visual editing • Live PostgreSQL import • Diff, SQL preview, and safe apply.</b> <br />
+  <b>Visual editing • Self-hosted persistence • Live PostgreSQL import • Diff, SQL preview, and safe apply.</b> <br />
 </p>
 
 <h3 align="center">
@@ -45,12 +45,15 @@
 ### 🎉 ChartDB
 
 ChartDB is a powerful, web-based database diagramming editor that now also includes a production-minded schema synchronization workflow for PostgreSQL.
-You can import a live schema from a real database, edit it visually, preview a structured migration plan, inspect generated SQL, and apply approved changes through a server-side safety layer.
+You can import a live schema from a real database, edit it visually, persist projects safely in a self-hosted backend, preview a structured migration plan, inspect generated SQL, and apply approved changes through a server-side safety layer.
 
 **What it does now**:
 
 - **Direct PostgreSQL Connectivity**
   Store database connections server-side, test them safely, and keep passwords out of the browser after submission.
+
+- **Self-Hosted Project Persistence**
+  Persist ChartDB projects and diagrams through the backend API instead of relying only on browser storage. The editor still works locally, but a running backend now becomes the durable source of truth for saved work.
 
 - **Live Schema Import**
   Import the live PostgreSQL schema into the existing visual editor and keep a persisted baseline snapshot for later diff/apply.
@@ -118,6 +121,7 @@ npm run dev:web
 ```
 
 The Vite development server proxies `/api` to `http://localhost:4010` by default.
+When the backend is available, ChartDB bootstraps a default self-hosted owner/project and persists diagrams there.
 
 ### Full Local Stack With Docker
 
@@ -141,7 +145,12 @@ Key variables:
 - `CHARTDB_API_HOST`: backend bind host
 - `CHARTDB_API_PORT`: backend port
 - `CHARTDB_SECRET_KEY`: encryption key for stored connection secrets
-- `CHARTDB_DATA_DIR`: backend metadata/audit SQLite location
+- `CHARTDB_DATA_DIR`: default directory for backend SQLite files
+- `CHARTDB_APP_DB_PATH`: optional override for the self-hosted app persistence database
+- `CHARTDB_METADATA_DB_PATH`: optional override for the schema-sync metadata database
+- `CHARTDB_LOG_LEVEL`: Fastify/Pino log level
+- `CHARTDB_DEFAULT_PROJECT_NAME`: initial self-hosted project name
+- `CHARTDB_DEFAULT_OWNER_NAME`: initial placeholder owner name
 - `CHARTDB_CORS_ORIGIN`: backend CORS policy
 
 ### Build
@@ -156,6 +165,13 @@ npm run build
 ```bash
 npm run dev -w @chartdb/server
 ```
+
+Useful backend endpoints:
+
+- `GET /api/health`
+- `GET /api/app/bootstrap`
+- `GET /api/projects`
+- `GET /api/projects/:projectId/diagrams`
 
 ### Run Only The Frontend
 
@@ -184,11 +200,12 @@ npm run dev:web
 - `packages/schema-sync-core`
   Shared canonical schema model, diff engine, SQL generation, risk analysis, and API contracts.
 - `server`
-  Fastify API for connection storage, PostgreSQL introspection, plan generation, apply execution, and audit/history persistence.
+  Fastify API for self-hosted app persistence, connection storage, PostgreSQL introspection, plan generation, apply execution, and audit/history persistence.
 - `src`
-  Existing ChartDB editor plus schema-sync UI, adapters between `Diagram` and `CanonicalSchema`, and toolbar/dialog integration.
+  Existing ChartDB editor plus schema-sync UI, a hybrid local/remote storage boundary, adapters between `Diagram` and `CanonicalSchema`, and toolbar/dialog integration.
 
 See [docs/schema-sync-architecture.md](./docs/schema-sync-architecture.md) for the detailed design.
+See [docs/backend-persistence-foundation.md](./docs/backend-persistence-foundation.md) for the self-hosted backend/persistence foundation.
 
 ## Security Considerations
 
