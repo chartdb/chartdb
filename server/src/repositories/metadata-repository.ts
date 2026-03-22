@@ -43,6 +43,10 @@ export class MetadataRepository {
         this.initialize();
     }
 
+    close() {
+        this.db.close();
+    }
+
     private initialize() {
         this.db.exec(`
             PRAGMA journal_mode = WAL;

@@ -1,44 +1,32 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { ZodError } from 'zod';
-import {
-    applySchemaRequestSchema,
-    connectionTestRequestSchema,
-    connectionUpsertSchema,
-    diffSchemaRequestSchema,
-    importLiveSchemaRequestSchema,
-} from '@chartdb/schema-sync-core';
-import { serverEnv } from './config/env.js';
-import { MetadataRepository } from './repositories/metadata-repository.js';
-import { ConnectionsService } from './services/connections-service.js';
-import { SchemaSyncService } from './services/schema-sync-service.js';
-import { ApplyService } from './services/apply-service.js';
+import { serverEnv, type ServerEnv } from './config/env.js';
+import { buildLoggerOptions } from './config/logger.js';
+import { createAppContext } from './context/app-context.js';
+import type { AppRepository } from './repositories/app-repository.js';
+import type { MetadataRepository } from './repositories/metadata-repository.js';
+import { registerHealthRoutes } from './routes/health-routes.js';
+import { registerPersistenceRoutes } from './routes/persistence-routes.js';
+import { registerSchemaSyncRoutes } from './routes/schema-sync-routes.js';
 import { AppError } from './utils/app-error.js';
 
-export const buildApp = () => {
+export const buildApp = (options?: {
+    env?: ServerEnv;
+    metadataRepository?: MetadataRepository;
+    appRepository?: AppRepository;
+}) => {
+    const env = options?.env ?? serverEnv;
     const app = Fastify({
-        logger: {
-            level: 'info',
-            redact: ['req.body.connection.secret.password', 'password'],
-        },
+        logger: buildLoggerOptions(env),
     });
-    const repository = new MetadataRepository(serverEnv.metadataDbPath);
-    const connectionsService = new ConnectionsService(
-        repository,
-        serverEnv.encryptionKey
-    );
-    const schemaSyncService = new SchemaSyncService(
-        repository,
-        connectionsService
-    );
-    const applyService = new ApplyService(
-        repository,
-        connectionsService,
-        schemaSyncService
-    );
+    const context = createAppContext(env, {
+        metadataRepository: options?.metadataRepository,
+        appRepository: options?.appRepository,
+    });
 
     app.register(cors, {
-        origin: serverEnv.corsOrigin === '*' ? true : serverEnv.corsOrigin,
+        origin: env.corsOrigin === '*' ? true : env.corsOrigin,
     });
 
     app.setErrorHandler((error, request, reply) => {
@@ -65,86 +53,12 @@ export const buildApp = () => {
         });
     });
 
-    app.get('/api/health', async () => ({
-        ok: true,
-        service: 'chartdb-schema-sync-api',
-    }));
+    registerHealthRoutes(app, context);
+    registerPersistenceRoutes(app, context);
+    registerSchemaSyncRoutes(app, context);
 
-    app.get('/api/connections', async () => ({
-        items: connectionsService.listConnections(),
-    }));
-
-    app.post('/api/connections', async (request) => {
-        const payload = connectionUpsertSchema.parse(request.body);
-        return {
-            connection: connectionsService.createConnection(payload),
-        };
-    });
-
-    app.patch('/api/connections/:id', async (request) => {
-        const payload = connectionUpsertSchema.parse(request.body);
-        const params = request.params as { id: string };
-        return {
-            connection: connectionsService.updateConnection(params.id, payload),
-        };
-    });
-
-    app.delete('/api/connections/:id', async (request) => {
-        const params = request.params as { id: string };
-        connectionsService.deleteConnection(params.id);
-        return { ok: true };
-    });
-
-    app.post('/api/connections/test', async (request) => {
-        const payload = connectionTestRequestSchema.parse(request.body);
-        return await connectionsService.testConnection(payload);
-    });
-
-    app.post('/api/connections/:id/test', async (request) => {
-        const params = request.params as { id: string };
-        return await connectionsService.testConnection({
-            connectionId: params.id,
-        });
-    });
-
-    app.post('/api/schema/import-live', async (request) => {
-        const payload = importLiveSchemaRequestSchema.parse(request.body);
-        return await schemaSyncService.importLiveSchema(payload);
-    });
-
-    app.post('/api/schema/diff', async (request) => {
-        const payload = diffSchemaRequestSchema.parse(request.body);
-        return await schemaSyncService.diffSchema(payload);
-    });
-
-    app.post('/api/schema/apply', async (request) => {
-        const payload = applySchemaRequestSchema.parse(request.body);
-        return await applyService.applyPlan(payload);
-    });
-
-    app.get('/api/schema/jobs/:id', async (request, reply) => {
-        const params = request.params as { id: string };
-        const job = repository.getApplyJob(params.id);
-        if (!job) {
-            return reply.code(404).send({ error: 'Job not found' });
-        }
-        return {
-            id: job.id,
-            status: job.status,
-            logs: job.logs,
-            error: job.error ?? null,
-            executedStatements: job.executedStatements,
-            auditId: job.auditId,
-        };
-    });
-
-    app.get('/api/audit/:id', async (request, reply) => {
-        const params = request.params as { id: string };
-        const audit = repository.getAudit(params.id);
-        if (!audit) {
-            return reply.code(404).send({ error: 'Audit record not found' });
-        }
-        return audit;
+    app.addHook('onClose', async () => {
+        context.close();
     });
 
     return app;

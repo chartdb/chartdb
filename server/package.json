@@ -15,6 +15,7 @@
         "@chartdb/schema-sync-core": "file:../packages/schema-sync-core",
         "@fastify/cors": "^11.1.0",
         "better-sqlite3": "^11.10.0",
+        "dotenv": "^17.2.3",
         "fastify": "^5.6.1",
         "pg": "^8.16.3",
         "zod": "^3.23.8"
