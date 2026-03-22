@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { syncSourceRefSchema, type SyncSourceRef } from './schema-sync';
 
 export enum DBCustomTypeKind {
     enum = 'enum',
@@ -18,6 +19,7 @@ export interface DBCustomType {
     values?: string[] | null; // For enum types
     fields?: DBCustomTypeField[] | null; // For composite types
     order?: number | null;
+    syncMetadata?: SyncSourceRef;
 }
 
 export const dbCustomTypeFieldSchema = z.object({
@@ -33,6 +35,7 @@ export const dbCustomTypeSchema: z.ZodType<DBCustomType> = z.object({
     values: z.array(z.string()).or(z.null()).optional(),
     fields: z.array(dbCustomTypeFieldSchema).or(z.null()).optional(),
     order: z.number().or(z.null()).optional(),
+    syncMetadata: syncSourceRefSchema.optional(),
 });
 
 export const customTypeKindToLabel: Record<DBCustomTypeKind, string> = {

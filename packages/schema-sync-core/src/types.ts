@@ -14,6 +14,7 @@ export const canonicalColumnSchema = z.object({
     name: z.string(),
     dataType: z.string(),
     dataTypeDisplay: z.string().optional(),
+    customTypeId: z.string().nullable().optional(),
     nullable: z.boolean(),
     defaultValue: z.string().nullable().optional(),
     isPrimaryKey: z.boolean().optional(),
@@ -28,6 +29,42 @@ export const canonicalColumnSchema = z.object({
     sync: syncRefSchema.optional(),
 });
 export type CanonicalColumn = z.infer<typeof canonicalColumnSchema>;
+
+export const canonicalCustomTypeFieldSchema = z.object({
+    name: z.string(),
+    dataType: z.string(),
+});
+export type CanonicalCustomTypeField = z.infer<
+    typeof canonicalCustomTypeFieldSchema
+>;
+
+export const canonicalEnumTypeSchema = z.object({
+    id: z.string(),
+    schemaName: z.string(),
+    name: z.string(),
+    kind: z.literal('enum'),
+    values: z.array(z.string()),
+    sync: syncRefSchema.optional(),
+});
+export type CanonicalEnumType = z.infer<typeof canonicalEnumTypeSchema>;
+
+export const canonicalCompositeTypeSchema = z.object({
+    id: z.string(),
+    schemaName: z.string(),
+    name: z.string(),
+    kind: z.literal('composite'),
+    fields: z.array(canonicalCustomTypeFieldSchema).default([]),
+    sync: syncRefSchema.optional(),
+});
+export type CanonicalCompositeType = z.infer<
+    typeof canonicalCompositeTypeSchema
+>;
+
+export const canonicalCustomTypeSchema = z.discriminatedUnion('kind', [
+    canonicalEnumTypeSchema,
+    canonicalCompositeTypeSchema,
+]);
+export type CanonicalCustomType = z.infer<typeof canonicalCustomTypeSchema>;
 
 export const canonicalPrimaryKeySchema = z.object({
     id: z.string(),
@@ -102,6 +139,7 @@ export const canonicalSchemaSchema = z.object({
     defaultSchemaName: z.string().default('public'),
     schemaNames: z.array(z.string()).default([]),
     tables: z.array(canonicalTableSchema),
+    customTypes: z.array(canonicalCustomTypeSchema).default([]),
     fingerprint: z.string().optional(),
     importedAt: z.string().optional(),
 });
@@ -129,6 +167,19 @@ export const schemaChangeSchema = z.discriminatedUnion('kind', [
         id: z.string(),
         kind: z.literal('create_schema'),
         schemaName: z.string(),
+    }),
+    z.object({
+        id: z.string(),
+        kind: z.literal('create_enum_type'),
+        customType: canonicalEnumTypeSchema,
+    }),
+    z.object({
+        id: z.string(),
+        kind: z.literal('add_enum_value'),
+        typeId: z.string(),
+        schemaName: z.string(),
+        typeName: z.string(),
+        value: z.string(),
     }),
     z.object({
         id: z.string(),
@@ -192,6 +243,7 @@ export const schemaChangeSchema = z.discriminatedUnion('kind', [
         columnName: z.string(),
         fromType: z.string(),
         toType: z.string(),
+        customTypeId: z.string().nullable().optional(),
     }),
     z.object({
         id: z.string(),

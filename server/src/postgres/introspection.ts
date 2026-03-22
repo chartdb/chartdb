@@ -2,6 +2,7 @@ import { Client } from 'pg';
 import type {
     CanonicalCheckConstraint,
     CanonicalColumn,
+    CanonicalCustomType,
     CanonicalForeignKey,
     CanonicalIndex,
     CanonicalPrimaryKey,
@@ -18,6 +19,64 @@ const actionMap: Record<string, string> = {
     c: 'CASCADE',
     n: 'SET NULL',
     d: 'SET DEFAULT',
+};
+
+type PostgresStringArray = string[] | string | null | undefined;
+
+export const normalizePostgresStringArray = (
+    value: PostgresStringArray
+): string[] => {
+    if (Array.isArray(value)) {
+        return value;
+    }
+
+    if (typeof value !== 'string') {
+        return [];
+    }
+
+    const trimmed = value.trim();
+    if (trimmed.length === 0) {
+        return [];
+    }
+
+    if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) {
+        return [trimmed];
+    }
+
+    const items: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    let escaped = false;
+
+    for (const char of trimmed.slice(1, -1)) {
+        if (escaped) {
+            current += char;
+            escaped = false;
+            continue;
+        }
+
+        if (char === '\\') {
+            escaped = true;
+            continue;
+        }
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+            continue;
+        }
+
+        if (char === ',' && !inQuotes) {
+            items.push(current);
+            current = '';
+            continue;
+        }
+
+        current += char;
+    }
+
+    items.push(current);
+
+    return items.filter((item) => item.length > 0);
 };
 
 const makeClient = async (secret: DatabaseConnectionSecret) => {
@@ -97,6 +156,9 @@ export const introspectPostgresSchema = async ({
             column_name: string;
             ordinal_position: number;
             formatted_type: string;
+            type_schema_name: string;
+            type_name: string;
+            type_kind: string;
             nullable: boolean;
             column_default: string | null;
             identity_generation: string | null;
@@ -109,6 +171,9 @@ export const introspectPostgresSchema = async ({
                 att.attname AS column_name,
                 att.attnum AS ordinal_position,
                 pg_catalog.format_type(att.atttypid, att.atttypmod) AS formatted_type,
+                typ_ns.nspname AS type_schema_name,
+                typ.typname AS type_name,
+                typ.typtype AS type_kind,
                 NOT att.attnotnull AS nullable,
                 pg_get_expr(def.adbin, def.adrelid) AS column_default,
                 CASE
@@ -120,6 +185,8 @@ export const introspectPostgresSchema = async ({
             FROM pg_attribute att
             JOIN pg_class cls ON cls.oid = att.attrelid
             JOIN pg_namespace ns ON ns.oid = cls.relnamespace
+            JOIN pg_type typ ON typ.oid = att.atttypid
+            JOIN pg_namespace typ_ns ON typ_ns.oid = typ.typnamespace
             LEFT JOIN pg_attrdef def ON def.adrelid = att.attrelid AND def.adnum = att.attnum
             WHERE cls.relkind IN ('r', 'v', 'm')
               AND att.attnum > 0
@@ -134,14 +201,14 @@ export const introspectPostgresSchema = async ({
             schema_name: string;
             table_name: string;
             constraint_name: string;
-            column_names: string[];
+            column_names: string[] | string | null;
         }>(
             `
             SELECT
                 ns.nspname AS schema_name,
                 cls.relname AS table_name,
                 con.conname AS constraint_name,
-                array_agg(att.attname ORDER BY ord.ordinality) AS column_names
+                array_agg(att.attname::text ORDER BY ord.ordinality) AS column_names
             FROM pg_constraint con
             JOIN pg_class cls ON cls.oid = con.conrelid
             JOIN pg_namespace ns ON ns.oid = cls.relnamespace
@@ -158,14 +225,14 @@ export const introspectPostgresSchema = async ({
             schema_name: string;
             table_name: string;
             constraint_name: string;
-            column_names: string[];
+            column_names: string[] | string | null;
         }>(
             `
             SELECT
                 ns.nspname AS schema_name,
                 cls.relname AS table_name,
                 con.conname AS constraint_name,
-                array_agg(att.attname ORDER BY ord.ordinality) AS column_names
+                array_agg(att.attname::text ORDER BY ord.ordinality) AS column_names
             FROM pg_constraint con
             JOIN pg_class cls ON cls.oid = con.conrelid
             JOIN pg_namespace ns ON ns.oid = cls.relnamespace
@@ -182,10 +249,10 @@ export const introspectPostgresSchema = async ({
             schema_name: string;
             table_name: string;
             constraint_name: string;
-            column_names: string[];
+            column_names: string[] | string | null;
             referenced_schema_name: string;
             referenced_table_name: string;
-            referenced_column_names: string[];
+            referenced_column_names: string[] | string | null;
             on_update: string;
             on_delete: string;
         }>(
@@ -194,10 +261,10 @@ export const introspectPostgresSchema = async ({
                 src_ns.nspname AS schema_name,
                 src_tbl.relname AS table_name,
                 con.conname AS constraint_name,
-                array_agg(src_att.attname ORDER BY src_ord.ordinality) AS column_names,
+                array_agg(src_att.attname::text ORDER BY src_ord.ordinality) AS column_names,
                 ref_ns.nspname AS referenced_schema_name,
                 ref_tbl.relname AS referenced_table_name,
-                array_agg(ref_att.attname ORDER BY src_ord.ordinality) AS referenced_column_names,
+                array_agg(ref_att.attname::text ORDER BY src_ord.ordinality) AS referenced_column_names,
                 max(con.confupdtype) AS on_update,
                 max(con.confdeltype) AS on_delete
             FROM pg_constraint con
@@ -222,7 +289,7 @@ export const introspectPostgresSchema = async ({
             index_name: string;
             unique: boolean;
             index_type: string | null;
-            column_names: string[];
+            column_names: string[] | string | null;
         }>(
             `
             SELECT
@@ -231,7 +298,7 @@ export const introspectPostgresSchema = async ({
                 idx.relname AS index_name,
                 ind.indisunique AS unique,
                 am.amname AS index_type,
-                array_agg(att.attname ORDER BY ord.ordinality) FILTER (WHERE att.attname IS NOT NULL) AS column_names
+                array_agg(att.attname::text ORDER BY ord.ordinality) FILTER (WHERE att.attname IS NOT NULL) AS column_names
             FROM pg_index ind
             JOIN pg_class tbl ON tbl.oid = ind.indrelid
             JOIN pg_namespace ns ON ns.oid = tbl.relnamespace
@@ -273,6 +340,62 @@ export const introspectPostgresSchema = async ({
             [normalizedSchemas]
         );
 
+        const enumTypeResult = await client.query<{
+            schema_name: string;
+            type_name: string;
+            enum_label: string;
+            sort_order: number;
+        }>(
+            `
+            SELECT
+                ns.nspname AS schema_name,
+                typ.typname AS type_name,
+                enum.enumlabel AS enum_label,
+                enum.enumsortorder AS sort_order
+            FROM pg_type typ
+            JOIN pg_namespace ns ON ns.oid = typ.typnamespace
+            JOIN pg_enum enum ON enum.enumtypid = typ.oid
+            WHERE ns.nspname = ANY($1::text[])
+            ORDER BY ns.nspname, typ.typname, enum.enumsortorder
+            `,
+            [normalizedSchemas]
+        );
+
+        const customTypes = enumTypeResult.rows.reduce<CanonicalCustomType[]>(
+            (items, row) => {
+                const last = items.at(-1);
+                if (
+                    last &&
+                    last.kind === 'enum' &&
+                    last.schemaName === row.schema_name &&
+                    last.name === row.type_name
+                ) {
+                    last.values.push(row.enum_label);
+                    return items;
+                }
+
+                items.push({
+                    id: `${row.schema_name}.${row.type_name}`,
+                    schemaName: row.schema_name,
+                    name: row.type_name,
+                    kind: 'enum',
+                    values: [row.enum_label],
+                    sync: {
+                        sourceId: `${row.schema_name}.${row.type_name}`,
+                    },
+                });
+                return items;
+            },
+            []
+        );
+
+        const customTypesByKey = new Map(
+            customTypes.map((customType) => [
+                `${customType.schemaName}.${customType.name}`,
+                customType,
+            ])
+        );
+
         const tables = tablesResult.rows.map<CanonicalTable>((row) => {
             const tableColumns = columnsResult.rows
                 .filter(
@@ -285,6 +408,12 @@ export const introspectPostgresSchema = async ({
                     name: column.column_name,
                     dataType: column.formatted_type,
                     dataTypeDisplay: column.formatted_type,
+                    customTypeId:
+                        column.type_kind === 'e'
+                            ? (customTypesByKey.get(
+                                  `${column.type_schema_name}.${column.type_name}`
+                              )?.id ?? null)
+                            : null,
                     nullable: column.nullable,
                     defaultValue:
                         column.column_default &&
@@ -311,7 +440,9 @@ export const introspectPostgresSchema = async ({
                 ? {
                       id: `${row.schema_name}.${row.table_name}.${primaryKeyRow.constraint_name}`,
                       name: primaryKeyRow.constraint_name,
-                      columnIds: primaryKeyRow.column_names.map(
+                      columnIds: normalizePostgresStringArray(
+                          primaryKeyRow.column_names
+                      ).map(
                           (columnName) =>
                               `${row.schema_name}.${row.table_name}.${columnName}`
                       ),
@@ -327,7 +458,9 @@ export const introspectPostgresSchema = async ({
                 .map<CanonicalUniqueConstraint>((constraint) => ({
                     id: `${row.schema_name}.${row.table_name}.${constraint.constraint_name}`,
                     name: constraint.constraint_name,
-                    columnIds: constraint.column_names.map(
+                    columnIds: normalizePostgresStringArray(
+                        constraint.column_names
+                    ).map(
                         (columnName) =>
                             `${row.schema_name}.${row.table_name}.${columnName}`
                     ),
@@ -345,7 +478,9 @@ export const introspectPostgresSchema = async ({
                 .map<CanonicalIndex>((index) => ({
                     id: `${row.schema_name}.${row.table_name}.${index.index_name}`,
                     name: index.index_name,
-                    columnIds: (index.column_names ?? []).map(
+                    columnIds: normalizePostgresStringArray(
+                        index.column_names
+                    ).map(
                         (columnName) =>
                             `${row.schema_name}.${row.table_name}.${columnName}`
                     ),
@@ -365,14 +500,17 @@ export const introspectPostgresSchema = async ({
                 .map<CanonicalForeignKey>((foreignKey) => ({
                     id: `${row.schema_name}.${row.table_name}.${foreignKey.constraint_name}`,
                     name: foreignKey.constraint_name,
-                    columnIds: foreignKey.column_names.map(
+                    columnIds: normalizePostgresStringArray(
+                        foreignKey.column_names
+                    ).map(
                         (columnName) =>
                             `${row.schema_name}.${row.table_name}.${columnName}`
                     ),
                     referencedSchemaName: foreignKey.referenced_schema_name,
                     referencedTableName: foreignKey.referenced_table_name,
-                    referencedColumnNames:
-                        foreignKey.referenced_column_names ?? [],
+                    referencedColumnNames: normalizePostgresStringArray(
+                        foreignKey.referenced_column_names
+                    ),
                     onUpdate: actionMap[foreignKey.on_update] ?? null,
                     onDelete: actionMap[foreignKey.on_delete] ?? null,
                     sync: {
@@ -420,6 +558,7 @@ export const introspectPostgresSchema = async ({
             defaultSchemaName: normalizedSchemas[0] ?? 'public',
             schemaNames: normalizedSchemas,
             tables,
+            customTypes,
             importedAt: new Date().toISOString(),
         };
         schema.fingerprint = hashCanonicalSchema(schema);
