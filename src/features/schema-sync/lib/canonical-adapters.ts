@@ -1,13 +1,23 @@
 import {
     type CanonicalColumn,
+    type CanonicalCompositeType,
+    type CanonicalCustomType,
+    type CanonicalEnumType,
     type CanonicalForeignKey,
     type CanonicalSchema,
     type CanonicalTable,
 } from '@chartdb/schema-sync-core';
 import { DatabaseType } from '@/lib/domain/database-type';
-import type { Diagram, DBIndex, DBRelationship, DBTable } from '@/lib/domain';
+import type {
+    Diagram,
+    DBCustomType,
+    DBIndex,
+    DBRelationship,
+    DBTable,
+} from '@/lib/domain';
 import {
     adjustTablePositions,
+    DBCustomTypeKind,
     getTableIndexesWithPrimaryKey,
 } from '@/lib/domain';
 import {
@@ -18,6 +28,14 @@ import {
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { generateDBFieldSuffix } from '@/lib/domain/db-field';
 import { generateDiagramId, generateId } from '@/lib/utils';
+
+const defaultSchemaName = defaultSchemas[DatabaseType.POSTGRESQL] ?? 'public';
+
+const normalizeTypeReference = (typeName: string) =>
+    typeName.replace(/\[\]$/, '').replace(/"/g, '').trim();
+
+const customTypeKey = (schemaName: string, typeName: string) =>
+    `${schemaName}.${typeName}`.toLowerCase();
 
 const normalizeDataType = (typeName: string): DataType => {
     const normalized = typeName.replace(/\[\]$/, '').trim().toLowerCase();
@@ -34,6 +52,78 @@ const normalizeDataType = (typeName: string): DataType => {
     };
 };
 
+const canonicalCustomTypeToDiagramCustomType = (
+    customType: CanonicalCustomType,
+    index: number
+): DBCustomType => {
+    if (customType.kind === 'enum') {
+        return {
+            id: generateId(),
+            schema: customType.schemaName,
+            name: customType.name,
+            kind: DBCustomTypeKind.enum,
+            values: [...customType.values],
+            order: index,
+            syncMetadata: {
+                sourceId: customType.sync?.sourceId ?? customType.id,
+                sourceName: customType.name,
+            },
+        };
+    }
+
+    return {
+        id: generateId(),
+        schema: customType.schemaName,
+        name: customType.name,
+        kind: DBCustomTypeKind.composite,
+        fields: customType.fields.map((field) => ({
+            field: field.name,
+            type: field.dataType,
+        })),
+        order: index,
+        syncMetadata: {
+            sourceId: customType.sync?.sourceId ?? customType.id,
+            sourceName: customType.name,
+        },
+    };
+};
+
+const diagramCustomTypeToCanonicalCustomType = (
+    customType: DBCustomType
+): CanonicalCustomType => {
+    const schemaName = customType.schema ?? defaultSchemaName;
+    if (customType.kind === DBCustomTypeKind.enum) {
+        const canonical: CanonicalEnumType = {
+            id: customType.syncMetadata?.sourceId ?? customType.id,
+            schemaName,
+            name: customType.name,
+            kind: 'enum',
+            values: [...(customType.values ?? [])],
+            sync: {
+                sourceId: customType.syncMetadata?.sourceId ?? customType.id,
+                sourceName: customType.name,
+            },
+        };
+        return canonical;
+    }
+
+    const canonical: CanonicalCompositeType = {
+        id: customType.syncMetadata?.sourceId ?? customType.id,
+        schemaName,
+        name: customType.name,
+        kind: 'composite',
+        fields: (customType.fields ?? []).map((field) => ({
+            name: field.field,
+            dataType: field.type,
+        })),
+        sync: {
+            sourceId: customType.syncMetadata?.sourceId ?? customType.id,
+            sourceName: customType.name,
+        },
+    };
+    return canonical;
+};
+
 const relationshipFromForeignKey = ({
     foreignKey,
     localTable,
@@ -43,36 +133,38 @@ const relationshipFromForeignKey = ({
     localTable: DBTable;
     tablesByKey: Map<string, DBTable>;
 }): DBRelationship | null => {
-    const targetTable = tablesByKey.get(
+    const referencedTable = tablesByKey.get(
         `${foreignKey.referencedSchemaName}.${foreignKey.referencedTableName}`
     );
     const localFieldKey = foreignKey.columnIds[0];
     const localFieldName = localFieldKey.includes('.')
         ? localFieldKey.slice(localFieldKey.lastIndexOf('.') + 1)
         : localFieldKey;
-    const targetFieldName = foreignKey.referencedColumnNames[0];
+    const referencedFieldName = foreignKey.referencedColumnNames[0];
     const localField = localTable.fields.find(
         (field) => field.name === localFieldName
     );
-    const targetField = targetTable?.fields.find(
-        (field) => field.name === targetFieldName
+    const referencedField = referencedTable?.fields.find(
+        (field) => field.name === referencedFieldName
     );
 
-    if (!targetTable || !localField || !targetField) {
+    if (!referencedTable || !localField || !referencedField) {
         return null;
     }
+
+    const isLocalColumnSetUnique = !!localField.primaryKey || !!localField.unique;
 
     return {
         id: generateId(),
         name: foreignKey.name,
-        sourceSchema: localTable.schema,
-        sourceTableId: localTable.id,
-        targetSchema: targetTable.schema,
-        targetTableId: targetTable.id,
-        sourceFieldId: localField.id,
-        targetFieldId: targetField.id,
-        sourceCardinality: 'many',
-        targetCardinality: 'one',
+        sourceSchema: referencedTable.schema,
+        sourceTableId: referencedTable.id,
+        targetSchema: localTable.schema,
+        targetTableId: localTable.id,
+        sourceFieldId: referencedField.id,
+        targetFieldId: localField.id,
+        sourceCardinality: 'one',
+        targetCardinality: isLocalColumnSetUnique ? 'one' : 'many',
         createdAt: Date.now(),
         syncMetadata: {
             sourceId: foreignKey.sync?.sourceId ?? foreignKey.id,
@@ -92,6 +184,16 @@ export const canonicalSchemaToDiagram = ({
     diagramName?: string;
     schemaSync?: Diagram['schemaSync'];
 }): Diagram => {
+    const customTypes = canonicalSchema.customTypes.map(
+        canonicalCustomTypeToDiagramCustomType
+    );
+    const customTypesById = new Map(
+        canonicalSchema.customTypes.map((customType) => [
+            customType.id,
+            customType,
+        ])
+    );
+
     const tables = canonicalSchema.tables.map<DBTable>((table) => {
         const pkColumnIds = new Set(table.primaryKey?.columnIds ?? []);
         const singleColumnUniqueIds = new Set(
@@ -102,9 +204,15 @@ export const canonicalSchemaToDiagram = ({
 
         const fields = table.columns.map((column) => {
             const columnKey = column.sync?.sourceId ?? column.id;
-            const fieldType = normalizeDataType(
-                column.dataTypeDisplay ?? column.dataType
-            );
+            const referencedCustomType = column.customTypeId
+                ? customTypesById.get(column.customTypeId)
+                : undefined;
+            const fieldType = referencedCustomType
+                ? {
+                      id: referencedCustomType.name,
+                      name: referencedCustomType.name,
+                  }
+                : normalizeDataType(column.dataTypeDisplay ?? column.dataType);
 
             return {
                 id: generateId(),
@@ -260,7 +368,7 @@ export const canonicalSchemaToDiagram = ({
         relationships,
         dependencies: [],
         areas: [],
-        customTypes: [],
+        customTypes,
         notes: [],
         schemaSync,
         createdAt: new Date(),
@@ -276,25 +384,34 @@ const renderFieldType = (column: DBTable['fields'][number]) =>
     })}`;
 
 export const diagramToCanonicalSchema = (diagram: Diagram): CanonicalSchema => {
+    const canonicalCustomTypes = (diagram.customTypes ?? []).map(
+        diagramCustomTypeToCanonicalCustomType
+    );
+    const customTypesByName = new Map(
+        canonicalCustomTypes.flatMap((customType) => [
+            [customTypeKey(customType.schemaName, customType.name), customType],
+            [customType.name.toLowerCase(), customType],
+        ])
+    );
     const schemaNames = [
         ...new Set(
-            (diagram.tables ?? [])
-                .map(
-                    (table) =>
-                        table.schema ?? defaultSchemas[DatabaseType.POSTGRESQL]
-                )
-                .filter(Boolean) as string[]
+            [
+                ...(diagram.tables ?? []).map(
+                    (table) => table.schema ?? defaultSchemaName
+                ),
+                ...canonicalCustomTypes.map((customType) => customType.schemaName),
+            ].filter(Boolean) as string[]
         ),
     ];
     const tablesById = new Map(
         (diagram.tables ?? []).map((table) => [table.id, table])
     );
-    const relationshipsBySource = new Map<string, DBRelationship[]>();
+    const relationshipsByTarget = new Map<string, DBRelationship[]>();
     for (const relationship of diagram.relationships ?? []) {
         const current =
-            relationshipsBySource.get(relationship.sourceTableId) ?? [];
+            relationshipsByTarget.get(relationship.targetTableId) ?? [];
         current.push(relationship);
-        relationshipsBySource.set(relationship.sourceTableId, current);
+        relationshipsByTarget.set(relationship.targetTableId, current);
     }
 
     const tables = (diagram.tables ?? []).map<CanonicalTable>((table) => {
@@ -302,12 +419,32 @@ export const diagramToCanonicalSchema = (diagram: Diagram): CanonicalSchema => {
             table.fields.map((field) => [field.id, field.name])
         );
         const columns: CanonicalColumn[] = table.fields.map((field) => ({
+            ...(function () {
+                const schemaName = table.schema ?? defaultSchemaName;
+                const qualifiedTypeName = customTypeKey(
+                    schemaName,
+                    field.type.name
+                );
+                const customType =
+                    customTypesByName.get(qualifiedTypeName) ??
+                    customTypesByName.get(
+                        normalizeTypeReference(field.type.name).toLowerCase()
+                    );
+
+                return {
+                    customTypeId: customType?.id ?? null,
+                    dataType: customType
+                        ? customType.name
+                        : renderFieldType(field),
+                    dataTypeDisplay: customType
+                        ? customType.name
+                        : renderFieldType(field),
+                };
+            })(),
             id:
                 field.syncMetadata?.sourceId ??
                 `${table.schema ?? 'public'}.${table.name}.${field.name}`,
             name: field.name,
-            dataType: renderFieldType(field),
-            dataTypeDisplay: renderFieldType(field),
             nullable: field.nullable,
             defaultValue: field.default ?? null,
             isPrimaryKey: field.primaryKey,
@@ -390,17 +527,19 @@ export const diagramToCanonicalSchema = (diagram: Diagram): CanonicalSchema => {
                 },
             }));
 
-        const foreignKeys = (relationshipsBySource.get(table.id) ?? []).flatMap(
+        const foreignKeys = (relationshipsByTarget.get(table.id) ?? []).flatMap(
             (relationship) => {
-                const targetTable = tablesById.get(relationship.targetTableId);
-                const sourceField = table.fields.find(
-                    (field) => field.id === relationship.sourceFieldId
+                const referencedTable = tablesById.get(
+                    relationship.sourceTableId
                 );
-                const targetField = targetTable?.fields.find(
+                const localField = table.fields.find(
                     (field) => field.id === relationship.targetFieldId
                 );
+                const referencedField = referencedTable?.fields.find(
+                    (field) => field.id === relationship.sourceFieldId
+                );
 
-                if (!targetTable || !sourceField || !targetField) {
+                if (!referencedTable || !localField || !referencedField) {
                     return [];
                 }
 
@@ -411,17 +550,17 @@ export const diagramToCanonicalSchema = (diagram: Diagram): CanonicalSchema => {
                             `${table.schema ?? 'public'}.${table.name}.${relationship.name}`,
                         name:
                             relationship.name ||
-                            `${table.name}_${sourceField.name}_fkey`,
+                            `${table.name}_${localField.name}_fkey`,
                         columnIds: [
-                            sourceField.syncMetadata?.sourceId ??
-                                `${table.schema ?? 'public'}.${table.name}.${sourceField.name}`,
+                            localField.syncMetadata?.sourceId ??
+                                `${table.schema ?? 'public'}.${table.name}.${localField.name}`,
                         ],
                         referencedSchemaName:
-                            targetTable.schema ??
+                            referencedTable.schema ??
                             defaultSchemas[DatabaseType.POSTGRESQL] ??
                             'public',
-                        referencedTableName: targetTable.name,
-                        referencedColumnNames: [targetField.name],
+                        referencedTableName: referencedTable.name,
+                        referencedColumnNames: [referencedField.name],
                         sync: {
                             sourceId: relationship.syncMetadata?.sourceId,
                             sourceName:
@@ -480,9 +619,10 @@ export const diagramToCanonicalSchema = (diagram: Diagram): CanonicalSchema => {
     const canonical: CanonicalSchema = {
         engine: 'postgresql',
         databaseName: diagram.name,
-        defaultSchemaName: defaultSchemas[DatabaseType.POSTGRESQL] ?? 'public',
+        defaultSchemaName: defaultSchemaName,
         schemaNames: schemaNames.length > 0 ? schemaNames : ['public'],
         tables,
+        customTypes: canonicalCustomTypes,
     };
 
     return canonical;

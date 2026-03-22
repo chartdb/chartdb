@@ -1,21 +1,71 @@
-import type { CanonicalColumn, CanonicalTable, SchemaChange } from './types.js';
+import type {
+    CanonicalColumn,
+    CanonicalSchema,
+    CanonicalTable,
+    SchemaChange,
+} from './types.js';
 
 const quoteIdent = (value: string) => `"${value.replace(/"/g, '""')}"`;
+const quoteLiteral = (value: string) => `'${value.replace(/'/g, "''")}'`;
 const columnNameFromKey = (value: string) =>
     value.includes('.') ? value.slice(value.lastIndexOf('.') + 1) : value;
 const qualify = (schemaName: string, tableName: string) =>
     `${quoteIdent(schemaName)}.${quoteIdent(tableName)}`;
+const normalizeTypeReference = (value: string) =>
+    value.replace(/"/g, '').replace(/\[\]$/, '').trim();
 
-const renderType = (column: CanonicalColumn) => {
-    const base = column.dataTypeDisplay ?? column.dataType;
+const buildCustomTypeMap = (schema?: CanonicalSchema) =>
+    new Map(
+        (schema?.customTypes ?? []).map((customType) => [customType.id, customType])
+    );
+
+const renderTypeReference = ({
+    typeName,
+    customTypeId,
+    customTypesById,
+}: {
+    typeName: string;
+    customTypeId?: string | null;
+    customTypesById: Map<string, CanonicalSchema['customTypes'][number]>;
+}) => {
+    const customType = customTypeId ? customTypesById.get(customTypeId) : null;
+    if (customType) {
+        return qualify(customType.schemaName, customType.name);
+    }
+
+    const normalized = normalizeTypeReference(typeName);
+    if (
+        normalized.includes('.') &&
+        !normalized.includes(' ') &&
+        !normalized.includes('(')
+    ) {
+        const [schemaName, localName] = normalized.split('.');
+        return qualify(schemaName, localName);
+    }
+
+    return typeName;
+};
+
+const renderType = (
+    column: CanonicalColumn,
+    customTypesById: Map<string, CanonicalSchema['customTypes'][number]>
+) => {
+    const base = renderTypeReference({
+        typeName: column.dataTypeDisplay ?? column.dataType,
+        customTypeId: column.customTypeId,
+        customTypesById,
+    });
     if (column.isArray) {
         return `${base}[]`;
     }
     return base;
 };
 
-const renderColumnDefinition = (column: CanonicalColumn) => {
-    const parts = [`${quoteIdent(column.name)} ${renderType(column)}`];
+const renderColumnDefinition = (
+    column: CanonicalColumn,
+    customTypesById: Map<string, CanonicalSchema['customTypes'][number]>
+) => {
+    const parts = [`${quoteIdent(column.name)} ${renderType(column, customTypesById)}`];
     if (!column.nullable) {
         parts.push('NOT NULL');
     }
@@ -30,8 +80,13 @@ const renderColumnDefinition = (column: CanonicalColumn) => {
     return parts.join(' ');
 };
 
-const renderCreateTable = (table: CanonicalTable) => {
-    const lines = table.columns.map(renderColumnDefinition);
+const renderCreateTable = (
+    table: CanonicalTable,
+    customTypesById: Map<string, CanonicalSchema['customTypes'][number]>
+) => {
+    const lines = table.columns.map((column) =>
+        renderColumnDefinition(column, customTypesById)
+    );
 
     if (table.primaryKey?.columnIds.length) {
         const columnNames = table.primaryKey.columnIds
@@ -65,19 +120,32 @@ const renderCreateTable = (table: CanonicalTable) => {
 };
 
 const alterColumnType = (
-    change: Extract<SchemaChange, { kind: 'alter_column_type' }>
+    change: Extract<SchemaChange, { kind: 'alter_column_type' }>,
+    customTypesById: Map<string, CanonicalSchema['customTypes'][number]>
 ) =>
-    `ALTER TABLE ${qualify(change.schemaName, change.tableName)} ALTER COLUMN ${quoteIdent(change.columnName)} TYPE ${change.toType} USING ${quoteIdent(change.columnName)}::${change.toType};`;
+    `ALTER TABLE ${qualify(change.schemaName, change.tableName)} ALTER COLUMN ${quoteIdent(change.columnName)} TYPE ${renderTypeReference({
+        typeName: change.toType,
+        customTypeId: change.customTypeId,
+        customTypesById,
+    })} USING ${quoteIdent(change.columnName)}::${renderTypeReference({
+        typeName: change.toType,
+        customTypeId: change.customTypeId,
+        customTypesById,
+    })};`;
 
 const orderRank = (change: SchemaChange): number => {
     switch (change.kind) {
         case 'create_schema':
             return 0;
+        case 'create_enum_type':
+            return 5;
         case 'create_table':
             return 10;
         case 'move_table':
         case 'rename_table':
             return 20;
+        case 'add_enum_value':
+            return 25;
         case 'add_column':
             return 30;
         case 'alter_column_type':
@@ -106,8 +174,12 @@ const orderRank = (change: SchemaChange): number => {
     }
 };
 
-export const generateMigrationSql = (changes: SchemaChange[]): string[] => {
+export const generateMigrationSql = (
+    changes: SchemaChange[],
+    targetSchema?: CanonicalSchema
+): string[] => {
     const sql: string[] = [];
+    const customTypesById = buildCustomTypeMap(targetSchema);
 
     for (const change of [...changes].sort(
         (left, right) => orderRank(left) - orderRank(right)
@@ -118,8 +190,18 @@ export const generateMigrationSql = (changes: SchemaChange[]): string[] => {
                     `CREATE SCHEMA IF NOT EXISTS ${quoteIdent(change.schemaName)};`
                 );
                 break;
+            case 'create_enum_type':
+                sql.push(
+                    `CREATE TYPE ${qualify(
+                        change.customType.schemaName,
+                        change.customType.name
+                    )} AS ENUM (${change.customType.values
+                        .map(quoteLiteral)
+                        .join(', ')});`
+                );
+                break;
             case 'create_table':
-                sql.push(renderCreateTable(change.table));
+                sql.push(renderCreateTable(change.table, customTypesById));
                 break;
             case 'move_table':
                 sql.push(
@@ -131,9 +213,14 @@ export const generateMigrationSql = (changes: SchemaChange[]): string[] => {
                     `ALTER TABLE ${qualify(change.schemaName, change.fromName)} RENAME TO ${quoteIdent(change.toName)};`
                 );
                 break;
+            case 'add_enum_value':
+                sql.push(
+                    `ALTER TYPE ${qualify(change.schemaName, change.typeName)} ADD VALUE IF NOT EXISTS ${quoteLiteral(change.value)};`
+                );
+                break;
             case 'add_column':
                 sql.push(
-                    `ALTER TABLE ${qualify(change.schemaName, change.tableName)} ADD COLUMN ${renderColumnDefinition(change.column)};`
+                    `ALTER TABLE ${qualify(change.schemaName, change.tableName)} ADD COLUMN ${renderColumnDefinition(change.column, customTypesById)};`
                 );
                 break;
             case 'drop_column':
@@ -147,7 +234,7 @@ export const generateMigrationSql = (changes: SchemaChange[]): string[] => {
                 );
                 break;
             case 'alter_column_type':
-                sql.push(alterColumnType(change));
+                sql.push(alterColumnType(change, customTypesById));
                 break;
             case 'alter_column_nullability':
                 sql.push(

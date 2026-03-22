@@ -23,9 +23,11 @@ export interface SidePanelProps {}
 
 export const SidePanel: React.FC<SidePanelProps> = () => {
     const { t } = useTranslation();
-    const { databaseType } = useChartDB();
+    const { databaseType, customTypes } = useChartDB();
     const { selectSidebarSection, selectedSidebarSection } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
+    const canShowCustomTypes =
+        supportsCustomTypes(databaseType) || customTypes.length > 0;
 
     return (
         <aside className="flex h-full flex-col overflow-hidden">
@@ -57,7 +59,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                 <SelectItem value="visuals">
                                     {t('side_panel.visuals_section.visuals')}
                                 </SelectItem>
-                                {supportsCustomTypes(databaseType) ? (
+                                {canShowCustomTypes ? (
                                     <SelectItem value="customTypes">
                                         {t(
                                             'side_panel.custom_types_section.custom_types'

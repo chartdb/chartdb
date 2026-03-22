@@ -3,6 +3,8 @@ import {
     canonicalPrimaryKeySchema,
     type CanonicalCheckConstraint,
     type CanonicalColumn,
+    type CanonicalCustomType,
+    type CanonicalEnumType,
     type CanonicalForeignKey,
     type CanonicalIndex,
     type CanonicalSchema,
@@ -95,6 +97,66 @@ const normalizeTypeName = (value: string) =>
 
 const isBuiltinPostgresType = (value: string) =>
     BUILTIN_POSTGRES_TYPES.has(normalizeTypeName(value));
+
+const getCustomTypeMatchKey = (customType: CanonicalCustomType): string =>
+    customType.sync?.sourceId?.toLowerCase() ??
+    `${customType.schemaName}.${customType.name}`.toLowerCase();
+
+const findReferencedCustomType = ({
+    customTypeId,
+    typeName,
+    customTypes,
+    contextSchema,
+    defaultSchema,
+}: {
+    customTypeId?: string | null;
+    typeName: string;
+    customTypes: CanonicalCustomType[];
+    contextSchema: string;
+    defaultSchema: string;
+}) => {
+    if (customTypeId) {
+        const byId = customTypes.find(
+            (customType) =>
+                customType.id === customTypeId ||
+                customType.sync?.sourceId === customTypeId
+        );
+        if (byId) {
+            return byId;
+        }
+    }
+
+    const normalized = normalizeTypeName(typeName);
+    if (!normalized) {
+        return undefined;
+    }
+
+    if (normalized.includes('.')) {
+        return customTypes.find(
+            (customType) => getCustomTypeMatchKey(customType) === normalized
+        );
+    }
+
+    return (
+        customTypes.find(
+            (customType) =>
+                getCustomTypeMatchKey(customType) ===
+                `${contextSchema}.${normalized}`.toLowerCase()
+        ) ??
+        customTypes.find(
+            (customType) =>
+                getCustomTypeMatchKey(customType) ===
+                `${defaultSchema}.${normalized}`.toLowerCase()
+        ) ??
+        customTypes.find(
+            (customType) => customType.name.toLowerCase() === normalized
+        )
+    );
+};
+
+const valuesEqual = (left: string[], right: string[]) =>
+    left.length === right.length &&
+    left.every((value, index) => value === right[index]);
 
 const mapBy = <T>(items: T[], keyFn: (item: T) => string): Map<string, T> =>
     items.reduce((map, item) => {
@@ -233,6 +295,73 @@ const diffNamedCollection = <
     return changes;
 };
 
+const resolveColumnName = (
+    table: CanonicalTable,
+    columnKeyOrName: string
+): string | null => {
+    const normalized = normalizeName(columnKeyOrName);
+    const directName = columnKeyOrName.includes('.')
+        ? columnKeyOrName.slice(columnKeyOrName.lastIndexOf('.') + 1)
+        : columnKeyOrName;
+
+    const directMatch = table.columns.find(
+        (column) => normalizeName(column.name) === normalizeName(directName)
+    );
+    if (directMatch) {
+        return directMatch.name;
+    }
+
+    const byReference = table.columns.find(
+        (column) =>
+            normalizeName(column.id) === normalized ||
+            normalizeName(column.sync?.sourceId ?? '') === normalized
+    );
+
+    return byReference?.name ?? null;
+};
+
+const resolveColumnNames = (
+    table: CanonicalTable,
+    columnKeysOrNames: string[]
+): string[] | null => {
+    const resolved = columnKeysOrNames.map((value) =>
+        resolveColumnName(table, value)
+    );
+
+    return resolved.every(Boolean) ? (resolved as string[]) : null;
+};
+
+const hasMatchingUniqueReference = (
+    table: CanonicalTable,
+    referencedColumnNames: string[]
+): boolean => {
+    const normalizedReference = referencedColumnNames.map(normalizeName);
+    const primaryKeyColumns = table.primaryKey
+        ? resolveColumnNames(table, table.primaryKey.columnIds)
+        : null;
+
+    if (
+        primaryKeyColumns &&
+        valuesEqual(
+            primaryKeyColumns.map(normalizeName),
+            normalizedReference
+        )
+    ) {
+        return true;
+    }
+
+    return table.uniqueConstraints.some((constraint) => {
+        const constraintColumns = resolveColumnNames(table, constraint.columnIds);
+        return (
+            !!constraintColumns &&
+            valuesEqual(
+                constraintColumns.map(normalizeName),
+                normalizedReference
+            )
+        );
+    });
+};
+
 const summarize = (
     changes: SchemaChange[],
     warnings: RiskWarning[]
@@ -281,13 +410,20 @@ export const createChangePlan = ({
 }): ChangePlan => {
     const changes: SchemaChange[] = [];
     const warnings = [...additionalWarnings];
+    const allKnownCustomTypes = [...baseline.customTypes, ...target.customTypes];
     const baselineKnownTypes = new Set(
-        baseline.tables.flatMap((table) =>
-            table.columns.flatMap((column) => [
-                normalizeTypeName(column.dataType),
-                normalizeTypeName(column.dataType).split('.').at(-1) ?? '',
-            ])
-        )
+        [
+            ...baseline.tables.flatMap((table) =>
+                table.columns.flatMap((column) => [
+                    normalizeTypeName(column.dataType),
+                    normalizeTypeName(column.dataType).split('.').at(-1) ?? '',
+                ])
+            ),
+            ...baseline.customTypes.flatMap((customType) => [
+                getCustomTypeMatchKey(customType),
+                customType.name.toLowerCase(),
+            ]),
+        ]
     );
 
     const baselineSchemas = new Set(baseline.schemaNames);
@@ -299,6 +435,122 @@ export const createChangePlan = ({
                 schemaName,
             });
         }
+    }
+
+    const baselineCustomTypes = mapBy(
+        baseline.customTypes,
+        getCustomTypeMatchKey
+    );
+    const targetCustomTypes = mapBy(target.customTypes, getCustomTypeMatchKey);
+
+    for (const [key, baselineCustomType] of baselineCustomTypes) {
+        const targetCustomType = targetCustomTypes.get(key);
+        if (!targetCustomType) {
+            warnings.push({
+                code: 'drop_custom_type_not_supported',
+                level: 'blocked',
+                title: 'Dropping custom PostgreSQL types is not supported',
+                message: `Custom type ${baselineCustomType.schemaName}.${baselineCustomType.name} exists in the baseline schema but is missing from the target schema. Automatic DROP TYPE is not supported in v1.`,
+                changeIds: [],
+            });
+            continue;
+        }
+
+        if (baselineCustomType.kind !== targetCustomType.kind) {
+            warnings.push({
+                code: 'custom_type_kind_change_not_supported',
+                level: 'blocked',
+                title: 'Changing custom type kind is not supported',
+                message: `Custom type ${baselineCustomType.schemaName}.${baselineCustomType.name} changed kind from ${baselineCustomType.kind} to ${targetCustomType.kind}, which requires a manual migration.`,
+                changeIds: [],
+            });
+            continue;
+        }
+
+        if (
+            baselineCustomType.kind === 'enum' &&
+            targetCustomType.kind === 'enum' &&
+            !valuesEqual(baselineCustomType.values, targetCustomType.values)
+        ) {
+            const baselinePrefixMatches = baselineCustomType.values.every(
+                (value, index) => targetCustomType.values[index] === value
+            );
+
+            if (
+                baselinePrefixMatches &&
+                targetCustomType.values.length > baselineCustomType.values.length
+            ) {
+                for (const value of targetCustomType.values.slice(
+                    baselineCustomType.values.length
+                )) {
+                    changes.push({
+                        id: `add-enum-value:${targetCustomType.id}:${value}`,
+                        kind: 'add_enum_value',
+                        typeId: targetCustomType.id,
+                        schemaName: targetCustomType.schemaName,
+                        typeName: targetCustomType.name,
+                        value,
+                    });
+                }
+
+                warnings.push({
+                    code: 'enum_value_append',
+                    level: 'warning',
+                    title: 'Enum label addition',
+                    message: `Enum ${targetCustomType.schemaName}.${targetCustomType.name} adds new value(s). PostgreSQL may execute enum label additions before the main transaction depending on server capabilities.`,
+                    changeIds: changes
+                        .filter(
+                            (
+                                change
+                            ): change is Extract<
+                                SchemaChange,
+                                { kind: 'add_enum_value' }
+                            > =>
+                                change.kind === 'add_enum_value' &&
+                                change.typeId === targetCustomType.id
+                        )
+                        .map((change) => change.id),
+                });
+            } else {
+                warnings.push({
+                    code: 'unsupported_enum_modification',
+                    level: 'blocked',
+                    title: 'Unsupported enum modification',
+                    message: `Enum ${targetCustomType.schemaName}.${targetCustomType.name} changes existing labels by reordering or removing values. v1 supports only additive enum changes at the end of the label list.`,
+                    changeIds: [],
+                });
+            }
+        }
+    }
+
+    for (const [key, targetCustomType] of targetCustomTypes) {
+        if (baselineCustomTypes.has(key)) {
+            continue;
+        }
+
+        if (targetCustomType.kind === 'enum') {
+            changes.push({
+                id: `create-enum-type:${targetCustomType.id}`,
+                kind: 'create_enum_type',
+                customType: targetCustomType,
+            });
+            warnings.push({
+                code: 'create_enum_type',
+                level: 'safe',
+                title: 'Enum type will be created automatically',
+                message: `Detected new PostgreSQL enum type ${targetCustomType.schemaName}.${targetCustomType.name}. It will be created before dependent schema changes.`,
+                changeIds: [`create-enum-type:${targetCustomType.id}`],
+            });
+            continue;
+        }
+
+        warnings.push({
+            code: 'unsupported_custom_type_kind',
+            level: 'blocked',
+            title: 'Unsupported custom PostgreSQL type',
+            message: `Custom type ${targetCustomType.schemaName}.${targetCustomType.name} is a ${targetCustomType.kind} type. v1 currently automates PostgreSQL enum types only.`,
+            changeIds: [],
+        });
     }
 
     const baselineTables = mapBy(baseline.tables, getTableMatchKey);
@@ -378,6 +630,7 @@ export const createChangePlan = ({
                     columnName: targetColumn.name,
                     fromType: baselineColumn.dataType,
                     toType: targetColumn.dataType,
+                    customTypeId: targetColumn.customTypeId ?? null,
                 });
             }
 
@@ -589,10 +842,35 @@ export const createChangePlan = ({
 
     const ensureSupportedType = (
         typeName: string,
+        customTypeId: string | null | undefined,
+        contextSchema: string,
         changeId: string,
         contextLabel: string
     ) => {
         const normalized = normalizeTypeName(typeName);
+        const referencedCustomType = findReferencedCustomType({
+            customTypeId,
+            typeName,
+            customTypes: allKnownCustomTypes,
+            contextSchema,
+            defaultSchema: target.defaultSchemaName,
+        });
+
+        if (referencedCustomType?.kind === 'enum') {
+            return;
+        }
+
+        if (referencedCustomType?.kind) {
+            analyzedWarnings.push({
+                code: 'unsupported_custom_type_kind',
+                level: 'blocked',
+                title: 'Unsupported custom PostgreSQL type',
+                message: `${contextLabel} uses custom type "${referencedCustomType.schemaName}.${referencedCustomType.name}", but v1 only automates PostgreSQL enum types.`,
+                changeIds: [changeId],
+            });
+            return;
+        }
+
         const unqualified = normalized.split('.').at(-1) ?? normalized;
         if (
             !normalized ||
@@ -607,7 +885,7 @@ export const createChangePlan = ({
             code: 'unsupported_custom_type',
             level: 'blocked',
             title: 'Unsupported custom PostgreSQL type',
-            message: `${contextLabel} uses type "${typeName}", but v1 does not create custom types automatically during apply.`,
+            message: `Type "${typeName}" is referenced by ${contextLabel}, but no enum definition is available in the target schema or imported baseline.`,
             changeIds: [changeId],
         });
     };
@@ -618,6 +896,8 @@ export const createChangePlan = ({
                 for (const column of change.table.columns) {
                     ensureSupportedType(
                         column.dataType,
+                        column.customTypeId,
+                        change.table.schemaName,
                         change.id,
                         `${change.table.schemaName}.${change.table.name}.${column.name}`
                     );
@@ -626,6 +906,8 @@ export const createChangePlan = ({
             case 'add_column':
                 ensureSupportedType(
                     change.column.dataType,
+                    change.column.customTypeId,
+                    change.schemaName,
                     change.id,
                     `${change.schemaName}.${change.tableName}.${change.column.name}`
                 );
@@ -633,15 +915,57 @@ export const createChangePlan = ({
             case 'alter_column_type':
                 ensureSupportedType(
                     change.toType,
+                    change.customTypeId,
+                    change.schemaName,
                     change.id,
                     `${change.schemaName}.${change.tableName}.${change.columnName}`
                 );
                 break;
+            case 'add_foreign_key': {
+                const referencedTable = target.tables.find(
+                    (table) =>
+                        normalizeName(table.schemaName) ===
+                            normalizeName(
+                                change.foreignKey.referencedSchemaName
+                            ) &&
+                        normalizeName(table.name) ===
+                            normalizeName(
+                                change.foreignKey.referencedTableName
+                            )
+                );
+
+                if (!referencedTable) {
+                    analyzedWarnings.push({
+                        code: 'foreign_key_reference_table_missing',
+                        level: 'blocked',
+                        title: 'Foreign key target table not found',
+                        message: `Foreign key ${change.foreignKey.name} references ${change.foreignKey.referencedSchemaName}.${change.foreignKey.referencedTableName}, but that table does not exist in the target schema.`,
+                        changeIds: [change.id],
+                    });
+                    break;
+                }
+
+                if (
+                    !hasMatchingUniqueReference(
+                        referencedTable,
+                        change.foreignKey.referencedColumnNames
+                    )
+                ) {
+                    analyzedWarnings.push({
+                        code: 'foreign_key_reference_not_unique',
+                        level: 'blocked',
+                        title: 'Foreign key target must be unique',
+                        message: `Foreign key ${change.foreignKey.name} references ${change.foreignKey.referencedSchemaName}.${change.foreignKey.referencedTableName}(${change.foreignKey.referencedColumnNames.join(', ')}), but PostgreSQL requires the referenced column set to be a PRIMARY KEY or UNIQUE constraint.`,
+                        changeIds: [change.id],
+                    });
+                }
+                break;
+            }
         }
     }
 
     const summary = summarize(changes, analyzedWarnings);
-    const sqlStatements = generateMigrationSql(changes);
+    const sqlStatements = generateMigrationSql(changes, target);
     const requiresConfirmation = analyzedWarnings.some(
         (warning) => warning.level === 'destructive'
     );

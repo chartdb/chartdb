@@ -18,6 +18,8 @@ import { AppError } from '../utils/app-error.js';
 const quoteIdent = (value: string) => `"${value.replace(/"/g, '""')}"`;
 const qualify = (schemaName: string, tableName: string) =>
     `${quoteIdent(schemaName)}.${quoteIdent(tableName)}`;
+const isNonTransactionalStatement = (statement: string) =>
+    /^\s*ALTER\s+TYPE\b[\s\S]*\bADD\s+VALUE\b/i.test(statement);
 
 const requiresDestructiveApproval = (warnings: RiskWarning[]) =>
     warnings.some((warning) => warning.level === 'destructive');
@@ -184,19 +186,34 @@ export class ApplyService {
             client = await this.makeClient(secret);
             await this.validatePlanPreflight(client, plan.changes, logs);
 
-            await client.query('BEGIN');
-            transactionStarted = true;
-            logs.push('Transaction started');
+            const preTransactionStatements = plan.sqlStatements.filter(
+                isNonTransactionalStatement
+            );
+            const transactionalStatements = plan.sqlStatements.filter(
+                (statement) => !isNonTransactionalStatement(statement)
+            );
 
-            for (const statement of plan.sqlStatements) {
-                logs.push(`Executing: ${statement}`);
+            for (const statement of preTransactionStatements) {
+                logs.push(`Executing before transaction: ${statement}`);
                 await client.query(statement);
                 executedStatements.push(statement);
             }
 
-            await client.query('COMMIT');
-            transactionStarted = false;
-            logs.push('Transaction committed');
+            if (transactionalStatements.length > 0) {
+                await client.query('BEGIN');
+                transactionStarted = true;
+                logs.push('Transaction started');
+
+                for (const statement of transactionalStatements) {
+                    logs.push(`Executing: ${statement}`);
+                    await client.query(statement);
+                    executedStatements.push(statement);
+                }
+
+                await client.query('COMMIT');
+                transactionStarted = false;
+                logs.push('Transaction committed');
+            }
 
             const postApplySchema = await introspectPostgresSchema({
                 secret,

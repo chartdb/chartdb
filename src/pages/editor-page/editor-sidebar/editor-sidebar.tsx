@@ -51,8 +51,10 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { effectiveTheme } = useTheme();
-    const { databaseType } = useChartDB();
+    const { databaseType, customTypes } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
+    const canShowCustomTypes =
+        supportsCustomTypes(databaseType) || customTypes.length > 0;
 
     const diagramItems: SidebarItem[] = useMemo(
         () => [
@@ -105,7 +107,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'refs',
             },
-            ...(supportsCustomTypes(databaseType)
+            ...(canShowCustomTypes
                 ? [
                       {
                           title: t('editor_sidebar.custom_types'),
@@ -134,7 +136,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             selectedSidebarSection,
             t,
             showSidePanel,
-            databaseType,
+            canShowCustomTypes,
             selectVisualsTab,
         ]
     );
