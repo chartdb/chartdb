@@ -26,6 +26,8 @@ import { useDiagramLoader } from './use-diagram-loader';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
+import { SchemaSyncProvider } from '@/features/schema-sync/context/schema-sync-context';
+import { SchemaSyncDialog } from '@/features/schema-sync/dialogs/schema-sync-dialog';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -72,7 +74,7 @@ const EditorPageComponent: React.FC = () => {
     ]);
 
     return (
-        <>
+        <SchemaSyncProvider>
             <Helmet>
                 <title>
                     {diagramName
@@ -106,8 +108,9 @@ const EditorPageComponent: React.FC = () => {
                     )}
                 </Suspense>
             </section>
+            <SchemaSyncDialog />
             <Toaster />
-        </>
+        </SchemaSyncProvider>
     );
 };
 

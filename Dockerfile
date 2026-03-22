@@ -3,12 +3,15 @@ FROM node:24-alpine AS builder
 ARG VITE_OPENAI_API_KEY
 ARG VITE_OPENAI_API_ENDPOINT
 ARG VITE_LLM_MODEL_NAME
+ARG VITE_API_BASE_URL
 ARG VITE_HIDE_CHARTDB_CLOUD
 ARG VITE_DISABLE_ANALYTICS
 
 WORKDIR /usr/src/app
 
 COPY package.json package-lock.json ./
+COPY packages/schema-sync-core/package.json ./packages/schema-sync-core/package.json
+COPY server/package.json ./server/package.json
 
 RUN npm ci
 
@@ -17,10 +20,11 @@ COPY . .
 RUN echo "VITE_OPENAI_API_KEY=${VITE_OPENAI_API_KEY}" > .env && \
     echo "VITE_OPENAI_API_ENDPOINT=${VITE_OPENAI_API_ENDPOINT}" >> .env && \
     echo "VITE_LLM_MODEL_NAME=${VITE_LLM_MODEL_NAME}" >> .env && \
+    echo "VITE_API_BASE_URL=${VITE_API_BASE_URL}" >> .env && \
     echo "VITE_HIDE_CHARTDB_CLOUD=${VITE_HIDE_CHARTDB_CLOUD}" >> .env && \
     echo "VITE_DISABLE_ANALYTICS=${VITE_DISABLE_ANALYTICS}" >> .env
 
-RUN npm run build
+RUN npm run build:web
 
 FROM nginx:stable-alpine AS production
 

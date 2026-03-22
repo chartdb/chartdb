@@ -6,6 +6,7 @@ import { Menu } from './menu/menu';
 import { Button } from '@/components/button/button';
 import { useSidebar } from '@/components/sidebar/use-sidebar';
 import { MenuIcon } from 'lucide-react';
+import { SchemaSyncToolbarButton } from '@/features/schema-sync/components/schema-sync-toolbar-button';
 
 export interface TopNavbarMobileProps {}
 
@@ -49,6 +50,7 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <SchemaSyncToolbarButton />
                         {renderStars()}
                         <LanguageNav />
                     </div>
