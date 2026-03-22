@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: chartdb
+      POSTGRES_USER: chartdb
+      POSTGRES_PASSWORD: chartdb
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U chartdb -d chartdb']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    environment:
+      CHARTDB_API_PORT: 4010
+      CHARTDB_API_HOST: 0.0.0.0
+      CHARTDB_SECRET_KEY: change-me-before-production
+      CHARTDB_DATA_DIR: /app/data
+      CHARTDB_CORS_ORIGIN: '*'
+    ports:
+      - '4010:4010'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - chartdb-api-data:/app/data
+    healthcheck:
+      test: ['CMD-SHELL', 'node -e "fetch(`http://127.0.0.1:4010/api/health`).then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ''
+    environment:
+      API_UPSTREAM: api:4010
+      API_BASE_URL: ''
+    ports:
+      - '8080:80'
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  chartdb-api-data:

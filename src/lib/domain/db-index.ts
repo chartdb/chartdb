@@ -3,6 +3,7 @@ import { generateId } from '../utils';
 import { DatabaseType } from './database-type';
 import type { DBTable } from './db-table';
 import type { DBField } from './db-field';
+import { syncSourceRefSchema, type SyncSourceRef } from './schema-sync';
 
 export const INDEX_TYPES = [
     'btree',
@@ -31,6 +32,7 @@ export interface DBIndex {
     type?: IndexType | null;
     isPrimaryKey?: boolean | null;
     comments?: string | null;
+    syncMetadata?: SyncSourceRef;
 }
 
 export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
@@ -42,6 +44,7 @@ export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
     type: z.enum(INDEX_TYPES).optional(),
     isPrimaryKey: z.boolean().or(z.null()).optional(),
     comments: z.string().or(z.null()).optional(),
+    syncMetadata: syncSourceRefSchema.optional(),
 });
 
 export const databaseIndexTypes: Record<DatabaseType, IndexType[] | undefined> =

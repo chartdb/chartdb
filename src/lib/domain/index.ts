@@ -13,3 +13,4 @@ export * from './db-schema';
 export * from './db-table';
 export * from './diagram';
 export * from './note';
+export * from './schema-sync';

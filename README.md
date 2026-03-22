@@ -9,8 +9,8 @@
 </h1>
 
 <p align="center">
-  <b>Open-source database diagrams editor</b> <br />
-  <b>No installations • No Database password required.</b> <br />
+  <b>Open-source database diagrams editor and schema synchronization platform</b> <br />
+  <b>Visual editing • Live PostgreSQL import • Diff, SQL preview, and safe apply.</b> <br />
 </p>
 
 <h3 align="center">
@@ -44,10 +44,25 @@
 
 ### 🎉 ChartDB
 
-ChartDB is a powerful, web-based database diagramming editor.
-Instantly visualize your database schema with a single **"Smart Query."** Customize diagrams, export SQL scripts, and access all features—no account required. Experience seamless database design here.
+ChartDB is a powerful, web-based database diagramming editor that now also includes a production-minded schema synchronization workflow for PostgreSQL.
+You can import a live schema from a real database, edit it visually, preview a structured migration plan, inspect generated SQL, and apply approved changes through a server-side safety layer.
 
-**What it does**:
+**What it does now**:
+
+- **Direct PostgreSQL Connectivity**
+  Store database connections server-side, test them safely, and keep passwords out of the browser after submission.
+
+- **Live Schema Import**
+  Import the live PostgreSQL schema into the existing visual editor and keep a persisted baseline snapshot for later diff/apply.
+
+- **Visual Editing + Change Preview**
+  Reuse the existing ChartDB editor to modify tables, columns, constraints, and indexes, then preview a canonical schema diff with grouped warnings and SQL.
+
+- **Migration SQL Generation**
+  Generate PostgreSQL migration SQL from the baseline-vs-target diff in dependency-aware order.
+
+- **Safe Apply Workflow**
+  Apply approved change plans back to PostgreSQL from the backend with drift detection, preflight checks, destructive confirmations, audit records, and post-apply refresh support.
 
 - **Instant Schema Import**
   Run a single query to instantly retrieve your database schema as JSON. This makes it incredibly fast to visualize your database schema, whether for documentation, team discussions, or simply understanding your data better.
@@ -71,16 +86,63 @@ ChartDB is currently in Public Beta. Star and watch this repository to get notif
 - ✅ CockroachDB
 - ✅ ClickHouse
 
+### Live Schema Sync MVP
+
+The first production-oriented schema sync release supports:
+
+- PostgreSQL connection management and testing
+- Live schema import into the existing editor
+- Canonical baseline/target schema diffing
+- Generated migration SQL preview
+- Safe apply with destructive confirmations
+- Audit trail, execution logs, and drift detection
+
+Planned next adapters:
+
+- MySQL
+- MariaDB
+- SQL Server
+
 ## Getting Started
 
-Use the [cloud version](https://app.chartdb.io?ref=github_readme_2) or deploy locally:
+Use the [cloud version](https://app.chartdb.io?ref=github_readme_2) or deploy locally.
 
-### How To Use
+### Local Development
+
+Install everything and run the frontend and backend separately:
 
 ```bash
 npm install
-npm run dev
+npm run dev:server
+npm run dev:web
 ```
+
+The Vite development server proxies `/api` to `http://localhost:4010` by default.
+
+### Full Local Stack With Docker
+
+```bash
+docker compose up --build
+```
+
+This starts:
+
+- `web` on `http://localhost:8080`
+- `api` on `http://localhost:4010`
+- `postgres` on `localhost:5432`
+
+### Environment Variables
+
+See [`.env.example`](./.env.example) for the full list.
+
+Key variables:
+
+- `VITE_API_BASE_URL`: optional frontend API base override
+- `CHARTDB_API_HOST`: backend bind host
+- `CHARTDB_API_PORT`: backend port
+- `CHARTDB_SECRET_KEY`: encryption key for stored connection secrets
+- `CHARTDB_DATA_DIR`: backend metadata/audit SQLite location
+- `CHARTDB_CORS_ORIGIN`: backend CORS policy
 
 ### Build
 
@@ -89,63 +151,71 @@ npm install
 npm run build
 ```
 
-Or like this if you want to have AI capabilities:
+### Run Only The Backend
 
 ```bash
-npm install
-VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
+npm run dev -w @chartdb/server
 ```
 
-### Run the Docker Container
+### Run Only The Frontend
 
 ```bash
-docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
+npm run dev:web
 ```
 
-#### Build and Run locally
+## Schema Sync Workflow
 
-```bash
-docker build -t chartdb .
-docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 chartdb
-```
+1. Open `Schema Sync` from the editor toolbar.
+2. Create or update a PostgreSQL connection.
+3. Click `Test Connection`.
+4. Use `Import Live Schema` to bring the live schema into the canvas.
+5. Modify the schema visually in ChartDB.
+6. Open `Preview Changes` to inspect:
+   - summary
+   - detailed diff
+   - generated SQL
+   - risk warnings
+7. If destructive operations are present, type the required confirmation text.
+8. Click `Apply Changes`.
+9. Review the result and then `Refresh From Database` to re-import the live state.
 
-#### Using Custom Inference Server
+## Architecture
 
-```bash
-# Build
-docker build \
-  --build-arg VITE_OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
-  --build-arg VITE_LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
-  -t chartdb .
+- `packages/schema-sync-core`
+  Shared canonical schema model, diff engine, SQL generation, risk analysis, and API contracts.
+- `server`
+  Fastify API for connection storage, PostgreSQL introspection, plan generation, apply execution, and audit/history persistence.
+- `src`
+  Existing ChartDB editor plus schema-sync UI, adapters between `Diagram` and `CanonicalSchema`, and toolbar/dialog integration.
 
-# Run
-docker run \
-  -e OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
-  -e LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
-  -p 8080:80 chartdb
-```
+See [docs/schema-sync-architecture.md](./docs/schema-sync-architecture.md) for the detailed design.
 
-> **Privacy Note:** ChartDB includes privacy-focused analytics via Fathom Analytics. You can disable this by adding `-e DISABLE_ANALYTICS=true` to the run command or `--build-arg VITE_DISABLE_ANALYTICS=true` when building.
+## Security Considerations
 
-> **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
+- Browser clients never connect directly to PostgreSQL.
+- Raw database passwords are never returned to the browser after submission.
+- Connection secrets are encrypted at rest using application-level AES-256-GCM.
+- The UI cannot execute arbitrary SQL.
+- Apply only executes server-generated plans.
+- Destructive operations require explicit confirmation text.
+- The backend re-introspects the live schema before apply and rejects drift.
+- `SET NOT NULL` changes run preflight null checks.
 
-Open your browser and navigate to `http://localhost:8080`.
+## Limitations of v1
 
-Example configuration for a local vLLM server:
+- Live connection/import/diff/apply currently targets PostgreSQL only.
+- The apply engine focuses on table/column/constraint/index operations, not every PostgreSQL object type.
+- Composite foreign keys are preserved in the canonical model, but the current visual relationship editor remains optimized for single-column relationships.
+- Automatic rollback SQL is not generated in v1; instead, pre/post snapshots and audit logs support rollback-oriented operational workflows.
 
-```bash
-VITE_OPENAI_API_ENDPOINT=http://localhost:8000/v1
-VITE_LLM_MODEL_NAME=Qwen/Qwen2.5-32B-Instruct-AWQ
-```
+## CI and Delivery
 
-## Try it on our website
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test:ci`
+- `npm run build`
 
-1. Go to [ChartDB.io](https://chartdb.io?ref=github_readme_2)
-2. Click "Go to app"
-3. Choose the database that you are using.
-4. Take the magic query and run it in your database.
-5. Copy and paste the resulting JSON set into ChartDB.
-6. Enjoy Viewing & Editing!
+The CI workflow runs these checks on pull requests.
 
 ## 💚 Community & Support
 
