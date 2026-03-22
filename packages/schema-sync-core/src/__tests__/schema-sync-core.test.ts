@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createChangePlan } from '../diff.js';
+import { hashCanonicalSchema } from '../hash.js';
 import type { CanonicalSchema } from '../types.js';
 
 const baseline: CanonicalSchema = {
@@ -118,5 +119,111 @@ describe('schema sync core', () => {
         expect(
             plan.summary.destructiveChanges + plan.summary.warningChanges
         ).toBeGreaterThan(0);
+    });
+
+    it('ignores volatile fingerprint metadata when hashing schemas', () => {
+        const firstHash = hashCanonicalSchema({
+            ...baseline,
+            importedAt: '2026-03-22T10:00:00.000Z',
+            fingerprint: 'fingerprint-a',
+        });
+        const secondHash = hashCanonicalSchema({
+            ...baseline,
+            importedAt: '2026-03-22T10:05:00.000Z',
+            fingerprint: 'fingerprint-b',
+        });
+
+        expect(firstHash).toBe(secondHash);
+    });
+
+    it('recomputes plan fingerprints from schema content instead of trusting stored values', () => {
+        const expectedBaselineFingerprint = hashCanonicalSchema({
+            ...baseline,
+            fingerprint: 'stale-fingerprint',
+            importedAt: '2026-03-22T10:00:00.000Z',
+        });
+        const plan = createChangePlan({
+            id: 'plan-3',
+            baselineSnapshotId: 'snapshot-1',
+            connectionId: 'conn-1',
+            baseline: {
+                ...baseline,
+                fingerprint: 'stale-fingerprint',
+                importedAt: '2026-03-22T10:00:00.000Z',
+            },
+            target: {
+                ...baseline,
+                fingerprint: 'another-stale-fingerprint',
+                importedAt: '2026-03-22T10:05:00.000Z',
+            },
+        });
+
+        expect(plan.baselineFingerprint).toBe(expectedBaselineFingerprint);
+        expect(plan.targetFingerprint).toBe(expectedBaselineFingerprint);
+    });
+
+    it('blocks preview when new custom PostgreSQL types are introduced', () => {
+        const plan = createChangePlan({
+            id: 'plan-4',
+            baselineSnapshotId: 'snapshot-1',
+            connectionId: 'conn-1',
+            baseline,
+            target: {
+                ...baseline,
+                tables: [
+                    {
+                        ...baseline.tables[0],
+                        columns: [
+                            ...baseline.tables[0].columns,
+                            {
+                                id: 'users.revelation',
+                                name: 'revelation',
+                                dataType: 'revelation_type',
+                                nullable: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+        });
+
+        expect(plan.blocked).toBe(true);
+        expect(
+            plan.warnings.some(
+                (warning) => warning.code === 'unsupported_custom_type'
+            )
+        ).toBe(true);
+    });
+
+    it('does not block preview for builtin PostgreSQL aliases like int', () => {
+        const plan = createChangePlan({
+            id: 'plan-5',
+            baselineSnapshotId: 'snapshot-1',
+            connectionId: 'conn-1',
+            baseline,
+            target: {
+                ...baseline,
+                tables: [
+                    {
+                        ...baseline.tables[0],
+                        columns: [
+                            {
+                                ...baseline.tables[0].columns[0],
+                                dataType: 'int',
+                            },
+                            ...baseline.tables[0].columns.slice(1),
+                        ],
+                    },
+                ],
+            },
+        });
+
+        expect(plan.warnings).not.toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    code: 'unsupported_custom_type',
+                }),
+            ])
+        );
     });
 });

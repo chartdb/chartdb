@@ -28,6 +28,14 @@ export const connectionUpsertSchema = z.object({
 });
 export type ConnectionUpsert = z.infer<typeof connectionUpsertSchema>;
 
+export const connectionTestDraftSchema = z.object({
+    name: z.string().default(''),
+    engine: z.literal('postgresql').default('postgresql'),
+    defaultSchemas: z.array(z.string()).default(['public']),
+    secret: databaseConnectionSecretSchema,
+});
+export type ConnectionTestDraft = z.infer<typeof connectionTestDraftSchema>;
+
 export const connectionSummarySchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -44,7 +52,7 @@ export type ConnectionSummary = z.infer<typeof connectionSummarySchema>;
 
 export const connectionTestRequestSchema = z.object({
     connectionId: z.string().optional(),
-    connection: connectionUpsertSchema.optional(),
+    connection: connectionTestDraftSchema.optional(),
 });
 export type ConnectionTestRequest = z.infer<typeof connectionTestRequestSchema>;
 

@@ -25,3 +25,5 @@ dist-ssr
 
 .env
 stats/
+.chartdb-data/
+server/.chartdb-data/

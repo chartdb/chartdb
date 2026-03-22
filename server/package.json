@@ -14,11 +14,13 @@
     "dependencies": {
         "@chartdb/schema-sync-core": "file:../packages/schema-sync-core",
         "@fastify/cors": "^11.1.0",
+        "better-sqlite3": "^11.10.0",
         "fastify": "^5.6.1",
         "pg": "^8.16.3",
         "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@types/better-sqlite3": "^7.6.13",
         "@types/node": "^24.10.4",
         "@types/pg": "^8.15.6",
         "tsx": "^4.20.6",

@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import { ZodError } from 'zod';
 import {
     applySchemaRequestSchema,
     connectionTestRequestSchema,
@@ -12,6 +13,7 @@ import { MetadataRepository } from './repositories/metadata-repository.js';
 import { ConnectionsService } from './services/connections-service.js';
 import { SchemaSyncService } from './services/schema-sync-service.js';
 import { ApplyService } from './services/apply-service.js';
+import { AppError } from './utils/app-error.js';
 
 export const buildApp = () => {
     const app = Fastify({
@@ -37,6 +39,30 @@ export const buildApp = () => {
 
     app.register(cors, {
         origin: serverEnv.corsOrigin === '*' ? true : serverEnv.corsOrigin,
+    });
+
+    app.setErrorHandler((error, request, reply) => {
+        if (error instanceof ZodError) {
+            return reply.code(400).send({
+                error: 'Invalid request payload.',
+                issues: error.issues.map((issue) => ({
+                    path: issue.path.join('.'),
+                    message: issue.message,
+                })),
+            });
+        }
+
+        if (error instanceof AppError) {
+            return reply.code(error.statusCode).send({
+                error: error.message,
+                code: error.code,
+            });
+        }
+
+        request.log.error(error);
+        return reply.code(500).send({
+            error: 'Internal server error.',
+        });
     });
 
     app.get('/api/health', async () => ({

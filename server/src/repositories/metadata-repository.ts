@@ -1,4 +1,4 @@
-import { DatabaseSync } from 'node:sqlite';
+import Database from 'better-sqlite3';
 import type {
     AuditRecord,
     ChangePlan,
@@ -36,10 +36,10 @@ const parseJson = <T>(value: string | null): T =>
     value ? (JSON.parse(value) as T) : ([] as unknown as T);
 
 export class MetadataRepository {
-    private readonly db: DatabaseSync;
+    private readonly db: Database.Database;
 
     constructor(filename: string) {
-        this.db = new DatabaseSync(filename);
+        this.db = new Database(filename);
         this.initialize();
     }
 

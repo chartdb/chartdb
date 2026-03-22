@@ -22,6 +22,80 @@ const qualifyTable = (schemaName: string, tableName: string) =>
 
 const normalizeName = (value: string) => value.trim().toLowerCase();
 
+const BUILTIN_POSTGRES_TYPES = new Set([
+    'bigint',
+    'bigserial',
+    'bit',
+    'bit varying',
+    'bool',
+    'boolean',
+    'box',
+    'bytea',
+    'char',
+    'character',
+    'character varying',
+    'cidr',
+    'circle',
+    'date',
+    'decimal',
+    'double precision',
+    'float4',
+    'float8',
+    'inet',
+    'int',
+    'int2',
+    'int4',
+    'int8',
+    'integer',
+    'interval',
+    'json',
+    'jsonb',
+    'line',
+    'lseg',
+    'macaddr',
+    'money',
+    'numeric',
+    'path',
+    'pg_lsn',
+    'point',
+    'polygon',
+    'real',
+    'serial2',
+    'serial4',
+    'serial8',
+    'smallint',
+    'smallserial',
+    'serial',
+    'text',
+    'time',
+    'time with time zone',
+    'time without time zone',
+    'timestamp',
+    'timestamp with time zone',
+    'timestamp without time zone',
+    'timetz',
+    'timestamptz',
+    'tsquery',
+    'tsvector',
+    'txid_snapshot',
+    'uuid',
+    'varbit',
+    'varchar',
+    'xml',
+]);
+
+const normalizeTypeName = (value: string) =>
+    value
+        .trim()
+        .replace(/\[\]$/, '')
+        .replace(/\s*\(.*\)\s*$/, '')
+        .replace(/"/g, '')
+        .replace(/^pg_catalog\./i, '')
+        .toLowerCase();
+
+const isBuiltinPostgresType = (value: string) =>
+    BUILTIN_POSTGRES_TYPES.has(normalizeTypeName(value));
+
 const mapBy = <T>(items: T[], keyFn: (item: T) => string): Map<string, T> =>
     items.reduce((map, item) => {
         map.set(keyFn(item), item);
@@ -207,6 +281,14 @@ export const createChangePlan = ({
 }): ChangePlan => {
     const changes: SchemaChange[] = [];
     const warnings = [...additionalWarnings];
+    const baselineKnownTypes = new Set(
+        baseline.tables.flatMap((table) =>
+            table.columns.flatMap((column) => [
+                normalizeTypeName(column.dataType),
+                normalizeTypeName(column.dataType).split('.').at(-1) ?? '',
+            ])
+        )
+    );
 
     const baselineSchemas = new Set(baseline.schemaNames);
     for (const schemaName of uniqueBy(target.schemaNames, (schema) => schema)) {
@@ -505,6 +587,59 @@ export const createChangePlan = ({
 
     const { warnings: analyzedWarnings } = analyzePlanRisks(changes, warnings);
 
+    const ensureSupportedType = (
+        typeName: string,
+        changeId: string,
+        contextLabel: string
+    ) => {
+        const normalized = normalizeTypeName(typeName);
+        const unqualified = normalized.split('.').at(-1) ?? normalized;
+        if (
+            !normalized ||
+            isBuiltinPostgresType(typeName) ||
+            baselineKnownTypes.has(normalized) ||
+            baselineKnownTypes.has(unqualified)
+        ) {
+            return;
+        }
+
+        analyzedWarnings.push({
+            code: 'unsupported_custom_type',
+            level: 'blocked',
+            title: 'Unsupported custom PostgreSQL type',
+            message: `${contextLabel} uses type "${typeName}", but v1 does not create custom types automatically during apply.`,
+            changeIds: [changeId],
+        });
+    };
+
+    for (const change of changes) {
+        switch (change.kind) {
+            case 'create_table':
+                for (const column of change.table.columns) {
+                    ensureSupportedType(
+                        column.dataType,
+                        change.id,
+                        `${change.table.schemaName}.${change.table.name}.${column.name}`
+                    );
+                }
+                break;
+            case 'add_column':
+                ensureSupportedType(
+                    change.column.dataType,
+                    change.id,
+                    `${change.schemaName}.${change.tableName}.${change.column.name}`
+                );
+                break;
+            case 'alter_column_type':
+                ensureSupportedType(
+                    change.toType,
+                    change.id,
+                    `${change.schemaName}.${change.tableName}.${change.columnName}`
+                );
+                break;
+        }
+    }
+
     const summary = summarize(changes, analyzedWarnings);
     const sqlStatements = generateMigrationSql(changes);
     const requiresConfirmation = analyzedWarnings.some(
@@ -519,9 +654,8 @@ export const createChangePlan = ({
         baselineSnapshotId,
         connectionId,
         engine: target.engine,
-        baselineFingerprint:
-            baseline.fingerprint ?? hashCanonicalSchema(baseline),
-        targetFingerprint: target.fingerprint ?? hashCanonicalSchema(target),
+        baselineFingerprint: hashCanonicalSchema(baseline),
+        targetFingerprint: hashCanonicalSchema(target),
         changes,
         warnings: analyzedWarnings,
         sqlStatements,

@@ -25,7 +25,10 @@ export interface SchemaSyncContextValue {
         connectionId?: string
     ) => Promise<void>;
     deleteConnection: (connectionId: string) => Promise<void>;
-    testConnectionDraft: (payload: ConnectionUpsert) => Promise<void>;
+    testConnectionDraft: (
+        payload: ConnectionUpsert,
+        connectionId?: string
+    ) => Promise<void>;
     importLiveSchema: (params: {
         connectionId: string;
         schemas: string[];

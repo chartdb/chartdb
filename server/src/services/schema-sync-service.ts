@@ -40,8 +40,7 @@ export class SchemaSyncService {
                     ? request.schemas
                     : connection.defaultSchemas,
         });
-        const fingerprint =
-            canonicalSchema.fingerprint ?? hashCanonicalSchema(canonicalSchema);
+        const fingerprint = hashCanonicalSchema(canonicalSchema);
         const snapshotId = generateId();
         const snapshot: StoredSnapshot = {
             id: snapshotId,
@@ -81,9 +80,7 @@ export class SchemaSyncService {
             id: targetSnapshotId,
             connectionId: baseline.connectionId,
             kind: 'target',
-            fingerprint:
-                request.targetSchema.fingerprint ??
-                hashCanonicalSchema(request.targetSchema),
+            fingerprint: hashCanonicalSchema(request.targetSchema),
             importedSchemas: request.targetSchema.schemaNames,
             schema: request.targetSchema,
             createdAt: new Date().toISOString(),

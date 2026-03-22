@@ -34,7 +34,17 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
             payload &&
             'error' in payload &&
             typeof payload.error === 'string'
-                ? payload.error
+                ? `${payload.error}${
+                      'issues' in payload &&
+                      Array.isArray(payload.issues) &&
+                      payload.issues.length > 0 &&
+                      typeof payload.issues[0] === 'object' &&
+                      payload.issues[0] &&
+                      'message' in payload.issues[0] &&
+                      typeof payload.issues[0].message === 'string'
+                          ? ` ${payload.issues[0].message}`
+                          : ''
+                  }`
                 : `Request to ${path} failed`;
         throw new Error(error);
     }

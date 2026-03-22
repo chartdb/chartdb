@@ -124,10 +124,15 @@ export const SchemaSyncProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     const testConnectionDraft = useCallback(
-        async (payload: ConnectionUpsert) => {
-            const result = await schemaSyncClient.testConnection({
-                connection: payload,
-            });
+        async (payload: ConnectionUpsert, connectionId?: string) => {
+            const result =
+                connectionId && payload.secret.password.length === 0
+                    ? await schemaSyncClient.testConnection({
+                          connectionId,
+                      })
+                    : await schemaSyncClient.testConnection({
+                          connection: payload,
+                      });
             setLastConnectionTest(result);
         },
         []

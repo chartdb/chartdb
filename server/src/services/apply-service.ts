@@ -13,6 +13,7 @@ import type { SchemaSyncService } from './schema-sync-service.js';
 import { introspectPostgresSchema } from '../postgres/introspection.js';
 import { Client } from 'pg';
 import { hashCanonicalSchema } from '@chartdb/schema-sync-core';
+import { AppError } from '../utils/app-error.js';
 
 const quoteIdent = (value: string) => `"${value.replace(/"/g, '""')}"`;
 const qualify = (schemaName: string, tableName: string) =>
@@ -81,13 +82,19 @@ export class ApplyService {
             plan.baselineSnapshotId
         );
         if (!baselineSnapshot) {
-            throw new Error(
-                `Baseline snapshot ${plan.baselineSnapshotId} not found`
+            throw new AppError(
+                `Baseline snapshot ${plan.baselineSnapshotId} not found`,
+                404,
+                'baseline_snapshot_not_found'
             );
         }
 
         if (plan.blocked) {
-            throw new Error('This plan is blocked and cannot be applied.');
+            throw new AppError(
+                'This plan is blocked and cannot be applied.',
+                409,
+                'plan_blocked'
+            );
         }
 
         if (
@@ -96,8 +103,10 @@ export class ApplyService {
                 request.destructiveApproval.confirmationText.trim() !==
                     expectedConfirmationText)
         ) {
-            throw new Error(
-                `Destructive changes require confirmation text: ${expectedConfirmationText}`
+            throw new AppError(
+                `Destructive changes require confirmation text: ${expectedConfirmationText}`,
+                400,
+                'destructive_confirmation_required'
             );
         }
 
@@ -140,34 +149,43 @@ export class ApplyService {
         const secret = this.connectionsService.getDecryptedSecret(
             plan.connectionId
         );
-        const liveSchema = await introspectPostgresSchema({
-            secret,
-            schemas: baselineSnapshot.importedSchemas,
-        });
-        const liveFingerprint =
-            liveSchema.fingerprint ?? hashCanonicalSchema(liveSchema);
-        if (liveFingerprint !== plan.baselineFingerprint) {
-            throw new Error(
-                'Live database schema drift detected. Refresh from database before applying changes.'
-            );
-        }
+        let preApplySnapshotId: string | null = null;
+        let client: Client | null = null;
+        let transactionStarted = false;
 
-        const preApplySnapshotId = generateId();
-        this.repository.putSnapshot({
-            id: preApplySnapshotId,
-            connectionId: plan.connectionId,
-            kind: 'pre_apply',
-            fingerprint: liveFingerprint,
-            importedSchemas: baselineSnapshot.importedSchemas,
-            schema: liveSchema,
-            createdAt: new Date().toISOString(),
-        });
-
-        const client = await this.makeClient(secret);
         try {
+            const liveSchema = await introspectPostgresSchema({
+                secret,
+                schemas: baselineSnapshot.importedSchemas,
+            });
+            const liveFingerprint = hashCanonicalSchema(liveSchema);
+            const expectedBaselineFingerprint = hashCanonicalSchema(
+                baselineSnapshot.schema
+            );
+            if (liveFingerprint !== expectedBaselineFingerprint) {
+                throw new AppError(
+                    'Live database schema drift detected. Refresh from database before applying changes.',
+                    409,
+                    'schema_drift_detected'
+                );
+            }
+
+            preApplySnapshotId = generateId();
+            this.repository.putSnapshot({
+                id: preApplySnapshotId,
+                connectionId: plan.connectionId,
+                kind: 'pre_apply',
+                fingerprint: liveFingerprint,
+                importedSchemas: baselineSnapshot.importedSchemas,
+                schema: liveSchema,
+                createdAt: new Date().toISOString(),
+            });
+
+            client = await this.makeClient(secret);
             await this.validatePlanPreflight(client, plan.changes, logs);
 
             await client.query('BEGIN');
+            transactionStarted = true;
             logs.push('Transaction started');
 
             for (const statement of plan.sqlStatements) {
@@ -177,10 +195,60 @@ export class ApplyService {
             }
 
             await client.query('COMMIT');
+            transactionStarted = false;
             logs.push('Transaction committed');
+
+            const postApplySchema = await introspectPostgresSchema({
+                secret,
+                schemas: baselineSnapshot.importedSchemas,
+            });
+            const postApplySnapshotId = generateId();
+            this.repository.putSnapshot({
+                id: postApplySnapshotId,
+                connectionId: plan.connectionId,
+                kind: 'post_apply',
+                fingerprint: hashCanonicalSchema(postApplySchema),
+                importedSchemas: baselineSnapshot.importedSchemas,
+                schema: postApplySchema,
+                createdAt: new Date().toISOString(),
+            });
+
+            this.repository.putAudit({
+                ...audit,
+                preApplySnapshotId,
+                postApplySnapshotId,
+                status: 'succeeded',
+                logs,
+                error: null,
+                updatedAt: new Date().toISOString(),
+            });
+            this.repository.putApplyJob({
+                id: jobId,
+                planId: plan.id,
+                auditId,
+                status: 'succeeded',
+                logs,
+                executedStatements,
+                error: null,
+                createdAt: now,
+                updatedAt: new Date().toISOString(),
+            });
+
+            return {
+                jobId,
+                status: 'succeeded',
+                executedStatements,
+                logs,
+                error: null,
+                auditId,
+                postApplySnapshotId,
+            };
         } catch (error) {
-            await client.query('ROLLBACK');
-            logs.push('Transaction rolled back');
+            if (client && transactionStarted) {
+                await client.query('ROLLBACK');
+                logs.push('Transaction rolled back');
+            }
+
             const message =
                 error instanceof Error
                     ? error.message
@@ -205,57 +273,14 @@ export class ApplyService {
                 createdAt: now,
                 updatedAt: new Date().toISOString(),
             });
-            throw error;
+            if (error instanceof AppError) {
+                throw error;
+            }
+            throw new AppError(message, 422, 'apply_execution_failed');
         } finally {
-            await client.end();
+            if (client) {
+                await client.end();
+            }
         }
-
-        const postApplySchema = await introspectPostgresSchema({
-            secret,
-            schemas: baselineSnapshot.importedSchemas,
-        });
-        const postApplySnapshotId = generateId();
-        this.repository.putSnapshot({
-            id: postApplySnapshotId,
-            connectionId: plan.connectionId,
-            kind: 'post_apply',
-            fingerprint:
-                postApplySchema.fingerprint ??
-                hashCanonicalSchema(postApplySchema),
-            importedSchemas: baselineSnapshot.importedSchemas,
-            schema: postApplySchema,
-            createdAt: new Date().toISOString(),
-        });
-
-        this.repository.putAudit({
-            ...audit,
-            preApplySnapshotId,
-            postApplySnapshotId,
-            status: 'succeeded',
-            logs,
-            error: null,
-            updatedAt: new Date().toISOString(),
-        });
-        this.repository.putApplyJob({
-            id: jobId,
-            planId: plan.id,
-            auditId,
-            status: 'succeeded',
-            logs,
-            executedStatements,
-            error: null,
-            createdAt: now,
-            updatedAt: new Date().toISOString(),
-        });
-
-        return {
-            jobId,
-            status: 'succeeded',
-            executedStatements,
-            logs,
-            error: null,
-            auditId,
-            postApplySnapshotId,
-        };
     }
 }

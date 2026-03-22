@@ -114,6 +114,9 @@ export const SchemaSyncDialog: React.FC = () => {
         previewPlan?.warnings.filter(
             (warning) => warning.level === 'destructive'
         ) ?? [];
+    const blockedWarnings =
+        previewPlan?.warnings.filter((warning) => warning.level === 'blocked') ??
+        [];
 
     const run = async (key: string, fn: () => Promise<void>) => {
         setBusyAction(key);
@@ -381,7 +384,8 @@ export const SchemaSyncDialog: React.FC = () => {
                                         onClick={() =>
                                             run('test-connection', async () => {
                                                 await testConnectionDraft(
-                                                    draft
+                                                    draft,
+                                                    editingConnectionId
                                                 );
                                             })
                                         }
@@ -588,12 +592,26 @@ export const SchemaSyncDialog: React.FC = () => {
                                         }
                                         disabled={
                                             !previewPlan ||
+                                            previewPlan.blocked ||
                                             busyAction === 'apply'
                                         }
                                     >
                                         Apply Changes
                                     </Button>
                                 </div>
+
+                                {previewPlan?.blocked ? (
+                                    <>
+                                        <Separator className="my-4" />
+                                        <div className="text-sm font-semibold text-destructive">
+                                            Apply blocked
+                                        </div>
+                                        <div className="mt-2 text-xs text-muted-foreground">
+                                            Resolve the blocked warnings before
+                                            applying this plan.
+                                        </div>
+                                    </>
+                                ) : null}
 
                                 {destructiveWarnings.length > 0 ? (
                                     <>
@@ -696,6 +714,15 @@ export const SchemaSyncDialog: React.FC = () => {
                                                                 : 'Not blocked'}
                                                         </Badge>
                                                     </div>
+                                                    {blockedWarnings.length >
+                                                    0 ? (
+                                                        <div className="mt-3 text-sm text-destructive">
+                                                            {
+                                                                blockedWarnings[0]
+                                                                    .message
+                                                            }
+                                                        </div>
+                                                    ) : null}
                                                 </div>
                                                 {applyResult ? (
                                                     <div className="rounded-md border p-3 md:col-span-2">
@@ -788,7 +815,12 @@ export const SchemaSyncDialog: React.FC = () => {
                                                         (warning, index) => (
                                                             <div
                                                                 key={`${warning.code}-${index}`}
-                                                                className="rounded-md border p-3"
+                                                                className={`rounded-md border p-3 ${
+                                                                    warning.level ===
+                                                                    'blocked'
+                                                                        ? 'border-destructive bg-destructive/5'
+                                                                        : ''
+                                                                }`}
                                                             >
                                                                 <div className="flex items-center gap-2">
                                                                     <Badge variant="secondary">

@@ -1,6 +1,8 @@
 import { createHash } from 'node:crypto';
 import type { CanonicalSchema } from './types.js';
 
+const VOLATILE_SCHEMA_KEYS = new Set(['fingerprint', 'importedAt']);
+
 const stableSort = (value: unknown): unknown => {
     if (Array.isArray(value)) {
         return value.map(stableSort);
@@ -9,6 +11,7 @@ const stableSort = (value: unknown): unknown => {
     if (value && typeof value === 'object') {
         return Object.fromEntries(
             Object.entries(value as Record<string, unknown>)
+                .filter(([key]) => !VOLATILE_SCHEMA_KEYS.has(key))
                 .sort(([left], [right]) => left.localeCompare(right))
                 .map(([key, child]) => [key, stableSort(child)])
         );
