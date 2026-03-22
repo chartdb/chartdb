@@ -33,10 +33,15 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
     const [importMethod, setImportMethod] = useState<ImportMethod>(
         initialImportMethod ?? importMethods[0]
     );
+    const effectiveDatabaseType =
+        importMethod === 'dbml' && databaseType === DatabaseType.GENERIC
+            ? DatabaseType.POSTGRESQL
+            : databaseType;
     const { closeImportDatabaseDialog } = useDialog();
     const {
         addTables,
         addRelationships,
+        addCustomTypes,
         diagramName,
         databaseType: currentDatabaseType,
         updateDatabaseType,
@@ -66,19 +71,19 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         if (importMethod === 'ddl') {
             diagram = await sqlImportToDiagram({
                 sqlContent: scriptResult,
-                sourceDatabaseType: databaseType,
-                targetDatabaseType: databaseType,
+                sourceDatabaseType: effectiveDatabaseType,
+                targetDatabaseType: effectiveDatabaseType,
             });
         } else if (importMethod === 'dbml') {
             diagram = await importDBMLToDiagram(scriptResult, {
-                databaseType,
+                databaseType: effectiveDatabaseType,
             });
         } else {
             const databaseMetadata: DatabaseMetadata =
                 loadDatabaseMetadata(scriptResult);
 
             diagram = await loadFromDatabaseMetadata({
-                databaseType,
+                databaseType: effectiveDatabaseType,
                 databaseMetadata,
                 databaseEdition:
                     databaseEdition?.trim().length === 0
@@ -90,7 +95,12 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         // Skip if nothing to import
         const newTablesNumber = diagram.tables?.length ?? 0;
         const newRelationshipsNumber = diagram.relationships?.length ?? 0;
-        if (newTablesNumber === 0 && newRelationshipsNumber === 0) {
+        const newCustomTypesNumber = diagram.customTypes?.length ?? 0;
+        if (
+            newTablesNumber === 0 &&
+            newRelationshipsNumber === 0 &&
+            newCustomTypesNumber === 0
+        ) {
             return;
         }
 
@@ -119,16 +129,19 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
 
         // Use queueMicrotask to defer work after dialog closes but before next paint
         queueMicrotask(async () => {
-            // Add tables and relationships
+            // Add tables, relationships, and custom types
             await Promise.all([
                 addTables(positionedTables, { updateHistory: false }),
                 addRelationships(diagram.relationships ?? [], {
                     updateHistory: false,
                 }),
+                addCustomTypes(diagram.customTypes ?? [], {
+                    updateHistory: false,
+                }),
             ]);
 
             if (currentDatabaseType === DatabaseType.GENERIC) {
-                await updateDatabaseType(databaseType);
+                await updateDatabaseType(effectiveDatabaseType);
             }
 
             // Reset undo/redo stacks
@@ -140,9 +153,10 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         databaseEdition,
         currentDatabaseType,
         updateDatabaseType,
-        databaseType,
+        effectiveDatabaseType,
         scriptResult,
         addRelationships,
+        addCustomTypes,
         addTables,
         resetRedoStack,
         resetUndoStack,
@@ -164,7 +178,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
                 showClose
             >
                 <ImportDatabase
-                    databaseType={databaseType}
+                    databaseType={effectiveDatabaseType}
                     databaseEdition={databaseEdition}
                     setDatabaseEdition={setDatabaseEdition}
                     onImport={importDatabase}

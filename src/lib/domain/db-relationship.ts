@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { syncSourceRefSchema, type SyncSourceRef } from './schema-sync';
 
 export interface DBRelationship {
     id: string;
@@ -12,6 +13,7 @@ export interface DBRelationship {
     sourceCardinality: Cardinality;
     targetCardinality: Cardinality;
     createdAt: number;
+    syncMetadata?: SyncSourceRef;
 }
 
 export const dbRelationshipSchema: z.ZodType<DBRelationship> = z.object({
@@ -26,6 +28,7 @@ export const dbRelationshipSchema: z.ZodType<DBRelationship> = z.object({
     sourceCardinality: z.union([z.literal('one'), z.literal('many')]),
     targetCardinality: z.union([z.literal('one'), z.literal('many')]),
     createdAt: z.number(),
+    syncMetadata: syncSourceRefSchema.optional(),
 });
 
 export type RelationshipType =
