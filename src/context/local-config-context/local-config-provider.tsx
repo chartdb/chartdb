@@ -12,11 +12,17 @@ const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
 const showDBViewsKey = 'show_db_views';
 
+const isTheme = (value: string | null): value is Theme =>
+    value === 'light' || value === 'dark' || value === 'system';
+
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const [theme, setTheme] = React.useState<Theme>(
-        (localStorage.getItem(themeKey) as Theme) || 'system'
+        (() => {
+            const storedTheme = localStorage.getItem(themeKey);
+            return isTheme(storedTheme) ? storedTheme : 'system';
+        })()
     );
 
     const [scrollAction, setScrollAction] = React.useState<ScrollAction>(
