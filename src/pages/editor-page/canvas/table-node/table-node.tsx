@@ -546,35 +546,46 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 <Table2 className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                             )}
 
-                            {tableChangedName ? (
-                                <Label className="flex h-5 items-center justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
-                                    <span className="truncate">
-                                        {tableChangedName.old}
-                                    </span>
-                                    <span className="mx-1 font-semibold">
-                                        →
-                                    </span>
-                                    <span className="truncate">
-                                        {tableChangedName.new}
-                                    </span>
-                                </Label>
-                            ) : isDiffNewTable ? (
-                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-green-200 px-2 py-0.5 text-sm font-normal text-green-900 dark:bg-green-800 dark:text-green-200">
-                                    {table.name}
-                                </Label>
-                            ) : isDiffTableRemoved ? (
-                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-red-200 px-2 py-0.5 text-sm font-normal text-red-900 dark:bg-red-800 dark:text-red-200">
-                                    {table.name}
-                                </Label>
-                            ) : isDiffTableChanged && !isSummaryOnly ? (
-                                <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
-                                    {table.name}
-                                </Label>
-                            ) : (
-                                <Label className="truncate px-2 py-0.5 text-sm font-bold">
-                                    {table.name}
-                                </Label>
-                            )}
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    {tableChangedName ? (
+                                        <Label className="flex h-5 items-center justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
+                                            <span className="truncate">
+                                                {tableChangedName.old}
+                                            </span>
+                                            <span className="mx-1 font-semibold">
+                                                →
+                                            </span>
+                                            <span className="truncate">
+                                                {tableChangedName.new}
+                                            </span>
+                                        </Label>
+                                    ) : isDiffNewTable ? (
+                                        <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-green-200 px-2 py-0.5 text-sm font-normal text-green-900 dark:bg-green-800 dark:text-green-200">
+                                            {table.name}
+                                        </Label>
+                                    ) : isDiffTableRemoved ? (
+                                        <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-red-200 px-2 py-0.5 text-sm font-normal text-red-900 dark:bg-red-800 dark:text-red-200">
+                                            {table.name}
+                                        </Label>
+                                    ) : isDiffTableChanged && !isSummaryOnly ? (
+                                        <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
+                                            {table.name}
+                                        </Label>
+                                    ) : (
+                                        <Label className="truncate px-2 py-0.5 text-sm font-bold">
+                                            {table.name}
+                                        </Label>
+                                    )}
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <div className="max-w-xs break-all">
+                                        {tableChangedName
+                                            ? `${tableChangedName.old} → ${tableChangedName.new}`
+                                            : table.name}
+                                    </div>
+                                </TooltipContent>
+                            </Tooltip>
                         </div>
                         <div className="hidden shrink-0 flex-row group-hover:flex">
                             {readonly ? null : (
