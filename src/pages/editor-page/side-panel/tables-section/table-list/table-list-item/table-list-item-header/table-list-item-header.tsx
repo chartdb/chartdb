@@ -290,16 +290,26 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             </div>
                         </TooltipTrigger>
                         <TooltipContent>
-                            {t('tool_tips.double_click_to_edit')}
+                            <div className="max-w-xs break-all">{table.name}</div>
+                            <div className="text-xs text-muted-foreground">
+                                {t('tool_tips.double_click_to_edit')}
+                            </div>
                         </TooltipContent>
                     </Tooltip>
                 ) : (
-                    <div className="truncate px-2 py-0.5">
-                        {table.name}
-                        <span className="text-xs text-muted-foreground">
-                            {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
-                        </span>
-                    </div>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div className="truncate px-2 py-0.5">
+                                {table.name}
+                                <span className="text-xs text-muted-foreground">
+                                    {schemaToDisplay ? ` (${schemaToDisplay})` : ''}
+                                </span>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <div className="max-w-xs break-all">{table.name}</div>
+                        </TooltipContent>
+                    </Tooltip>
                 )}
             </div>
             <div className="flex flex-row-reverse items-center">
