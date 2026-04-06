@@ -1,5 +1,12 @@
 import { isDatabaseMetadata } from './metadata-types/database-metadata';
 
+const applyTypeFixups = (json: string): string => {
+    return json
+        .replace(/"precision": "null"/g, '"precision": null')
+        .replace(/"nullable": "false"/g, '"nullable": false')
+        .replace(/"nullable": "true"/g, '"nullable": true');
+};
+
 export const fixMetadataJson = (metadataJson: string): string => {
     // Replace problematic array default values with null
     metadataJson = metadataJson.replace(
@@ -13,8 +20,44 @@ export const fixMetadataJson = (metadataJson: string): string => {
         '"default": "$1"$2'
     );
 
-    // TODO: remove this temporary eslint disable
-    return (
+    // Try minimal cleanup first — this preserves valid JSON escaping (e.g. \" in
+    // string values like Snowflake clustering keys with quoted identifiers).
+    // The destructive \" → " replacement below would break these.
+    const minimalCleaned = applyTypeFixups(
+        metadataJson
+            .trim()
+            .replace(/^[^{]*/, '')
+            .replace(/}[^}]*$/, '}')
+            .replace(/\n/g, '')
+    );
+
+    try {
+        JSON.parse(minimalCleaned);
+        return minimalCleaned;
+    } catch {
+        // Not valid JSON as-is, try other formats below
+    }
+
+    // Try CSV unwrap — Snowflake Snowsight CSV exports wrap the JSON in quotes
+    // and escape all internal " as "". Unwrapping "" → " produces valid JSON
+    // while preserving legitimate \" escaping (e.g. clustering keys).
+    const csvUnwrapped = applyTypeFixups(
+        metadataJson
+            .trim()
+            .replace(/^[^{]*/, '')
+            .replace(/}[^}]*$/, '}')
+            .replace(/""/g, '"')
+            .replace(/\n/g, '')
+    );
+
+    try {
+        JSON.parse(csvUnwrapped);
+        return csvUnwrapped;
+    } catch {
+        // Not CSV format, fall through to full transformation chain
+    }
+
+    return applyTypeFixups(
         metadataJson
             .trim()
             // First unescape the JSON string
@@ -47,13 +90,6 @@ export const fixMetadataJson = (metadataJson: string): string => {
             // Handle cases like "'CHAT'::"CustomType"" (ensures existing quotes are escaped for JSON)
             /* eslint-disable-next-line no-useless-escape */
             .replace(/'([^']+)'::\"([^\"]+)\"/g, '\'$1\'::\\\"$2\\\"')
-
-            // Convert string "null" to actual null for precision field
-            .replace(/"precision": "null"/g, '"precision": null')
-
-            // Convert string "true"/"false" to actual boolean for nullable field
-            .replace(/"nullable": "false"/g, '"nullable": false')
-            .replace(/"nullable": "true"/g, '"nullable": true')
 
             /* eslint-disable-next-line no-useless-escape */
             .replace(/\"/g, '___ESCAPED_QUOTE___') // Temporarily replace empty strings
