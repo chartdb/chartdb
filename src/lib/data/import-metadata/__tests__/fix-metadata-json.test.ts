@@ -165,14 +165,21 @@ describe('fixMetadataJson', () => {
     });
 
     describe('escaped backslashes', () => {
-        it('should convert \\\\\\\\ to \\\\ (double-escaped to single-escaped)', () => {
-            // Input: {"path": "C:\\\\Users"} (double-escaped backslash in JSON string literal)
-            // Output: {"path": "C:\\Users"} (single-escaped backslash, valid JSON for path C:\Users)
+        it('should preserve valid JSON with double backslashes as-is', () => {
+            // Input: {"path": "C:\\\\Users"} is valid JSON (value is C:\\Users)
+            // Valid JSON should be returned unchanged
             const input = '{"path": "C:\\\\\\\\Users"}';
             const result = fixMetadataJson(input);
-            // In JSON, \\ represents a single backslash, so this is correct
+            expect(result).toBe('{"path": "C:\\\\\\\\Users"}');
+            const parsed = JSON.parse(result);
+            expect(parsed.path).toBe('C:\\\\Users');
+        });
+
+        it('should convert double-escaped backslashes in stringified JSON', () => {
+            // Stringified JSON with double-escaped backslashes
+            const input = '{\\"path\\": \\"C:\\\\\\\\Users\\"}';
+            const result = fixMetadataJson(input);
             expect(result).toBe('{"path": "C:\\\\Users"}');
-            // Verify it parses correctly
             const parsed = JSON.parse(result);
             expect(parsed.path).toBe('C:\\Users');
         });
@@ -228,6 +235,97 @@ describe('fixMetadataJson', () => {
 
             expect(parsed.pk_info[0].pk_def).toBe('PRIMARY KEY (a, b)');
             expect(parsed.pk_info[0].nullable).toBe(false);
+        });
+    });
+
+    describe('embedded quotes in values', () => {
+        it('should preserve escaped quotes in Snowflake clustering key values', () => {
+            const input = `{
+    "indexes": [
+        {
+            "schema": "PUBLIC",
+            "table": "snap_lot",
+            "name": "snap_lot_cluster",
+            "column": "LINEAR(DIV0(\\"snaplot_id\\", 500000))",
+            "index_type": "CLUSTERING",
+            "cardinality": 0,
+            "size": 0,
+            "unique": false,
+            "column_position": 1,
+            "direction": "asc"
+        }
+    ],
+    "fk_info": [],
+    "pk_info": [],
+    "columns": [],
+    "tables": [],
+    "views": [],
+    "database_name": "test",
+    "version": "1.0"
+}`;
+
+            const result = fixMetadataJson(input);
+            const parsed = JSON.parse(result);
+            expect(parsed.indexes[0].column).toBe(
+                'LINEAR(DIV0("snaplot_id", 500000))'
+            );
+        });
+
+        it('should still fix stringified JSON with embedded quotes', () => {
+            const input =
+                '{\\"column\\": \\"LINEAR(DIV0(\\\\\\"snaplot_id\\\\\\", 500000))\\"}';
+            const result = fixMetadataJson(input);
+            const parsed = JSON.parse(result);
+            expect(parsed.column).toBe('LINEAR(DIV0("snaplot_id", 500000))');
+        });
+    });
+
+    describe('control characters and trailing junk', () => {
+        it('should strip carriage returns inside string values', () => {
+            const input =
+                '{"fk_info": [], "pk_info": [{"schema": "dbo",\r"table": "Users",\r"column": "id",\r"pk_def": "PRIMARY KEY"}], "columns": [], "indexes": [], "tables": [], "views": [], "database_name": "db", "version": "1.0"}';
+            const result = fixMetadataJson(input);
+            expect(isStringMetadataJson(result)).toBe(true);
+        });
+
+        it('should remove trailing commas in arrays and objects', () => {
+            const input = '{"a": [1, 2, 3,], "b": "x",}';
+            const result = fixMetadataJson(input);
+            expect(JSON.parse(result)).toEqual({ a: [1, 2, 3], b: 'x' });
+        });
+
+        it('should remove leading commas in arrays', () => {
+            const input = '{"a": [, 1, 2]}';
+            const result = fixMetadataJson(input);
+            expect(JSON.parse(result)).toEqual({ a: [1, 2] });
+        });
+
+        it('should strip terminal box-drawing characters from copy-paste', () => {
+            const input = '{   ↴│   "a": 1,   ↳"b": 2}';
+            const result = fixMetadataJson(input);
+            expect(JSON.parse(result)).toEqual({ a: 1, b: 2 });
+        });
+    });
+
+    describe('metadata_json_to_import wrapper', () => {
+        it('should extract inner JSON from object wrapper', () => {
+            // This shape has unescaped quotes inside the wrapper value, making
+            // the outer object invalid. We extract the inner object directly.
+            const input =
+                '{"metadata_json_to_import": "{"fk_info": [], "pk_info": [], "columns": [{"schema": "public", "table": "users", "name": "id", "type": "int", "ordinal_position": 1, "nullable": false}], "indexes": [], "tables": [], "views": [], "database_name": "db", "version": "1.0"}"}';
+            const result = fixMetadataJson(input);
+            expect(isStringMetadataJson(result)).toBe(true);
+            const parsed = JSON.parse(result);
+            expect(parsed.columns[0].name).toBe('id');
+        });
+
+        it('should extract inner JSON from array wrapper', () => {
+            const input =
+                '[{"metadata_json_to_import": "{"fk_info": [], "pk_info": [], "columns": [], "indexes": [], "tables": [], "views": [], "database_name": "test_db", "version": "8.0"}"}]';
+            const result = fixMetadataJson(input);
+            expect(isStringMetadataJson(result)).toBe(true);
+            const parsed = JSON.parse(result);
+            expect(parsed.database_name).toBe('test_db');
         });
     });
 
@@ -308,6 +406,30 @@ describe('isStringMetadataJson', () => {
         expect(isStringMetadataJson('undefined')).toBe(false);
 
         consoleErrorSpy.mockRestore();
+    });
+});
+
+describe('CSV-exported Snowflake output', () => {
+    it('should handle Snowflake Snowsight CSV export with "" quoting', () => {
+        // Simulates CSV export: outer quotes, all " escaped as ""
+        const csvInput = `"{ ""fk_info"": [], ""pk_info"": [{ ""schema"": ""PUBLIC"", ""table"": ""users"", ""column"": ""id"", ""pk_def"": ""pk_users"" }], ""columns"": [{ ""schema"": ""PUBLIC"", ""table"": ""users"", ""name"": ""id"", ""type"": ""NUMBER"", ""ordinal_position"": 1, ""nullable"": false, ""character_maximum_length"": null, ""precision"": { ""precision"": 38, ""scale"": 0 }, ""default"": null, ""collation"": null, ""comment"": null, ""is_identity"": true }], ""indexes"": [], ""tables"": [{ ""schema"": ""PUBLIC"", ""table"": ""users"", ""rows"": 100, ""type"": ""BASE TABLE"", ""engine"": """", ""collation"": """", ""comment"": """" }], ""views"": [], ""database_name"": ""MY_DB"", ""version"": ""10.11.1"" }"`;
+
+        const fixed = fixMetadataJson(csvInput);
+        expect(isStringMetadataJson(fixed)).toBe(true);
+        const parsed = JSON.parse(fixed);
+        expect(parsed.database_name).toBe('MY_DB');
+        expect(parsed.pk_info[0].schema).toBe('PUBLIC');
+        expect(parsed.columns[0].type).toBe('NUMBER');
+    });
+
+    it('should handle CSV export with embedded quotes in clustering keys', () => {
+        const csvInput = `"{ ""fk_info"": [], ""pk_info"": [], ""columns"": [], ""indexes"": [{ ""schema"": ""PUBLIC"", ""table"": ""snap_lot"", ""name"": ""snap_lot_cluster"", ""column"": ""LINEAR(DIV0(\\""snaplot_id\\"", 500000))"", ""index_type"": ""CLUSTERING"", ""cardinality"": 0, ""size"": 0, ""unique"": false, ""column_position"": 1, ""direction"": ""asc"" }], ""tables"": [], ""views"": [], ""database_name"": ""TEST_DB"", ""version"": ""10.11.1"" }"`;
+
+        const fixed = fixMetadataJson(csvInput);
+        const parsed = JSON.parse(fixed);
+        expect(parsed.indexes[0].column).toBe(
+            'LINEAR(DIV0("snaplot_id", 500000))'
+        );
     });
 });
 
