@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.20.1](https://github.com/chartdb/chartdb/compare/v1.20.0...v1.20.1) (2026-04-07)
+
+
+### Bug Fixes
+
+* escape single quotes in DBML comments and match renamed index names ([#1099](https://github.com/chartdb/chartdb/issues/1099)) ([1c49c7c](https://github.com/chartdb/chartdb/commit/1c49c7c63c8ddeca32e9ba5981e27f1f1aaf1ad4))
+* font family declaration in Tailwind config ([#1094](https://github.com/chartdb/chartdb/issues/1094)) ([7b941bb](https://github.com/chartdb/chartdb/commit/7b941bba39c7de29a92a78b721cf8be71fa715e0))
+* handle embedded quotes and CSV format in metadata import ([#1116](https://github.com/chartdb/chartdb/issues/1116)) ([3442936](https://github.com/chartdb/chartdb/commit/344293610cf4e95da3a93eea2e5399566f715893))
+* handle mixed-dialect types and comments in DBML export ([#1097](https://github.com/chartdb/chartdb/issues/1097)) ([1a1df6e](https://github.com/chartdb/chartdb/commit/1a1df6e3d03da02b820469aebcbec96735988eae))
+* resolve race condition between edge creation and handle registration ([#1118](https://github.com/chartdb/chartdb/issues/1118)) ([81dae56](https://github.com/chartdb/chartdb/commit/81dae56bcda0c64de5ad09c124065f102d87873b))
+* support index comments in DBML and SQL export ([#1098](https://github.com/chartdb/chartdb/issues/1098)) ([ce95f83](https://github.com/chartdb/chartdb/commit/ce95f83ff5315e6c10419b0368332805f7c94829))
+
 ## [1.20.0](https://github.com/chartdb/chartdb/compare/v1.19.0...v1.20.0) (2026-03-04)
 
 
