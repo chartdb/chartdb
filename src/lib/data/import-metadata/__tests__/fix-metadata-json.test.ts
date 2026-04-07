@@ -280,6 +280,55 @@ describe('fixMetadataJson', () => {
         });
     });
 
+    describe('control characters and trailing junk', () => {
+        it('should strip carriage returns inside string values', () => {
+            const input =
+                '{"fk_info": [], "pk_info": [{"schema": "dbo",\r"table": "Users",\r"column": "id",\r"pk_def": "PRIMARY KEY"}], "columns": [], "indexes": [], "tables": [], "views": [], "database_name": "db", "version": "1.0"}';
+            const result = fixMetadataJson(input);
+            expect(isStringMetadataJson(result)).toBe(true);
+        });
+
+        it('should remove trailing commas in arrays and objects', () => {
+            const input = '{"a": [1, 2, 3,], "b": "x",}';
+            const result = fixMetadataJson(input);
+            expect(JSON.parse(result)).toEqual({ a: [1, 2, 3], b: 'x' });
+        });
+
+        it('should remove leading commas in arrays', () => {
+            const input = '{"a": [, 1, 2]}';
+            const result = fixMetadataJson(input);
+            expect(JSON.parse(result)).toEqual({ a: [1, 2] });
+        });
+
+        it('should strip terminal box-drawing characters from copy-paste', () => {
+            const input = '{   ↴│   "a": 1,   ↳"b": 2}';
+            const result = fixMetadataJson(input);
+            expect(JSON.parse(result)).toEqual({ a: 1, b: 2 });
+        });
+    });
+
+    describe('metadata_json_to_import wrapper', () => {
+        it('should extract inner JSON from object wrapper', () => {
+            // This shape has unescaped quotes inside the wrapper value, making
+            // the outer object invalid. We extract the inner object directly.
+            const input =
+                '{"metadata_json_to_import": "{"fk_info": [], "pk_info": [], "columns": [{"schema": "public", "table": "users", "name": "id", "type": "int", "ordinal_position": 1, "nullable": false}], "indexes": [], "tables": [], "views": [], "database_name": "db", "version": "1.0"}"}';
+            const result = fixMetadataJson(input);
+            expect(isStringMetadataJson(result)).toBe(true);
+            const parsed = JSON.parse(result);
+            expect(parsed.columns[0].name).toBe('id');
+        });
+
+        it('should extract inner JSON from array wrapper', () => {
+            const input =
+                '[{"metadata_json_to_import": "{"fk_info": [], "pk_info": [], "columns": [], "indexes": [], "tables": [], "views": [], "database_name": "test_db", "version": "8.0"}"}]';
+            const result = fixMetadataJson(input);
+            expect(isStringMetadataJson(result)).toBe(true);
+            const parsed = JSON.parse(result);
+            expect(parsed.database_name).toBe('test_db');
+        });
+    });
+
     describe('edge cases', () => {
         it('should handle empty objects', () => {
             const input = '{}';
