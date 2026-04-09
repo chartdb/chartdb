@@ -529,6 +529,8 @@ export const vi: LanguageTranslation = {
             duplicate_table: 'Nhân đôi bảng',
             delete_table: 'Xóa bảng',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'Di chuyển đến Khu vực',
+            no_area: 'Không có Khu vực',
         },
 
         canvas: {

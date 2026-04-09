@@ -520,6 +520,8 @@ export const zh_CN: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: '删除表',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: '移动到区域',
+            no_area: '无区域',
         },
 
         canvas: {
