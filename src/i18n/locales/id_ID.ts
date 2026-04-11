@@ -531,6 +531,8 @@ export const id_ID: LanguageTranslation = {
             delete_table: 'Hapus Tabel',
             duplicate_table: 'Duplikat Tabel',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'Pindahkan ke Area',
+            no_area: 'Tanpa Area',
         },
 
         canvas: {

@@ -519,6 +519,8 @@ export const tr: LanguageTranslation = {
             delete_table: 'Tabloyu Sil',
             duplicate_table: 'Duplicate Table', // TODO: Translate
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'Alana Taşı',
+            no_area: 'Alan Yok',
         },
 
         canvas: {

@@ -1,6 +1,12 @@
 import type { DBTable } from '@/lib/domain/db-table';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Area } from '@/lib/domain/area';
-import { calcTableHeight, MIN_TABLE_SIZE } from '@/lib/domain/db-table';
+import {
+    adjustTablePositionsWithoutAreas,
+    calcTableHeight,
+    getTableDimensions,
+    MIN_TABLE_SIZE,
+} from '@/lib/domain/db-table';
 
 /**
  * Check if a table is inside an area based on their positions and dimensions
@@ -82,4 +88,65 @@ export const getTablesInArea = (
     tables: DBTable[]
 ): DBTable[] => {
     return tables.filter((table) => table.parentAreaId === areaId);
+};
+
+const AREA_PADDING = 30;
+const AREA_HEADER_HEIGHT = 50;
+
+/**
+ * Arrange tables using the relationship-aware algorithm and fit them into an area.
+ * Returns the arranged positions and the required area dimensions.
+ */
+export const arrangeTablesForArea = (
+    tablesToArrange: DBTable[],
+    relationships: DBRelationship[],
+    areaRect: { x: number; y: number; width: number; height: number }
+): {
+    positions: { id: string; x: number; y: number }[];
+    requiredWidth: number;
+    requiredHeight: number;
+} => {
+    if (tablesToArrange.length === 0) {
+        return {
+            positions: [],
+            requiredWidth: areaRect.width,
+            requiredHeight: areaRect.height,
+        };
+    }
+
+    const cloned = tablesToArrange.map((t) => ({ ...t }));
+
+    const ids = new Set(cloned.map((t) => t.id));
+    const areaRels = relationships.filter(
+        (rel) => ids.has(rel.sourceTableId) && ids.has(rel.targetTableId)
+    );
+
+    adjustTablePositionsWithoutAreas(cloned, areaRels, 'all');
+
+    // Calculate bounding box
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    cloned.forEach((t) => {
+        const { width, height } = getTableDimensions(t);
+        minX = Math.min(minX, t.x);
+        minY = Math.min(minY, t.y);
+        maxX = Math.max(maxX, t.x + width);
+        maxY = Math.max(maxY, t.y + height);
+    });
+
+    // Translate into area
+    const offsetX = areaRect.x + AREA_PADDING - minX;
+    const offsetY = areaRect.y + AREA_HEADER_HEIGHT - minY;
+
+    return {
+        positions: cloned.map((t) => ({
+            id: t.id,
+            x: t.x + offsetX,
+            y: t.y + offsetY,
+        })),
+        requiredWidth: maxX - minX + 2 * AREA_PADDING,
+        requiredHeight: maxY - minY + AREA_PADDING + AREA_HEADER_HEIGHT,
+    };
 };

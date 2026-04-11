@@ -520,6 +520,8 @@ export const en = {
             duplicate_table: 'Duplicate Table',
             delete_table: 'Delete Table',
             add_relationship: 'Add Relationship',
+            move_to_area: 'Move to Area',
+            no_area: 'No Area',
         },
 
         canvas: {

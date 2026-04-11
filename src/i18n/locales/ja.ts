@@ -534,6 +534,8 @@ export const ja: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'テーブルを削除',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'エリアに移動',
+            no_area: 'エリアなし',
         },
 
         canvas: {

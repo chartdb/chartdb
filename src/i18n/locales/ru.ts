@@ -529,6 +529,8 @@ export const ru: LanguageTranslation = {
             duplicate_table: 'Создать копию',
             delete_table: 'Удалить таблицу',
             add_relationship: 'Добавить связь',
+            move_to_area: 'Переместить в область',
+            no_area: 'Без области',
         },
 
         canvas: {

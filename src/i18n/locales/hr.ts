@@ -525,6 +525,8 @@ export const hr: LanguageTranslation = {
             duplicate_table: 'Dupliciraj tablicu',
             delete_table: 'Izbriši tablicu',
             add_relationship: 'Dodaj vezu',
+            move_to_area: 'Premjesti u područje',
+            no_area: 'Bez područja',
         },
 
         canvas: {

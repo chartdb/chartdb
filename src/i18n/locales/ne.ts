@@ -534,6 +534,8 @@ export const ne: LanguageTranslation = {
             duplicate_table: 'तालिका नक्कली गर्नुहोस्',
             delete_table: 'तालिका हटाउनुहोस्',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'क्षेत्रमा सार्नुहोस्',
+            no_area: 'कुनै क्षेत्र छैन',
         },
 
         canvas: {
