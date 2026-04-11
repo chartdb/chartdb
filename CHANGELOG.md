@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.0](https://github.com/chartdb/chartdb/compare/v1.20.1...v1.21.0) (2026-04-11)
+
+
+### Features
+
+* add move-to-area and auto-arrange-area context menu options ([#1120](https://github.com/chartdb/chartdb/issues/1120)) ([c24936a](https://github.com/chartdb/chartdb/commit/c24936a402bb3e24b4858f05282d69a04fcfe25b))
+
 ## [1.20.1](https://github.com/chartdb/chartdb/compare/v1.20.0...v1.20.1) (2026-04-07)
 
 
