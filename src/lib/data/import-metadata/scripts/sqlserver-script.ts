@@ -218,7 +218,7 @@ SELECT JSON_QUERY(
 ) AS metadata_json_to_import;
 `;
 
-const sqlServer2016AndBelowQuery = `${`/* SQL Server 2016 and below edition (13.0, 12.0, 11.0..) */`}
+const sqlServer2016Query = `${`/* SQL Server 2016 edition (13.0) */`}
 WITH fk_info AS (
     SELECT  JSON_QUERY('[' +
         ISNULL(
@@ -450,13 +450,246 @@ SELECT JSON_QUERY(
     }'
 ) AS metadata_json_to_import;`;
 
+const withDefaultExpr2014 = `'"' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(CAST(cols.COLUMN_DEFAULT AS NVARCHAR(MAX)), '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') + '"'`;
+
+const sqlServer2014AndBelowQuery = `${`/* SQL Server 2014 and below edition (12.0, 11.0) */`}
+WITH fk_info AS (
+    SELECT  '[' +
+        ISNULL(
+            STUFF((
+                SELECT ',' +
+                    CONVERT(nvarchar(max),
+                        N'{
+                            "schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(tp_schema.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "table": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(tp.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "column": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(cp.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "foreign_key_name": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(fk.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "reference_schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(tr_schema.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "reference_table": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(tr.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "reference_column": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(cr.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "fk_def": "FOREIGN KEY (' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(cp.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            ') REFERENCES ' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(tr.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '(' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(cr.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            ') ON DELETE ' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fk.delete_referential_action_desc, CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            ' ON UPDATE ' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fk.update_referential_action_desc, CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '"}' COLLATE DATABASE_DEFAULT
+                    )
+                FROM sys.foreign_keys AS fk
+                JOIN sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
+                JOIN sys.tables AS tp ON fkc.parent_object_id = tp.object_id
+                JOIN sys.schemas AS tp_schema ON tp.schema_id = tp_schema.schema_id
+                JOIN sys.columns AS cp ON fkc.parent_object_id = cp.object_id AND fkc.parent_column_id = cp.column_id
+                JOIN sys.tables AS tr ON fkc.referenced_object_id = tr.object_id
+                JOIN sys.schemas AS tr_schema ON tr.schema_id = tr_schema.schema_id
+                JOIN sys.columns AS cr ON fkc.referenced_object_id = cr.object_id AND fkc.referenced_column_id = cr.column_id
+                FOR XML PATH('')
+            ), 1, 1, ''), '')
+    + N']' AS all_fks_json
+),
+pk_info AS (
+    SELECT  '[' +
+                ISNULL(STUFF((
+                    SELECT ',' +
+                        CONVERT(nvarchar(max),
+                        N'{
+                            "schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(pk.TABLE_SCHEMA, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "table": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(pk.TABLE_NAME, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "column": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(pk.COLUMN_NAME, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                            '", "pk_def": "PRIMARY KEY (' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pk.COLUMN_NAME, CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') + N')"}' COLLATE DATABASE_DEFAULT
+                        )
+                    FROM
+                        (
+                            SELECT  kcu.TABLE_SCHEMA,
+                                    kcu.TABLE_NAME,
+                                    kcu.COLUMN_NAME
+                            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+                            JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+                                ON kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME
+                                AND kcu.CONSTRAINT_SCHEMA = tc.CONSTRAINT_SCHEMA
+                            WHERE   tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+                        ) pk
+                    FOR XML PATH('')
+                ), 1, 1, ''), '')
+    + N']' AS all_pks_json
+),
+cols AS (
+    SELECT  '[' +
+        ISNULL(
+            STUFF((
+                SELECT ',' +
+                    CONVERT(nvarchar(max),
+                    '{
+                                "schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(cols.TABLE_SCHEMA, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                                '", "table": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(cols.TABLE_NAME, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                                '", "name": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(cols.COLUMN_NAME, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                                '", "ordinal_position": ' + CAST(cols.ORDINAL_POSITION AS NVARCHAR(MAX)) +
+                                ', "type": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(LOWER(cols.DATA_TYPE), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                                '", "character_maximum_length": "' +
+                                    CASE
+                                        WHEN cols.CHARACTER_MAXIMUM_LENGTH IS NULL THEN 'null'
+                                        ELSE CAST(cols.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(MAX))
+                                    END +
+                                '", "precision": ' +
+                                    CASE
+                                        WHEN cols.DATA_TYPE IN ('numeric', 'decimal')
+                                        THEN '{"precision":' + COALESCE(CAST(cols.NUMERIC_PRECISION AS NVARCHAR(MAX)), 'null') +
+                                             ',"scale":' + COALESCE(CAST(cols.NUMERIC_SCALE AS NVARCHAR(MAX)), 'null') + '}'
+                                        ELSE 'null'
+                                    END +
+                                ', "nullable": ' + CASE WHEN cols.IS_NULLABLE = 'YES' THEN 'true' ELSE 'false' END +
+                                ', "default": ' + ${withDefault ? withDefaultExpr2014 : withoutDefault} +
+                                ', "collation": ' +
+                                    CASE
+                                        WHEN cols.COLLATION_NAME IS NULL THEN 'null'
+                                        ELSE '"' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(cols.COLLATION_NAME, CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') + '"'
+                                    END +
+                                N'}'
+                    )
+                FROM
+                    INFORMATION_SCHEMA.COLUMNS cols
+                WHERE
+                    cols.TABLE_CATALOG = DB_NAME()
+                FOR XML PATH('')
+            ), 1, 1, ''), '')
+    + ']' AS all_columns_json
+),
+indexes AS (
+    SELECT
+        '[' + ISNULL(
+            STUFF((
+                SELECT ',' +
+                    CONVERT(nvarchar(max),
+                    N'{
+                        "schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(s.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '", "table": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(t.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '", "name": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(i.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '", "column": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(c.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '", "index_type": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(LOWER(i.type_desc), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '", "unique": ' + CASE WHEN i.is_unique = 1 THEN 'true' ELSE 'false' END +
+                        ', "direction": "' + CASE WHEN ic.is_descending_key = 1 THEN 'desc' ELSE 'asc' END +
+                        '", "column_position": ' + CAST(ic.key_ordinal AS nvarchar(max)) + N'}'
+                    COLLATE DATABASE_DEFAULT
+                )
+                FROM sys.indexes i
+                JOIN sys.tables t ON i.object_id = t.object_id
+                JOIN sys.schemas s ON t.schema_id = s.schema_id
+                JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+                JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+                WHERE s.name LIKE '%'
+                        AND i.name IS NOT NULL
+                        AND ic.is_included_column = 0
+                FOR XML PATH('')
+            ), 1, 1, ''), '')
+        + N']' AS all_indexes_json
+),
+tbls AS (
+    SELECT
+    '[' + ISNULL(
+        STUFF((
+            SELECT ',' +
+                CONVERT(nvarchar(max),
+                N'{
+                    "schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(aggregated.schema_name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                    '", "table": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(aggregated.table_name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                    '", "row_count": ' + CAST(aggregated.row_count AS NVARCHAR(MAX)) +
+                    ', "table_type": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(aggregated.table_type, CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                    '", "creation_date": "' + CONVERT(NVARCHAR(MAX), aggregated.creation_date, 120) + N'"}'
+                )
+            FROM
+                (
+                    SELECT
+                        COALESCE(REPLACE(s.name, '"', ''), '') AS schema_name,
+                        COALESCE(REPLACE(t.name, '"', ''), '') AS table_name,
+                        SUM(p.rows) AS row_count,
+                        t.type_desc AS table_type,
+                        t.create_date AS creation_date
+                    FROM sys.tables t
+                    JOIN sys.schemas s ON t.schema_id = s.schema_id
+                    JOIN sys.partitions p ON t.object_id = p.object_id AND p.index_id IN (0, 1)
+                    WHERE s.name LIKE '%'
+                    GROUP BY s.name, t.name, t.type_desc, t.create_date
+
+                    UNION ALL
+
+                    SELECT
+                        COALESCE(REPLACE(s.name, '"', ''), '') AS schema_name,
+                        COALESCE(REPLACE(v.name, '"', ''), '') AS object_name,
+                        0 AS row_count,
+                        'VIEW' AS object_type,
+                        v.create_date AS creation_date
+                    FROM sys.views v
+                    JOIN sys.schemas s ON v.schema_id = s.schema_id
+                    WHERE s.name LIKE '%'
+                ) AS aggregated
+            FOR XML PATH('')
+        ), 1, 1, ''), '')
+    + N']' AS all_objects_json
+),
+views AS (
+    SELECT
+        '[' +
+        (
+            SELECT  STUFF((
+                        SELECT ',' + CONVERT(nvarchar(max),
+                                N'{
+                                "schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(s.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                                '", "view_name": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(v.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                                '", "view_definition": ""}'
+                        )
+                        FROM
+                            sys.views v
+                        JOIN
+                            sys.schemas s ON v.schema_id = s.schema_id
+                        WHERE
+                            s.name LIKE '%'
+                        FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, '')
+        ) + ']' AS all_views_json
+),
+check_constraints AS (
+    SELECT
+        '[' + ISNULL(
+            STUFF((
+                SELECT ',' +
+                    CONVERT(nvarchar(max),
+                    N'{
+                        "schema": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(s.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '", "table": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(t.name, '"', ''), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                        '", "expression": "' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(REPLACE(REPLACE(cc.definition, '"', CHAR(92) + '"'), CHAR(10), ' '), ''), CHAR(92), CHAR(92) + CHAR(92)), '"', CHAR(92) + '"'), CHAR(10), CHAR(92) + 'n'), CHAR(13), CHAR(92) + 'r'), CHAR(9), CHAR(92) + 't') +
+                    '"}' COLLATE DATABASE_DEFAULT
+                )
+                FROM sys.check_constraints cc
+                JOIN sys.tables t ON cc.parent_object_id = t.object_id
+                JOIN sys.schemas s ON t.schema_id = s.schema_id
+                WHERE s.name LIKE '%'
+                FOR XML PATH('')
+            ), 1, 1, ''), '')
+        + N']' AS all_check_constraints_json
+)
+SELECT CAST(
+    N'{
+        "fk_info": ' + ISNULL((SELECT cast(all_fks_json as nvarchar(max)) FROM fk_info), N'[]') +
+        ', "pk_info": ' + ISNULL((SELECT cast(all_pks_json as nvarchar(max)) FROM pk_info), N'[]') +
+        ', "columns": ' + ISNULL((SELECT cast(all_columns_json as nvarchar(max)) FROM cols), N'[]') +
+        ', "indexes": ' + ISNULL((SELECT cast(all_indexes_json as nvarchar(max)) FROM indexes), N'[]') +
+        ', "tables": ' + ISNULL((SELECT cast(all_objects_json as nvarchar(max)) FROM tbls), N'[]') +
+        ', "views": ' + ISNULL((SELECT cast(all_views_json as nvarchar(max)) FROM views), N'[]') +
+        ', "check_constraints": ' + ISNULL((SELECT cast(all_check_constraints_json as nvarchar(max)) FROM check_constraints), N'[]') +
+        ', "database_name": "' + DB_NAME() + '"' +
+        ', "version": ""
+    }'
+AS NVARCHAR(MAX)) AS metadata_json_to_import;`;
+
 export const getSqlServerQuery = (
     options: {
         databaseEdition?: DatabaseEdition;
     } = {}
 ): string => {
-    if (options.databaseEdition === DatabaseEdition.SQL_SERVER_2016_AND_BELOW) {
-        return sqlServer2016AndBelowQuery;
+    if (options.databaseEdition === DatabaseEdition.SQL_SERVER_2016) {
+        return sqlServer2016Query;
+    }
+
+    if (options.databaseEdition === DatabaseEdition.SQL_SERVER_2014_AND_BELOW) {
+        return sqlServer2014AndBelowQuery;
     }
 
     return sqlServerQuery;
