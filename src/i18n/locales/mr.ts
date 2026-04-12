@@ -44,6 +44,8 @@ export const mr: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_toolbar: 'Show Toolbar',
+                hide_toolbar: 'Hide Toolbar',
             },
             backup: {
                 // TODO: Add translations

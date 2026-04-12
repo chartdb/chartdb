@@ -307,7 +307,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction, showDBViews, showMiniMapOnCanvas } = useLocalConfig();
+    const { scrollAction, showDBViews, showMiniMapOnCanvas, showToolbar } =
+        useLocalConfig();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
@@ -1856,16 +1857,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             <ShowAllButton />
                         </Controls>
                     ) : null}
-                    <Controls
-                        position={isDesktop ? 'bottom-center' : 'top-center'}
-                        orientation="horizontal"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <Toolbar readonly={readonly} />
-                    </Controls>
+                    {showToolbar && (
+                        <Controls
+                            position={
+                                isDesktop ? 'bottom-center' : 'top-center'
+                            }
+                            orientation="horizontal"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <Toolbar readonly={readonly} />
+                        </Controls>
+                    )}
                     {showMiniMapOnCanvas && (
                         <MiniMap
                             style={{
