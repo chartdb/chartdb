@@ -44,6 +44,8 @@ export const mr: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_full_tables: 'पूर्ण तक्ते दाखवा',
+                hide_full_tables: 'पूर्ण तक्ते लपवा',
             },
             backup: {
                 // TODO: Add translations
