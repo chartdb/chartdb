@@ -30,6 +30,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
+import { APP_VERSION } from '@/lib/version';
 
 export interface SidebarItem {
     title: string;
@@ -273,6 +274,9 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                         </SidebarMenuItem>
                     ))}
                 </SidebarMenu>
+                <small className="flex justify-center space-y-0.5 text-xs opacity-50">
+                    <span>v{APP_VERSION}</span>
+                </small>
             </SidebarFooter>
         </Sidebar>
     );
