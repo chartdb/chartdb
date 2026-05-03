@@ -13,6 +13,21 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 
+// Build a unique, safe index name from table and index names,
+// respecting PostgreSQL's 63-character identifier limit
+function buildIndexName(tableName: string, indexName: string): string {
+    const safeTableName = tableName.replace(/[^a-zA-Z0-9_]/g, '_');
+    const safeIndexName = indexName.replace(/[^a-zA-Z0-9_]/g, '_');
+    let combinedName = `${safeTableName}_${safeIndexName}`;
+    if (combinedName.length > 60) {
+        combinedName =
+            safeIndexName.length > 60
+                ? safeIndexName.substring(0, 60)
+                : safeIndexName;
+    }
+    return combinedName;
+}
+
 function parsePostgresDefault(field: DBField): string {
     if (!field.default || typeof field.default !== 'string') {
         return '';
@@ -403,27 +418,10 @@ export function exportPostgreSQL({
                                     return '';
                                 }
 
-                                // Create unique index name using table name and index name
-                                // This ensures index names are unique across the database
-                                const safeTableName = table.name.replace(
-                                    /[^a-zA-Z0-9_]/g,
-                                    '_'
+                                const combinedName = buildIndexName(
+                                    table.name,
+                                    index.name
                                 );
-                                const safeIndexName = index.name.replace(
-                                    /[^a-zA-Z0-9_]/g,
-                                    '_'
-                                );
-
-                                // Limit index name length to avoid PostgreSQL's 63-character identifier limit
-                                let combinedName = `${safeTableName}_${safeIndexName}`;
-                                if (combinedName.length > 60) {
-                                    // If too long, use just the index name or a truncated version
-                                    combinedName =
-                                        safeIndexName.length > 60
-                                            ? safeIndexName.substring(0, 60)
-                                            : safeIndexName;
-                                }
-
                                 const indexName = `"${combinedName}"`;
 
                                 // Get the properly quoted field names
@@ -440,9 +438,27 @@ export function exportPostgreSQL({
                             .filter(Boolean)
                             .sort((a, b) => a.localeCompare(b)); // Sort for consistent output
 
-                        return validIndexes.length > 0
-                            ? `\n-- Indexes\n${validIndexes.join('\n')}`
-                            : '';
+                        const indexComments = table.indexes
+                            .filter((index) => index.comments)
+                            .map((index) => {
+                                const combinedName = buildIndexName(
+                                    table.name,
+                                    index.name
+                                );
+                                return `COMMENT ON INDEX "${combinedName}" IS '${escapeSQLComment(index.comments!)}';`;
+                            })
+                            .filter(Boolean);
+
+                        const indexSection =
+                            validIndexes.length > 0
+                                ? `\n-- Indexes\n${validIndexes.join('\n')}`
+                                : '';
+                        const indexCommentSection =
+                            indexComments.length > 0
+                                ? `\n${indexComments.join('\n')}`
+                                : '';
+
+                        return indexSection + indexCommentSection;
                     })()
                 }\n`;
             })

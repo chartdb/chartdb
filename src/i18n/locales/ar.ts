@@ -522,6 +522,8 @@ export const ar: LanguageTranslation = {
             duplicate_table: 'نسخ الجدول',
             delete_table: 'حذف الجدول',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'نقل إلى منطقة',
+            no_area: 'بدون منطقة',
         },
 
         canvas: {

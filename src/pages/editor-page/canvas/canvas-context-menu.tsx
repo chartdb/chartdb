@@ -3,34 +3,68 @@ import {
     ContextMenuContent,
     ContextMenuItem,
     ContextMenuSeparator,
+    ContextMenuSub,
+    ContextMenuSubContent,
+    ContextMenuSubTrigger,
     ContextMenuTrigger,
 } from '@/components/context-menu/context-menu';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
-import { useReactFlow } from '@xyflow/react';
+import { useReactFlow, useStore } from '@xyflow/react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Table, Workflow, Group, View, StickyNote, Import } from 'lucide-react';
+import {
+    Table,
+    Workflow,
+    Group,
+    View,
+    StickyNote,
+    Import,
+    LayoutGrid,
+    Plus,
+    SquareArrowOutUpRight,
+} from 'lucide-react';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useAlert } from '@/context/alert-context/alert-context';
+import { arrangeTablesForArea } from '@/lib/utils/area-utils';
 
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { createTable, readonly, createArea, databaseType, createNote } =
-        useChartDB();
+    const {
+        createTable,
+        readonly,
+        createArea,
+        databaseType,
+        createNote,
+        areas,
+        tables,
+        relationships,
+        updateArea,
+        updateTablesState,
+    } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
     const { openCreateRelationshipDialog, openImportDatabaseDialog } =
         useDialog();
-    const { screenToFlowPosition } = useReactFlow();
+    const { screenToFlowPosition, getNodes } = useReactFlow();
     const { t } = useTranslation();
     const { showDBViews } = useLocalConfig();
-    const { setEditTableModeTable } = useCanvas();
+    const { setEditTableModeTable, reorderTables } = useCanvas();
+    const { showAlert } = useAlert();
 
     const { isMd: isDesktop } = useBreakpoint('md');
+
+    // Reactively detect selected tables
+    const selectedTableIds = useStore((state) =>
+        state.nodes
+            .filter((n) => n.type === 'table' && n.selected && !n.hidden)
+            .map((n) => n.id)
+    );
+    const hasSelectedTables = selectedTableIds.length > 0;
 
     const createTableHandler = useCallback(
         async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -39,7 +73,6 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 y: event.clientY,
             });
 
-            // Auto-select schema with priority: default schema > first displayed schema > undefined
             let schema: string | undefined = undefined;
             if (schemasDisplayed.length > 0) {
                 const defaultSchemaName = defaultSchemas[databaseType];
@@ -77,7 +110,6 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 y: event.clientY,
             });
 
-            // Auto-select schema with priority: default schema > first displayed schema > undefined
             let schema: string | undefined = undefined;
             if (schemasDisplayed.length > 0) {
                 const defaultSchemaName = defaultSchemas[databaseType];
@@ -143,8 +175,17 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog]);
 
+    const autoArrangeHandler = useCallback(() => {
+        showAlert({
+            title: t('reorder_diagram_alert.title'),
+            description: t('reorder_diagram_alert.description'),
+            actionLabel: t('reorder_diagram_alert.reorder'),
+            closeLabel: t('reorder_diagram_alert.cancel'),
+            onAction: reorderTables,
+        });
+    }, [t, showAlert, reorderTables]);
+
     const importSqlDbmlHandler = useCallback(() => {
-        // Defer dialog opening to prevent Radix UI context menu/dialog portal conflicts
         queueMicrotask(() => {
             openImportDatabaseDialog({
                 databaseType,
@@ -152,6 +193,97 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             });
         });
     }, [openImportDatabaseDialog, databaseType]);
+
+    // Arrange selected tables into an area
+    const moveSelectedToArea = useCallback(
+        (
+            areaId: string,
+            overrideRect?: {
+                x: number;
+                y: number;
+                width: number;
+                height: number;
+            }
+        ) => {
+            let areaRect = overrideRect;
+            if (!areaRect) {
+                const canvasNodes = getNodes();
+                const areaNode = canvasNodes.find(
+                    (n) => n.id === areaId && n.type === 'area'
+                );
+                const areaData = areas.find((a) => a.id === areaId)!;
+                areaRect = {
+                    x: areaNode?.position.x ?? areaData.x,
+                    y: areaNode?.position.y ?? areaData.y,
+                    width: areaNode?.measured?.width ?? areaData.width,
+                    height: areaNode?.measured?.height ?? areaData.height,
+                };
+            }
+
+            const tableIdSet = new Set(selectedTableIds);
+            const existingAreaTables = tables.filter(
+                (t) => t.parentAreaId === areaId && !tableIdSet.has(t.id)
+            );
+            const movingTables = tables.filter((t) => tableIdSet.has(t.id));
+            const allAreaTables = [...existingAreaTables, ...movingTables];
+
+            const { positions, requiredWidth, requiredHeight } =
+                arrangeTablesForArea(allAreaTables, relationships, areaRect);
+
+            if (
+                requiredWidth > areaRect.width ||
+                requiredHeight > areaRect.height
+            ) {
+                updateArea(areaId, {
+                    width: Math.max(areaRect.width, requiredWidth),
+                    height: Math.max(areaRect.height, requiredHeight),
+                });
+            }
+
+            updateTablesState(
+                (currentTables) =>
+                    currentTables.map((t) => {
+                        const pos = positions.find((p) => p.id === t.id);
+                        if (!pos) return t;
+                        return {
+                            ...t,
+                            parentAreaId: areaId,
+                            x: pos.x,
+                            y: pos.y,
+                        };
+                    }),
+                { updateHistory: true }
+            );
+        },
+        [
+            selectedTableIds,
+            updateTablesState,
+            updateArea,
+            tables,
+            relationships,
+            areas,
+            getNodes,
+        ]
+    );
+
+    const createAreaForSelectedHandler = useCallback(async () => {
+        const canvasNodes = getNodes();
+        const firstSelected = canvasNodes.find((n) =>
+            selectedTableIds.includes(n.id)
+        );
+
+        const newArea = await createArea({
+            x: (firstSelected?.position.x ?? 0) - 30,
+            y: (firstSelected?.position.y ?? 0) - 50,
+        });
+
+        moveSelectedToArea(newArea.id, {
+            x: newArea.x,
+            y: newArea.y,
+            width: newArea.width,
+            height: newArea.height,
+        });
+    }, [selectedTableIds, createArea, getNodes, moveSelectedToArea]);
 
     if (!isDesktop) {
         return <>{children}</>;
@@ -200,7 +332,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 >
                     {t('canvas_context_menu.new_note')}
                     <StickyNote className="size-3.5" />
-                </ContextMenuItem>{' '}
+                </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem
                     onClick={importSqlDbmlHandler}
@@ -208,6 +340,56 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 >
                     Import SQL/DBML
                     <Import className="size-3.5" />
+                </ContextMenuItem>
+                {hasSelectedTables && (
+                    <>
+                        <ContextMenuSeparator />
+                        <ContextMenuSub>
+                            <ContextMenuSubTrigger className="flex items-center gap-3">
+                                <span>
+                                    {`${t('table_node_context_menu.move_to_area')} (${selectedTableIds.length})`}
+                                </span>
+                                <SquareArrowOutUpRight className="ml-auto size-3.5" />
+                            </ContextMenuSubTrigger>
+                            <ContextMenuSubContent>
+                                <ContextMenuItem
+                                    onClick={createAreaForSelectedHandler}
+                                    className="flex items-center gap-2"
+                                >
+                                    <Plus className="size-3.5" />
+                                    <span>
+                                        {t('canvas_context_menu.new_area')}
+                                    </span>
+                                </ContextMenuItem>
+                                {areas.length > 0 && <ContextMenuSeparator />}
+                                {areas.map((area) => (
+                                    <ContextMenuItem
+                                        key={area.id}
+                                        onClick={() =>
+                                            moveSelectedToArea(area.id)
+                                        }
+                                        className="flex items-center gap-2"
+                                    >
+                                        <div
+                                            className="size-2.5 shrink-0 rounded-full"
+                                            style={{
+                                                backgroundColor: area.color,
+                                            }}
+                                        />
+                                        <span>{area.name}</span>
+                                    </ContextMenuItem>
+                                ))}
+                            </ContextMenuSubContent>
+                        </ContextMenuSub>
+                    </>
+                )}
+                <ContextMenuSeparator />
+                <ContextMenuItem
+                    onClick={autoArrangeHandler}
+                    className="flex justify-between gap-4"
+                >
+                    {t('toolbar.reorder_diagram')}
+                    <LayoutGrid className="size-3.5" />
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>

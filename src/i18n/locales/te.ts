@@ -536,6 +536,8 @@ export const te: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'పట్టికను తొలగించు',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'ప్రాంతానికి తరలించు',
+            no_area: 'ప్రాంతం లేదు',
         },
 
         canvas: {

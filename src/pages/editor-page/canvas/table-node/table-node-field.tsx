@@ -48,6 +48,8 @@ export interface TableNodeFieldProps {
     highlighted: boolean;
     visible: boolean;
     isConnectable: boolean;
+    // Target edge count passed from canvas to ensure sync with edge creation
+    targetEdgeCount?: number;
 }
 
 const arePropsEqual = (
@@ -72,12 +74,21 @@ const arePropsEqual = (
         prevProps.highlighted === nextProps.highlighted &&
         prevProps.visible === nextProps.visible &&
         prevProps.isConnectable === nextProps.isConnectable &&
-        prevProps.tableNodeId === nextProps.tableNodeId
+        prevProps.tableNodeId === nextProps.tableNodeId &&
+        prevProps.targetEdgeCount === nextProps.targetEdgeCount
     );
 };
 
 export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
-    ({ field, focused, tableNodeId, highlighted, visible, isConnectable }) => {
+    ({
+        field,
+        focused,
+        tableNodeId,
+        highlighted,
+        visible,
+        isConnectable,
+        targetEdgeCount,
+    }) => {
         const { relationships, readonly, highlightedCustomType, databaseType } =
             useChartDB();
 
@@ -117,6 +128,11 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         );
 
         const numberOfEdgesToField = useMemo(() => {
+            // Use targetEdgeCount from canvas when available (ensures sync with edge creation)
+            if (targetEdgeCount !== undefined) {
+                return targetEdgeCount;
+            }
+            // Fallback: count from relationships
             let count = 0;
             for (const rel of relationships) {
                 if (
@@ -127,7 +143,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 }
             }
             return count;
-        }, [relationships, tableNodeId, field.id]);
+        }, [targetEdgeCount, relationships, tableNodeId, field.id]);
 
         const isForeignKey = useMemo(() => {
             return relationships.some((rel) => {
@@ -154,18 +170,21 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             });
         }, [relationships, tableNodeId, field.id]);
 
-        const previousNumberOfEdgesToFieldRef = useRef(numberOfEdgesToField);
+        const previousNumberOfEdgesToFieldRef = useRef<number | null>(null);
 
         useEffect(() => {
+            // Always update on first render, then only when count changes
             if (
+                previousNumberOfEdgesToFieldRef.current === null ||
                 previousNumberOfEdgesToFieldRef.current !== numberOfEdgesToField
             ) {
-                const timer = setTimeout(() => {
+                // Use requestAnimationFrame for immediate but batched update
+                const frameId = requestAnimationFrame(() => {
                     updateNodeInternals(tableNodeId);
                     previousNumberOfEdgesToFieldRef.current =
                         numberOfEdgesToField;
-                }, 100);
-                return () => clearTimeout(timer);
+                });
+                return () => cancelAnimationFrame(frameId);
             }
         }, [tableNodeId, updateNodeInternals, numberOfEdgesToField]);
 

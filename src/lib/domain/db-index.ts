@@ -30,6 +30,7 @@ export interface DBIndex {
     createdAt: number;
     type?: IndexType | null;
     isPrimaryKey?: boolean | null;
+    comments?: string | null;
 }
 
 export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
@@ -40,6 +41,7 @@ export const dbIndexSchema: z.ZodType<DBIndex> = z.object({
     createdAt: z.number(),
     type: z.enum(INDEX_TYPES).optional(),
     isPrimaryKey: z.boolean().or(z.null()).optional(),
+    comments: z.string().or(z.null()).optional(),
 });
 
 export const databaseIndexTypes: Record<DatabaseType, IndexType[] | undefined> =

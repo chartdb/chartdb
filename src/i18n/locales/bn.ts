@@ -533,6 +533,8 @@ export const bn: LanguageTranslation = {
             duplicate_table: 'টেবিল নকল করুন',
             delete_table: 'টেবিল মুছে ফেলুন',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'এলাকায় সরান',
+            no_area: 'কোনো এলাকা নেই',
         },
 
         canvas: {

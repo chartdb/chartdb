@@ -531,6 +531,8 @@ export const gu: LanguageTranslation = {
             duplicate_table: 'ટેબલ નકલ કરો',
             delete_table: 'ટેબલ કાઢી નાખો',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'વિસ્તારમાં ખસેડો',
+            no_area: 'કોઈ વિસ્તાર નહીં',
         },
 
         canvas: {

@@ -15,7 +15,12 @@ import {
 import { defaultTableColor } from '@/lib/colors';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type Field from '@dbml/core/types/model_structure/field';
-import { getTableIndexesWithPrimaryKey, type DBIndex } from '@/lib/domain';
+import {
+    getTableIndexesWithPrimaryKey,
+    type DBIndex,
+    type IndexType,
+    INDEX_TYPES,
+} from '@/lib/domain';
 import {
     DBCustomTypeKind,
     type DBCustomType,
@@ -288,6 +293,8 @@ interface DBMLIndex {
     unique?: boolean;
     name?: string;
     pk?: boolean; // Primary key index flag
+    type?: string; // Index type (e.g., 'gin', 'btree', 'hash')
+    note?: string | { value: string } | null;
 }
 
 interface DBMLTable {
@@ -621,6 +628,8 @@ export const importDBMLToDiagram = async (
                                     unique: dbmlIndex.unique || false,
                                     name: indexName,
                                     pk: Boolean(dbmlIndex.pk) || false,
+                                    type: dbmlIndex.type,
+                                    note: dbmlIndex.note,
                                 };
                             }) || [],
                     });
@@ -825,6 +834,26 @@ export const importDBMLToDiagram = async (
                             return field.id;
                         });
 
+                        const indexType =
+                            dbmlIndex.type &&
+                            INDEX_TYPES.includes(
+                                dbmlIndex.type.toLowerCase() as IndexType
+                            )
+                                ? (dbmlIndex.type.toLowerCase() as IndexType)
+                                : undefined;
+
+                        let indexComment: string | undefined;
+                        if (dbmlIndex.note) {
+                            if (typeof dbmlIndex.note === 'string') {
+                                indexComment = dbmlIndex.note;
+                            } else if (
+                                typeof dbmlIndex.note === 'object' &&
+                                'value' in dbmlIndex.note
+                            ) {
+                                indexComment = dbmlIndex.note.value;
+                            }
+                        }
+
                         return {
                             id: generateId(),
                             name:
@@ -833,6 +862,8 @@ export const importDBMLToDiagram = async (
                             fieldIds,
                             unique: dbmlIndex.unique || false,
                             createdAt: Date.now(),
+                            ...(indexType ? { type: indexType } : {}),
+                            ...(indexComment ? { comments: indexComment } : {}),
                         };
                     }) || [];
 

@@ -52,9 +52,26 @@ describe('DBML SQL Sanitization - Fantasy Examples', () => {
 
             const sanitized = sanitizeSQLforDBML(sql);
 
-            // Should convert both NOW and now to NOW()
-            expect(sanitized.match(/DEFAULT NOW\(\)/gi)?.length).toBe(2); // cast_at becomes NOW(), created_at already has NOW()
+            // Should convert all three: NOW -> NOW(), now -> NOW(), NOW() stays NOW()
+            expect(sanitized.match(/DEFAULT NOW\(\)/gi)?.length).toBe(3);
             expect(sanitized).not.toMatch(/DEFAULT NOW(?!\()/i);
+        });
+
+        it('should quote lowercase and mixed-case bare identifier defaults', () => {
+            const sql = `CREATE TABLE users (
+  id uuid PRIMARY KEY,
+  status varchar(20) DEFAULT active,
+  permission varchar(20) DEFAULT all,
+  role varchar(20) DEFAULT member,
+  tier varchar(20) DEFAULT Basic
+);`;
+
+            const sanitized = sanitizeSQLforDBML(sql);
+
+            expect(sanitized).toContain("DEFAULT 'active'");
+            expect(sanitized).toContain("DEFAULT 'all'");
+            expect(sanitized).toContain("DEFAULT 'member'");
+            expect(sanitized).toContain("DEFAULT 'Basic'");
         });
 
         it('should not affect other DEFAULT values', () => {
@@ -230,7 +247,7 @@ CREATE TABLE public.account_users (
             expect(sanitized).not.toContain('char (3)');
             expect(sanitized).toContain("DEFAULT 'EUR'");
             expect(sanitized).not.toContain('DEFAULT EUR');
-            expect(sanitized).toContain("DEFAULT 'NOW'"); // NOW is quoted in this case
+            expect(sanitized).toContain('DEFAULT NOW()'); // NOW is preserved then converted to NOW()
             expect(sanitized).not.toContain('DEFAULT NOW,');
 
             // The composite primary key issue isn't fixed by sanitization
@@ -265,7 +282,7 @@ ALTER TABLE spell_component_links ADD CONSTRAINT fk_creator FOREIGN KEY (link_id
             expect(sanitized).toContain('char(64)');
             expect(sanitized).toContain('char(1)');
             expect(sanitized).toContain("DEFAULT 'F'");
-            expect(sanitized).toContain("DEFAULT 'NOW'"); // NOW is quoted as a single word
+            expect(sanitized).toContain('DEFAULT NOW()'); // NOW is preserved then converted to NOW()
             expect(sanitized).toContain('(matrix_pattern)'); // Deduplicated
             // Valid self-referencing relationships (different fields) are preserved
             expect(sanitized).toContain(
@@ -280,7 +297,7 @@ ALTER TABLE spell_component_links ADD CONSTRAINT fk_creator FOREIGN KEY (link_id
             expect(sanitized).toContain(
                 'ADD CONSTRAINT fk_creator_1 FOREIGN KEY'
             );
-            expect(sanitized).toContain('DEFAULT has default'); // This should be handled by export function
+            expect(sanitized).toContain("DEFAULT 'has'"); // 'has' gets quoted as a bare identifier
         });
     });
 });

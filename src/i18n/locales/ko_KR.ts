@@ -527,6 +527,8 @@ export const ko_KR: LanguageTranslation = {
             duplicate_table: '테이블 복제',
             delete_table: '테이블 삭제',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: '영역으로 이동',
+            no_area: '영역 없음',
         },
 
         canvas: {

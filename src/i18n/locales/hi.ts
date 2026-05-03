@@ -535,6 +535,8 @@ export const hi: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'तालिका हटाएँ',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'क्षेत्र में ले जाएं',
+            no_area: 'कोई क्षेत्र नहीं',
         },
 
         canvas: {

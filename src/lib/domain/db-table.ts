@@ -185,7 +185,7 @@ function isTableInsideArea(table: DBTable, area: Area): boolean {
 }
 
 // Helper function to position tables within an area
-function positionTablesWithinArea(
+export function positionTablesWithinArea(
     tables: DBTable[],
     _relationships: DBRelationship[],
     area: Area
@@ -228,7 +228,7 @@ function positionTablesWithinArea(
 }
 
 // Original algorithm with area avoidance
-function adjustTablePositionsWithoutAreas(
+export function adjustTablePositionsWithoutAreas(
     tables: DBTable[],
     relationships: DBRelationship[],
     mode: 'all' | 'perSchema',

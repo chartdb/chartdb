@@ -1088,6 +1088,7 @@ function compareIndexProperties({
         'unique',
         'fieldIds',
         'type',
+        'comments',
     ];
 
     const changedAttributes: IndexDiffAttribute[] = [];
@@ -1120,6 +1121,13 @@ function compareIndexProperties({
         if (oldType !== newType) {
             changedAttributes.push('type');
         }
+    }
+
+    if (
+        attributesToCheck.includes('comments') &&
+        (oldIndex.comments ?? null) !== (newIndex.comments ?? null)
+    ) {
+        changedAttributes.push('comments');
     }
 
     if (changedAttributes.length > 0) {

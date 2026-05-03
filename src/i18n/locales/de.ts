@@ -533,6 +533,8 @@ export const de: LanguageTranslation = {
             duplicate_table: 'Duplicate Table', // TODO: Translate
             delete_table: 'Tabelle löschen',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'In Bereich verschieben',
+            no_area: 'Kein Bereich',
         },
 
         canvas: {

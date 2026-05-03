@@ -18,6 +18,7 @@ import { Separator } from '@/components/separator/separator';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { Label } from '@/components/label/label';
 import { Input } from '@/components/input/input';
+import { Textarea } from '@/components/textarea/textarea';
 import { useTranslation } from 'react-i18next';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableIndexToggle } from './table-index-toggle';
@@ -122,7 +123,24 @@ export const TableIndex: React.FC<TableIndexProps> = ({
         'Select type';
 
     return (
-        <div className="flex flex-1 flex-row justify-between gap-2 p-1">
+        <div className="relative flex flex-1 flex-row justify-between gap-2 p-1">
+            {index.comments ? (
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <div className="absolute right-0 top-0 size-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-pink-500" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                        <div>
+                            <div className="font-normal text-white/70 dark:text-black/70">
+                                Comment:
+                            </div>
+                            <div className="whitespace-pre-wrap break-words">
+                                {index.comments}
+                            </div>
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
+            ) : null}
             <SelectBox
                 className="flex h-8 min-h-8 min-w-0 flex-1"
                 multiple
@@ -245,6 +263,26 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                         t={t}
                                     />
                                 )}
+                                <div className="flex flex-col gap-2">
+                                    <Label
+                                        htmlFor="width"
+                                        className="text-subtitle"
+                                    >
+                                        Comments
+                                    </Label>
+                                    <Textarea
+                                        value={index.comments ?? ''}
+                                        onChange={(e) =>
+                                            updateIndex({
+                                                comments:
+                                                    e.target.value || null,
+                                            })
+                                        }
+                                        placeholder="No comments"
+                                        className="w-full rounded-md bg-muted text-sm"
+                                        readOnly={readonly}
+                                    />
+                                </div>
                                 {!readonly && (
                                     <>
                                         <Separator orientation="horizontal" />

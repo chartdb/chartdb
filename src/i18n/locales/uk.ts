@@ -529,6 +529,8 @@ export const uk: LanguageTranslation = {
             duplicate_table: 'Дублювати таблицю',
             delete_table: 'Видалити таблицю',
             add_relationship: 'Add Relationship', // TODO: Translate
+            move_to_area: 'Перемістити в область',
+            no_area: 'Без області',
         },
 
         canvas: {

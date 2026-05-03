@@ -528,6 +528,8 @@ export const fr: LanguageTranslation = {
             duplicate_table: 'Tableau Dupliqué',
             delete_table: 'Supprimer la Table',
             add_relationship: 'Ajouter une Relation',
+            move_to_area: 'Déplacer vers une Zone',
+            no_area: 'Aucune Zone',
         },
 
         canvas: {
