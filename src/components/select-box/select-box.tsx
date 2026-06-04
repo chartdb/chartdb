@@ -41,7 +41,7 @@ export interface SelectBoxProps {
     ) => void;
     placeholder?: string;
     inputPlaceholder?: string;
-    emptyPlaceholder?: string;
+    emptyPlaceholder?: React.ReactNode;
     className?: string;
     multiple?: boolean;
     oneLine?: boolean;

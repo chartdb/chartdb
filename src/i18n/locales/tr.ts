@@ -114,6 +114,9 @@ export const tr: LanguageTranslation = {
         show_less: 'Daha Az Göster',
         copy_to_clipboard: 'Panoya Kopyala',
         copied: 'Kopyalandı!',
+        select_box: {
+            no_results: 'Sonuç bulunamadı.',
+        },
         side_panel: {
             view_all_options: 'Tüm Seçenekleri Gör...',
             tables_section: {
@@ -451,6 +454,10 @@ export const tr: LanguageTranslation = {
             title: 'Yeni Şema Oluştur',
             description:
                 'Henüz hiç şema mevcut değil. Tablolarınızı düzenlemek için ilk şemanızı oluşturun.',
+            or: 'veya',
+            select_existing: 'Mevcut şemayı seç',
+            create_new: 'Yeni şema oluştur',
+            quick_create: '"{{schemaName}}" şemasını oluştur',
             create: 'Oluştur',
             cancel: 'İptal',
         },

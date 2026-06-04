@@ -113,6 +113,10 @@ export const en = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        select_box: {
+            no_results: 'No results found.',
+        },
+
         side_panel: {
             view_all_options: 'View all Options...',
             tables_section: {
@@ -451,6 +455,10 @@ export const en = {
             title: 'Create New Schema',
             description:
                 'No schemas exist yet. Create your first schema to organize your tables.',
+            or: 'or',
+            select_existing: 'Select existing schema',
+            create_new: 'Create new schema',
+            quick_create: 'Create schema "{{schemaName}}"',
             create: 'Create',
             cancel: 'Cancel',
         },
