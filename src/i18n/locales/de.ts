@@ -115,6 +115,10 @@ export const de: LanguageTranslation = {
         copy_to_clipboard: 'In die Zwischenablage kopieren',
         copied: 'Kopiert!',
 
+        select_box: {
+            no_results: 'Keine Ergebnisse gefunden.',
+        },
+
         side_panel: {
             view_all_options: 'Alle Optionen anzeigen...',
             tables_section: {
@@ -463,6 +467,10 @@ export const de: LanguageTranslation = {
             title: 'Neues Schema erstellen',
             description:
                 'Es existieren noch keine Schemas. Erstellen Sie Ihr erstes Schema, um Ihre Tabellen zu organisieren.',
+            or: 'oder',
+            select_existing: 'Vorhandenes Schema auswählen',
+            create_new: 'Neues Schema erstellen',
+            quick_create: 'Schema "{{schemaName}}" erstellen',
             create: 'Erstellen',
             cancel: 'Abbrechen',
         },

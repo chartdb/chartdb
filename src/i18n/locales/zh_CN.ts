@@ -111,6 +111,10 @@ export const zh_CN: LanguageTranslation = {
         copy_to_clipboard: '复制到剪切板',
         copied: '复制了！',
 
+        select_box: {
+            no_results: '未找到结果。',
+        },
+
         side_panel: {
             view_all_options: '查看所有选项...',
             tables_section: {
@@ -451,6 +455,10 @@ export const zh_CN: LanguageTranslation = {
         create_table_schema_dialog: {
             title: '创建新模式',
             description: '尚未存在任何模式。创建您的第一个模式来组织您的表。',
+            or: '或',
+            select_existing: '选择现有模式',
+            create_new: '创建新模式',
+            quick_create: '创建模式“{{schemaName}}”',
             create: '创建',
             cancel: '取消',
         },

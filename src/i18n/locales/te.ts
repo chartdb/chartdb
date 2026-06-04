@@ -115,6 +115,10 @@ export const te: LanguageTranslation = {
         copy_to_clipboard: 'క్లిప్బోర్డుకు కాపీ చేయండి',
         copied: 'కాపీ చేయబడింది!',
 
+        select_box: {
+            no_results: 'ఫలితాలు కనుగొనబడలేదు.',
+        },
+
         side_panel: {
             view_all_options: 'అన్ని ఎంపికలను చూడండి...',
             tables_section: {
@@ -462,6 +466,10 @@ export const te: LanguageTranslation = {
             title: 'కొత్త స్కీమా సృష్టించండి',
             description:
                 'ఇంకా ఏ స్కీమాలు లేవు. మీ పట్టికలను వ్యవస్థీకరించడానికి మీ మొదటి స్కీమాను సృష్టించండి.',
+            or: 'లేదా',
+            select_existing: 'ఉన్న స్కీమాను ఎంచుకోండి',
+            create_new: 'కొత్త స్కీమాను సృష్టించండి',
+            quick_create: 'స్కీమా "{{schemaName}}" సృష్టించండి',
             create: 'సృష్టించు',
             cancel: 'రద్దు',
         },

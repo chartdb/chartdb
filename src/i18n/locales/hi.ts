@@ -115,6 +115,10 @@ export const hi: LanguageTranslation = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        select_box: {
+            no_results: 'कोई परिणाम नहीं मिले।',
+        },
+
         side_panel: {
             view_all_options: 'सभी विकल्प देखें...',
             tables_section: {
@@ -464,6 +468,10 @@ export const hi: LanguageTranslation = {
             title: 'नया स्कीमा बनाएं',
             description:
                 'अभी तक कोई स्कीमा मौजूद नहीं है। अपनी तालिकाओं को व्यवस्थित करने के लिए अपना पहला स्कीमा बनाएं।',
+            or: 'या',
+            select_existing: 'मौजूदा स्कीमा चुनें',
+            create_new: 'नया स्कीमा बनाएं',
+            quick_create: 'स्कीमा "{{schemaName}}" बनाएँ',
             create: 'बनाएं',
             cancel: 'रद्द करें',
         },

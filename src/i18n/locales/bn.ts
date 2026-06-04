@@ -115,6 +115,10 @@ export const bn: LanguageTranslation = {
         copy_to_clipboard: 'ক্লিপবোর্ডে অনুলিপি করুন',
         copied: 'অনুলিপি সম্পন্ন!',
 
+        select_box: {
+            no_results: 'কোন ফলাফল পাওয়া যায়নি।',
+        },
+
         side_panel: {
             view_all_options: 'সমস্ত বিকল্প দেখুন...',
             tables_section: {
@@ -462,6 +466,10 @@ export const bn: LanguageTranslation = {
             title: 'নতুন স্কিমা তৈরি করুন',
             description:
                 'এখনও কোনো স্কিমা নেই। আপনার টেবিলগুলি সংগঠিত করতে আপনার প্রথম স্কিমা তৈরি করুন।',
+            or: 'অথবা',
+            select_existing: 'বিদ্যমান স্কিমা নির্বাচন করুন',
+            create_new: 'নতুন স্কিমা তৈরি করুন',
+            quick_create: 'স্কিমা "{{schemaName}}" তৈরি করুন',
             create: 'তৈরি করুন',
             cancel: 'বাতিল করুন',
         },

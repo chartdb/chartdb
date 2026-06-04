@@ -114,6 +114,10 @@ export const ko_KR: LanguageTranslation = {
         copy_to_clipboard: '클립보드에 복사',
         copied: '복사됨!',
 
+        select_box: {
+            no_results: '결과를 찾을 수 없습니다.',
+        },
+
         side_panel: {
             view_all_options: '전체 옵션 보기...',
             tables_section: {
@@ -459,6 +463,10 @@ export const ko_KR: LanguageTranslation = {
             title: '새 스키마 생성',
             description:
                 '아직 스키마가 없습니다. 테이블을 정리하기 위해 첫 번째 스키마를 생성하세요.',
+            or: '또는',
+            select_existing: '기존 스키마 선택',
+            create_new: '새 스키마 생성',
+            quick_create: '스키마 "{{schemaName}}" 만들기',
             create: '생성',
             cancel: '취소',
         },

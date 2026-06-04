@@ -115,6 +115,10 @@ export const pt_BR: LanguageTranslation = {
         copy_to_clipboard: 'Copiar para a Área de Transferência',
         copied: 'Copiado!',
 
+        select_box: {
+            no_results: 'Nenhum resultado encontrado.',
+        },
+
         side_panel: {
             view_all_options: 'Ver todas as Opções...',
             tables_section: {
@@ -463,6 +467,10 @@ export const pt_BR: LanguageTranslation = {
             title: 'Criar Novo Esquema',
             description:
                 'Ainda não existem esquemas. Crie seu primeiro esquema para organizar suas tabelas.',
+            or: 'ou',
+            select_existing: 'Selecionar esquema existente',
+            create_new: 'Criar novo esquema',
+            quick_create: 'Criar esquema "{{schemaName}}"',
             create: 'Criar',
             cancel: 'Cancelar',
         },

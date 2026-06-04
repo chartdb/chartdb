@@ -117,6 +117,10 @@ export const mr: LanguageTranslation = {
         // TODO: Add translations
         copied: 'Copied!',
 
+        select_box: {
+            no_results: 'कोणतेही परिणाम सापडले नाहीत.',
+        },
+
         side_panel: {
             view_all_options: 'सर्व पर्याय पहा...',
             tables_section: {
@@ -467,6 +471,10 @@ export const mr: LanguageTranslation = {
             title: 'नवीन स्कीमा तयार करा',
             description:
                 'अजून कोणतीही स्कीमा अस्तित्वात नाही. आपल्या टेबल्स व्यवस्थित करण्यासाठी आपली पहिली स्कीमा तयार करा.',
+            or: 'किंवा',
+            select_existing: 'विद्यमान स्कीमा निवडा',
+            create_new: 'नवीन स्कीमा तयार करा',
+            quick_create: 'स्कीमा "{{schemaName}}" तयार करा',
             create: 'तयार करा',
             cancel: 'रद्द करा',
         },
