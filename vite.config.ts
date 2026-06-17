@@ -3,11 +3,13 @@ import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 import path from 'path';
 import UnpluginInjectPreload from 'unplugin-inject-preload/vite';
+import { dbmlAutosavePlugin } from './vite-plugins/dbml-autosave';
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         react(),
+        dbmlAutosavePlugin(),
         visualizer({
             filename: './stats/stats.html',
             open: false,
