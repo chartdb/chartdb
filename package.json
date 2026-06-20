@@ -69,7 +69,7 @@
         "react-resizable-panels": "^2.0.22",
         "react-responsive": "^10.0.0",
         "react-router-dom": "^7.1.1",
-        "react-use": "^17.5.1",
+        "react-use": "^17.6.1",
         "rehype-raw": "^7.0.0",
         "remark-gfm": "^4.0.1",
         "tailwind-merge": "^2.4.0",
