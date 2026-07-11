@@ -49,10 +49,14 @@ export const validateLLMConfiguration = (): { provider: LLMProvider } => {
 
 interface LLMClientConfig {
     apiKey: string;
-    baseUrl?: string;
+    // NOTE: must be `baseURL` (capital URL) — that is the option
+    // `@ai-sdk/openai`'s createOpenAI reads. A lowercase `baseUrl` is silently
+    // ignored and every request falls back to api.openai.com, which breaks the
+    // OpenRouter and custom-endpoint providers.
+    baseURL?: string;
 }
 
-// Resolve the provider config (apiKey/baseUrl) and the model name to call for a
+// Resolve the provider config (apiKey/baseURL) and the model name to call for a
 // given provider. Mirrors the precedence rules in validateLLMConfiguration.
 export const resolveLLMClientConfig = (
     provider: LLMProvider
@@ -64,7 +68,7 @@ export const resolveLLMClientConfig = (
             config: {
                 apiKey: openRouterApiKey,
                 // Allow overriding the endpoint (e.g. a proxy) but default to OpenRouter
-                baseUrl: baseUrl || OPENROUTER_DEFAULT_ENDPOINT,
+                baseURL: baseUrl || OPENROUTER_DEFAULT_ENDPOINT,
             },
             modelName: modelName ?? OPENROUTER_DEFAULT_MODEL,
         };
@@ -72,7 +76,7 @@ export const resolveLLMClientConfig = (
 
     if (provider === 'custom') {
         return {
-            config: { apiKey, baseUrl },
+            config: { apiKey, baseURL: baseUrl },
             modelName: modelName ?? OPENAI_DEFAULT_MODEL,
         };
     }
