@@ -5,6 +5,7 @@ import { useDiff } from '@/context/diff-context/use-diff';
 import { useToast } from '@/components/toast/use-toast';
 import { Button } from '@/components/button/button';
 import { editDiagramWithAI } from '@/lib/ai/edit-diagram';
+import { describeLLMError } from '@/lib/ai/llm-client';
 import type { Diagram } from '@/lib/domain/diagram';
 
 export interface AIEditorBarProps {}
@@ -47,11 +48,7 @@ export const AIEditorBar: React.FC<AIEditorBarProps> = () => {
             console.error('AI editor error:', error);
             toast({
                 title: 'AI Editor Error',
-                description:
-                    error instanceof Error &&
-                    error.message.includes('Configuration')
-                        ? error.message
-                        : 'Could not generate changes. Check your AI configuration and try again.',
+                description: describeLLMError(error),
                 variant: 'destructive',
             });
         } finally {
