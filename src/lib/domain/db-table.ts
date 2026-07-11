@@ -25,6 +25,9 @@ export interface DBTable {
     indexes: DBIndex[];
     checkConstraints?: DBCheckConstraint[] | null;
     color: string;
+    // When true, `color` was explicitly picked by the user and overrides any
+    // schema-level color. When falsy, the table inherits its schema color (if any).
+    isColorCustom?: boolean | null;
     isView: boolean;
     isMaterializedView?: boolean | null;
     createdAt: number;
@@ -45,6 +48,7 @@ export const dbTableSchema: z.ZodType<DBTable> = z.object({
     indexes: z.array(dbIndexSchema),
     checkConstraints: z.array(dbCheckConstraintSchema).or(z.null()).optional(),
     color: z.string(),
+    isColorCustom: z.boolean().or(z.null()).optional(),
     isView: z.boolean(),
     isMaterializedView: z.boolean().or(z.null()).optional(),
     createdAt: z.number(),

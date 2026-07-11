@@ -160,7 +160,10 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
 
         const handleColorChange = useCallback(
             (newColor: string) => {
-                updateTable(table.id, { color: newColor });
+                updateTable(table.id, {
+                    color: newColor,
+                    isColorCustom: true,
+                });
             },
             [updateTable, table.id]
         );
