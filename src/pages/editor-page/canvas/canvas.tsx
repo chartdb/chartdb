@@ -45,6 +45,7 @@ import {
     TARGET_ID_PREFIX,
 } from './table-node/table-node-field';
 import { Toolbar } from './toolbar/toolbar';
+import { AIEditorBar } from './ai-editor/ai-editor-bar';
 import { useToast } from '@/components/toast/use-toast';
 import {
     Pencil,
@@ -1866,6 +1867,18 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     >
                         <Toolbar readonly={readonly} />
                     </Controls>
+                    {!readonly && isDesktop ? (
+                        <Controls
+                            position="top-center"
+                            orientation="horizontal"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <AIEditorBar />
+                        </Controls>
+                    ) : null}
                     {showMiniMapOnCanvas && (
                         <MiniMap
                             style={{
