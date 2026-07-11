@@ -15,6 +15,7 @@ import {
 } from '@/components/accordion/accordion';
 import { Separator } from '@/components/separator/separator';
 import type { DBTable } from '@/lib/domain/db-table';
+import { getEffectiveTableColor } from '@/lib/domain/db-schema';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -61,9 +62,10 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         updateTable,
         readonly,
         databaseType,
+        schemaColors,
     } = useChartDB();
     const { t } = useTranslation();
-    const { color } = table;
+    const color = getEffectiveTableColor(table, schemaColors);
     const [selectedItems, setSelectedItems] = React.useState<
         AccordionItemValue[]
     >(['fields']);
@@ -416,7 +418,12 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 {!table.isView && !readonly ? (
                     <ColorPicker
                         color={color}
-                        onChange={(color) => updateTable(table.id, { color })}
+                        onChange={(color) =>
+                            updateTable(table.id, {
+                                color,
+                                isColorCustom: true,
+                            })
+                        }
                     />
                 ) : (
                     <div />

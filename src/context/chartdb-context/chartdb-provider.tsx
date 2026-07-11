@@ -16,7 +16,7 @@ import { useStorage } from '@/hooks/use-storage';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
-import type { DBSchema } from '@/lib/domain/db-schema';
+import type { DBSchema, SchemaColors } from '@/lib/domain/db-schema';
 import {
     databasesWithSchemas,
     schemaNameToSchemaId,
@@ -71,6 +71,9 @@ export const ChartDBProvider: React.FC<
         diagram?.customTypes ?? []
     );
     const [notes, setNotes] = useState<Note[]>(diagram?.notes ?? []);
+    const [schemaColors, setSchemaColors] = useState<SchemaColors>(
+        diagram?.schemaColors ?? {}
+    );
 
     const { events: diffEvents } = useDiff();
 
@@ -154,6 +157,7 @@ export const ChartDBProvider: React.FC<
             areas,
             customTypes,
             notes,
+            schemaColors,
         }),
         [
             diagramId,
@@ -166,6 +170,7 @@ export const ChartDBProvider: React.FC<
             areas,
             customTypes,
             notes,
+            schemaColors,
             diagramCreatedAt,
             diagramUpdatedAt,
         ]
@@ -180,13 +185,17 @@ export const ChartDBProvider: React.FC<
             setAreas([]);
             setCustomTypes([]);
             setNotes([]);
+            setSchemaColors({});
             setDiagramUpdatedAt(updatedAt);
 
             resetRedoStack();
             resetUndoStack();
 
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateDiagram({
+                    id: diagramId,
+                    attributes: { updatedAt, schemaColors: {} },
+                }),
                 db.deleteDiagramTables(diagramId),
                 db.deleteDiagramRelationships(diagramId),
                 db.deleteDiagramDependencies(diagramId),
@@ -510,6 +519,30 @@ export const ChartDBProvider: React.FC<
             diagramId,
             events,
         ]
+    );
+
+    const updateSchemaColor: ChartDBContext['updateSchemaColor'] = useCallback(
+        async (schemaId: string, color: string | null) => {
+            let nextSchemaColors: SchemaColors = {};
+            setSchemaColors((prev) => {
+                const next = { ...prev };
+                if (color) {
+                    next[schemaId] = color;
+                } else {
+                    delete next[schemaId];
+                }
+                nextSchemaColors = next;
+                return next;
+            });
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await db.updateDiagram({
+                id: diagramId,
+                attributes: { updatedAt, schemaColors: nextSchemaColors },
+            });
+        },
+        [db, diagramId, setSchemaColors, setDiagramUpdatedAt]
     );
 
     const updateTablesState: ChartDBContext['updateTablesState'] = useCallback(
@@ -1895,6 +1928,7 @@ export const ChartDBProvider: React.FC<
                 setDiagramUpdatedAt(diagram.updatedAt);
                 setHighlightedCustomTypeId(undefined);
                 setNotes(diagram.notes ?? []);
+                setSchemaColors(diagram.schemaColors ?? {});
 
                 events.emit({ action: 'load_diagram', data: { diagram } });
 
@@ -1916,6 +1950,7 @@ export const ChartDBProvider: React.FC<
                 setHighlightedCustomTypeId,
                 events,
                 setNotes,
+                setSchemaColors,
                 resetRedoStack,
                 resetUndoStack,
             ]
@@ -2108,6 +2143,8 @@ export const ChartDBProvider: React.FC<
                 notes,
                 currentDiagram,
                 schemas,
+                schemaColors,
+                updateSchemaColor,
                 events,
                 readonly,
                 updateDiagramData,
