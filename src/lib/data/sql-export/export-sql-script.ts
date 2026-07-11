@@ -1,5 +1,5 @@
 import type { Diagram } from '../../domain/diagram';
-import { createLLMModel } from '@/lib/ai/llm-client';
+import { createLLMModel, describeLLMError } from '@/lib/ai/llm-client';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import { dataTypeMap, type DataType } from '../data-types/data-types';
@@ -779,14 +779,7 @@ export const exportSQL = async (
         return text;
     } catch (error: unknown) {
         console.error('Error generating SQL:', error);
-        if (error instanceof Error && error.message.includes('API key')) {
-            throw new Error(
-                'Error: Please check your API configuration. If using a custom endpoint, make sure the endpoint URL is correct.'
-            );
-        }
-        throw new Error(
-            'Error generating SQL script. Please check your configuration and try again.'
-        );
+        throw new Error(describeLLMError(error));
     }
 };
 

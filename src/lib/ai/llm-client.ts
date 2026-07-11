@@ -109,3 +109,36 @@ export const createLLMModel = async () => {
         generateObject: ai.generateObject,
     };
 };
+
+// Turn a thrown LLM error into a user-facing message. Browser calls fail in a
+// few distinct ways that all deserve different guidance:
+//  - config not set up (validateLLMConfiguration threw)
+//  - the provider rejected the key / ran out of credit (HTTP 401/403)
+//  - the browser couldn't reach the provider at all (CORS block or network),
+//    which surfaces as an opaque TypeError ("Failed to fetch" / "Load failed")
+//    with no readable status — common when pointing a browser straight at
+//    api.openai.com, which does not serve permissive CORS.
+export const describeLLMError = (error: unknown): string => {
+    if (error instanceof Error && error.message.includes('Configuration')) {
+        return error.message;
+    }
+
+    const statusCode =
+        error && typeof error === 'object' && 'statusCode' in error
+            ? (error as { statusCode?: number }).statusCode
+            : undefined;
+
+    if (statusCode === 401 || statusCode === 403) {
+        return 'The AI provider rejected your key (HTTP 401/403). Check the key is valid and has credit, or switch to OpenRouter.';
+    }
+
+    const message = error instanceof Error ? error.message : String(error);
+    if (
+        error instanceof TypeError ||
+        /failed to fetch|load failed|networkerror|access control/i.test(message)
+    ) {
+        return "Couldn't reach the AI provider from the browser. It likely rejected the key (401) or blocked the request (CORS) — check your key/credits, or use an OpenRouter key, which allows browser requests.";
+    }
+
+    return 'Could not generate changes. Check your AI configuration and try again.';
+};
