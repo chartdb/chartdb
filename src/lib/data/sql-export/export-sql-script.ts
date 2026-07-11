@@ -1,5 +1,5 @@
 import type { Diagram } from '../../domain/diagram';
-import { OPENAI_API_KEY, OPENAI_API_ENDPOINT, LLM_MODEL_NAME } from '@/lib/env';
+import { createLLMModel } from '@/lib/ai/llm-client';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import { dataTypeMap, type DataType } from '../data-types/data-types';
@@ -720,26 +720,6 @@ export const exportBaseSQL = ({
     return sqlScript;
 };
 
-const validateConfiguration = () => {
-    const apiKey = window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY;
-    const baseUrl = window?.env?.OPENAI_API_ENDPOINT ?? OPENAI_API_ENDPOINT;
-    const modelName = window?.env?.LLM_MODEL_NAME ?? LLM_MODEL_NAME;
-
-    // If using custom endpoint and model, don't require OpenAI API key
-    if (baseUrl && modelName) {
-        return { useCustomEndpoint: true };
-    }
-
-    // If using OpenAI's service, require API key
-    if (apiKey) {
-        return { useCustomEndpoint: false };
-    }
-
-    throw new Error(
-        'Configuration Error: Either provide an OpenAI API key or both a custom endpoint and model name'
-    );
-};
-
 export const exportSQL = async (
     diagram: Diagram,
     databaseType: DatabaseType,
@@ -765,42 +745,15 @@ export const exportSQL = async (
         return cachedResult;
     }
 
-    // Validate configuration before proceeding
-    const { useCustomEndpoint } = validateConfiguration();
-
-    const [{ streamText, generateText }, { createOpenAI }] = await Promise.all([
-        import('ai'),
-        import('@ai-sdk/openai'),
-    ]);
-
-    const apiKey = window?.env?.OPENAI_API_KEY ?? OPENAI_API_KEY;
-    const baseUrl = window?.env?.OPENAI_API_ENDPOINT ?? OPENAI_API_ENDPOINT;
-    const modelName =
-        window?.env?.LLM_MODEL_NAME ??
-        LLM_MODEL_NAME ??
-        'gpt-4o-mini-2024-07-18';
-
-    let config: { apiKey: string; baseUrl?: string };
-
-    if (useCustomEndpoint) {
-        config = {
-            apiKey: apiKey,
-            baseUrl: baseUrl,
-        };
-    } else {
-        config = {
-            apiKey: apiKey,
-        };
-    }
-
-    const openai = createOpenAI(config);
+    // Validate configuration and build the provider client before proceeding
+    const { model, streamText, generateText } = await createLLMModel();
 
     const prompt = generateSQLPrompt(databaseType, sqlScript);
 
     try {
         if (options?.stream) {
             const { textStream, text: textPromise } = await streamText({
-                model: openai(modelName),
+                model,
                 prompt: prompt,
             });
 
@@ -818,7 +771,7 @@ export const exportSQL = async (
         }
 
         const { text } = await generateText({
-            model: openai(modelName),
+            model,
             prompt: prompt,
         });
 
