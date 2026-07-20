@@ -1,7 +1,7 @@
 const withDefault = true;
 
-const withDefaultExpr = `IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), '')`;
-const withoutDefault = `""`;
+const withDefaultExpr = `JSON_QUOTE(IFNULL(cols.column_default, ''))`;
+const withoutDefault = `'""'`;
 
 export const mariaDBQuery = `SET SESSION group_concat_max_len = 10000000;
 SELECT CAST(CONCAT(
@@ -60,8 +60,8 @@ SELECT CAST(CONCAT(
     IFNULL((SELECT GROUP_CONCAT(
         CONCAT('{"schema":"', cast(cols.table_schema as CHAR),
                '","table":"', cols.table_name,
-               '","name":"', REPLACE(cols.column_name, '"', '\\"'),
-               '","type":"', LOWER(cols.data_type),
+               '","name":', JSON_QUOTE(cols.column_name),
+               ',"type":"', LOWER(cols.data_type),
                '","character_maximum_length":"', IFNULL(cols.character_maximum_length, 'null'),
                '","precision":',
                IF(cols.data_type IN ('decimal', 'numeric'),
@@ -69,10 +69,10 @@ SELECT CAST(CONCAT(
                          ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}'), 'null'),
                ',"ordinal_position":', cols.ordinal_position,
                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-               ',"default":"', ${withDefault ? withDefaultExpr : withoutDefault},
-               '","collation":"', IFNULL(cols.collation_name, ''),
+               ',"default":', ${withDefault ? withDefaultExpr : withoutDefault},
+               ',"collation":"', IFNULL(cols.collation_name, ''),
                '","is_identity":', IF(cols.extra LIKE '%auto_increment%', 'true', 'false'),
-               ',"comment":"', REPLACE(REPLACE(IFNULL(cols.column_comment, ''), '"', '\\"'), '\\n', ' '), '"}')
+               ',"comment":', JSON_QUOTE(IFNULL(cols.column_comment, '')), '}')
     ) FROM (
         SELECT cols.table_schema,
                cols.table_name,
@@ -130,7 +130,7 @@ SELECT CAST(CONCAT(
                ',"type":"', IFNULL(tbls.TABLE_TYPE, ''),
                '","engine":"', IFNULL(tbls.ENGINE, ''),
                '","collation":"', IFNULL(tbls.TABLE_COLLATION, ''),
-               '","comment":"', REPLACE(REPLACE(IFNULL(tbls.TABLE_COMMENT, ''), '"', '\\"'), '\\n', ' '), '"}')
+               '","comment":', JSON_QUOTE(IFNULL(tbls.TABLE_COMMENT, '')), '}')
     ) FROM (
         SELECT \`TABLE_SCHEMA\`,
                \`TABLE_NAME\`,
@@ -150,7 +150,7 @@ SELECT CAST(CONCAT(
     ) FROM (
         SELECT \`TABLE_SCHEMA\`,
                \`TABLE_NAME\` AS view_name,
-               null AS view_definition
+               '' AS view_definition
         FROM information_schema.views vws
         WHERE vws.table_schema = DATABASE()
     ) AS vws), ''),
