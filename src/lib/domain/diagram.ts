@@ -13,6 +13,13 @@ import { dbCustomTypeSchema } from './db-custom-type';
 import type { Note } from './note';
 import { noteSchema } from './note';
 
+// Where a diagram's data lives. "local" is the existing IndexedDB-only
+// behavior, private to this browser. "cloud" means it's stored in Firestore,
+// where it's part of one shared pool every user (via Firebase Auth, anonymous
+// or otherwise) can see and edit - there's no per-diagram ownership or invite
+// list. See src/context/storage-context and firestore.rules.
+export type DiagramStorageMode = 'local' | 'cloud';
+
 export interface Diagram {
     id: string;
     name: string;
@@ -26,6 +33,10 @@ export interface Diagram {
     notes?: Note[];
     createdAt: Date;
     updatedAt: Date;
+
+    // Only meaningful when the diagram is stored in Firestore; undefined for
+    // local-only diagrams.
+    storageMode?: DiagramStorageMode;
 }
 
 export const diagramSchema: z.ZodType<Diagram> = z.object({
@@ -41,4 +52,5 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     notes: z.array(noteSchema).optional(),
     createdAt: z.date(),
     updatedAt: z.date(),
+    storageMode: z.union([z.literal('local'), z.literal('cloud')]).optional(),
 });
