@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+env-vars.prod.yaml
 stats/
+.firebaserc

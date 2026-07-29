@@ -10,7 +10,40 @@ import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import type { Note } from '@/lib/domain/note';
 
+export type DiagramSyncEntityKind =
+    | 'diagram'
+    | 'table'
+    | 'relationship'
+    | 'dependency'
+    | 'area'
+    | 'customType'
+    | 'note';
+
+export interface DiagramSyncChange {
+    kind: DiagramSyncEntityKind;
+    type: 'added' | 'modified' | 'removed';
+    id: string;
+    // Absent for 'removed'. Loosely typed because each `kind` corresponds to
+    // a different domain type and callers already know which is which from
+    // `kind` alone.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any;
+    // Best-effort heuristic, not a guarantee: true when this change touches
+    // something the local client itself wrote to very recently, suggesting a
+    // genuinely concurrent edit rather than just someone else's unrelated
+    // change elsewhere in the diagram. See FirestoreStorageProvider.
+    isPossibleConflict: boolean;
+}
+
 export interface StorageContext {
+    // Real-time sync. Only meaningful for backends that support live
+    // updates (Firestore); local/IndexedDB storage has no other client to
+    // sync from, so it's a no-op there. Returns an unsubscribe function.
+    subscribeToDiagram: (
+        diagramId: string,
+        onChange: (change: DiagramSyncChange) => void
+    ) => () => void;
+
     // Config operations
     getConfig: () => Promise<ChartDBConfig | undefined>;
     updateConfig: (config: Partial<ChartDBConfig>) => Promise<void>;
@@ -155,6 +188,8 @@ export interface StorageContext {
 }
 
 export const storageInitialValue: StorageContext = {
+    subscribeToDiagram: () => emptyFn,
+
     getConfig: emptyFn,
     updateConfig: emptyFn,
 

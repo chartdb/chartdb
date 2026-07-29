@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
 import { defaultTableColor, randomColor, viewColor } from '@/lib/colors';
@@ -26,7 +32,11 @@ import { useEventEmitter } from 'ahooks';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { Note } from '@/lib/domain/note';
-import { storageInitialValue } from '../storage-context/storage-context';
+import {
+    storageInitialValue,
+    type DiagramSyncChange,
+} from '../storage-context/storage-context';
+import { toast } from '@/components/toast/use-toast';
 import { useDiff } from '../diff-context/use-diff';
 import type { DiffCalculatedEvent } from '../diff-context/diff-context';
 import {
@@ -34,6 +44,32 @@ import {
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
 import { getDefaultPrimaryKeyType } from '@/lib/data/data-types/data-types';
+
+// Applies one incoming real-time change (see StorageContext.subscribeToDiagram)
+// to a locally-held list of entities, keyed by id. Availability over strict
+// consistency: this always takes the incoming data as the new truth for that
+// entity rather than trying to diff/merge field-by-field against whatever's
+// locally in flight - any actual overlap is instead flagged separately via
+// `isPossibleConflict` so the UI can warn about it.
+function applyIdChange<T extends { id: string }>(
+    list: T[],
+    change: DiagramSyncChange
+): T[] {
+    if (change.type === 'removed') {
+        return list.filter((item) => item.id !== change.id);
+    }
+
+    if (change.data === undefined) {
+        return list;
+    }
+
+    const data = change.data as T;
+    const exists = list.some((item) => item.id === change.id);
+
+    return exists
+        ? list.map((item) => (item.id === change.id ? data : item))
+        : [...list, data];
+}
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -170,6 +206,71 @@ export const ChartDBProvider: React.FC<
             diagramUpdatedAt,
         ]
     );
+
+    // --- Live sync ---------------------------------------------------------
+    // For cloud-backed diagrams, merges in whatever any other client (or an
+    // echo of our own writes) changes; storageDB.subscribeToDiagram is a
+    // no-op for local/Dexie storage. Uses storageDB directly rather than the
+    // readonly-gated `db` above, since live updates should still apply while
+    // viewing a diagram read-only.
+    const lastConflictToastAtRef = useRef(0);
+
+    const handleRemoteChange = useCallback((change: DiagramSyncChange) => {
+        switch (change.kind) {
+            case 'diagram': {
+                const data = change.data as Partial<Diagram> | undefined;
+                if (data?.name !== undefined) setDiagramName(data.name);
+                if (data?.databaseType !== undefined)
+                    setDatabaseType(data.databaseType);
+                if (data?.databaseEdition !== undefined)
+                    setDatabaseEdition(data.databaseEdition);
+                if (data?.updatedAt !== undefined)
+                    setDiagramUpdatedAt(data.updatedAt);
+                break;
+            }
+            case 'table':
+                setTables((current) => applyIdChange(current, change));
+                break;
+            case 'relationship':
+                setRelationships((current) => applyIdChange(current, change));
+                break;
+            case 'dependency':
+                setDependencies((current) => applyIdChange(current, change));
+                break;
+            case 'area':
+                setAreas((current) => applyIdChange(current, change));
+                break;
+            case 'customType':
+                setCustomTypes((current) => applyIdChange(current, change));
+                break;
+            case 'note':
+                setNotes((current) => applyIdChange(current, change));
+                break;
+        }
+
+        if (change.isPossibleConflict) {
+            const now = Date.now();
+            // Throttle: a burst of overlapping edits (e.g. someone adding
+            // several fields at once) should surface one notice, not one
+            // per field.
+            if (now - lastConflictToastAtRef.current > 4000) {
+                lastConflictToastAtRef.current = now;
+                toast({
+                    title: 'Possible conflicting edit',
+                    description:
+                        'Someone else just changed the same part of this diagram at nearly the same time as you. Double check nothing got overwritten unexpectedly.',
+                });
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!diagramId) {
+            return;
+        }
+
+        return storageDB.subscribeToDiagram(diagramId, handleRemoteChange);
+    }, [diagramId, storageDB, handleRemoteChange]);
 
     const clearDiagramData: ChartDBContext['clearDiagramData'] =
         useCallback(async () => {

@@ -1,0 +1,57 @@
+rules_version = '2';
+
+// Security model for cloud-mode diagrams: one shared workspace. Every
+// signed-in user (Firebase Auth, anonymous or otherwise - see
+// src/lib/firebase/firebase-auth.ts) can read and write every diagram and
+// its tables/relationships/etc. There is no per-diagram ownership, invite
+// list, or share link; "sharing" is the default, not something you opt into.
+//
+// Local-only diagrams never touch Firestore at all (see STORAGE_MODE in
+// src/lib/env.ts), so these rules only apply once a diagram has been created
+// in cloud mode.
+//
+// The only thing gated is whether you're signed in at all, which stops
+// completely anonymous (no Firebase session) requests - e.g. someone hitting
+// the REST API directly with no client SDK - not whether you're *this*
+// diagram's creator.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /diagrams/{diagramId} {
+      allow read, write: if signedIn();
+    }
+
+    match /db_tables/{id} {
+      allow read, write: if signedIn();
+    }
+
+    match /db_relationships/{id} {
+      allow read, write: if signedIn();
+    }
+
+    match /db_dependencies/{id} {
+      allow read, write: if signedIn();
+    }
+
+    match /areas/{id} {
+      allow read, write: if signedIn();
+    }
+
+    match /db_custom_types/{id} {
+      allow read, write: if signedIn();
+    }
+
+    match /notes/{id} {
+      allow read, write: if signedIn();
+    }
+
+    // Keyed by diagramId itself rather than its own generated id.
+    match /diagram_filters/{diagramId} {
+      allow read, write: if signedIn();
+    }
+  }
+}

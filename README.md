@@ -138,6 +138,42 @@ VITE_OPENAI_API_ENDPOINT=http://localhost:8000/v1
 VITE_LLM_MODEL_NAME=Qwen/Qwen2.5-32B-Instruct-AWQ
 ```
 
+### Cloud storage (Firestore)
+
+By default ChartDB stores diagrams only in the browser (IndexedDB), exactly as before. Setting `VITE_STORAGE_MODE=cloud` switches the storage backend to Firestore instead, where every diagram is part of one shared workspace: any signed-in client (including anonymous ones) can see and edit every diagram - there's no per-diagram ownership or invite step, sharing is just the default. See `chartdb-firestore-sharing-proposal.md` for the design behind this (note the proposal describes a per-diagram invite/ACL model; the actual implementation was simplified to a fully shared workspace instead, based on how it was actually going to be used).
+
+To try it:
+
+1. Create a project at [console.firebase.google.com](https://console.firebase.google.com), then enable **Firestore Database** and, under **Authentication → Sign-in method**, enable the **Anonymous** provider (every client needs *some* Firebase Auth identity for the security rules to check against - it doesn't need to be a named account).
+2. Deploy `firestore.rules` from the repo root to that project. The repo already has `firebase.json`/`firestore.indexes.json` pointing at it, so you just need to link the CLI to your project once:
+
+   ```bash
+   npm install -g firebase-tools   # if you don't have it
+   firebase login
+   cd chartdb                      # repo root, where firebase.json lives
+   firebase use --add              # pick your project, e.g. alias it "default"
+   firebase deploy --only firestore:rules
+   ```
+
+   (`firebase deploy` on its own errors with "Not in a Firebase app directory" if you skip `firebase use --add` — that step is what creates `.firebaserc` linking this folder to your project.) Alternatively, skip the CLI entirely and paste `firestore.rules`'s contents into the Firestore **Rules** tab in the console.
+3. Grab the web app config from Project settings → General → Your apps, and set these when building/running:
+
+```bash
+VITE_STORAGE_MODE=cloud
+VITE_FIREBASE_API_KEY=<...>
+VITE_FIREBASE_AUTH_DOMAIN=<project-id>.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=<project-id>
+VITE_FIREBASE_STORAGE_BUCKET=<project-id>.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=<...>
+VITE_FIREBASE_APP_ID=<...>
+```
+
+For the Docker image, the same variables can be passed at `docker run` time without `VITE_` (e.g. `-e STORAGE_MODE=cloud -e FIREBASE_API_KEY=<...>`), since they're injected at container start via `entrypoint.sh`/`default.conf.template`, the same way `OPENAI_API_KEY` already works.
+
+Open diagrams sync live across clients: `StorageContext.subscribeToDiagram` (implemented in `firestore-storage-provider.tsx`, wired into `ChartDBProvider`) listens for changes to whichever diagram is open and merges them straight into the canvas, so a second browser sees edits without reloading. This deliberately favors availability over strict consistency - it never blocks a write waiting to check for conflicts, and a client that loses connectivity keeps working from Firestore's local cache and catches up automatically once back online. When a change comes in for something this client itself edited within the last few seconds, it shows a "Possible conflicting edit" toast so you know to double check that part of the diagram, rather than silently resolving it one way or the other.
+
+> **Note:** Anyone who can reach your Firestore project with a Firebase Auth session (anonymous ones included) can read and write every diagram in it - that's the point (one shared workspace), but it also means this isn't scoped per-user or per-team. If you need that later, `firestore.rules` would need real (non-anonymous) sign-in plus per-diagram ACL checks re-added.
+
 ## Try it on our website
 
 1. Go to [ChartDB.io](https://chartdb.io?ref=github_readme_2)
