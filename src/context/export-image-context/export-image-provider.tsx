@@ -14,7 +14,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { hideLoader, showLoader } = useFullScreenLoader();
-    const { getNodes, setNodes, getViewport, setViewport, fitView } = useReactFlow();
+    const { getNodes, setNodes, getViewport, setViewport, fitView } =
+        useReactFlow();
     const { effectiveTheme } = useTheme();
     const { diagramName } = useChartDB();
     const [logoBase64, setLogoBase64] = useState<string>('');
@@ -75,8 +76,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             setNodes((nodes) =>
                 nodes.map((node) => ({ ...node, selected: false }))
             );
-            
-            // 
+
+            //
             const nodes = getNodes();
             if (nodes.length === 0) {
                 hideLoader();
@@ -127,7 +128,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             const viewport = {
                 x: -minX + exportPadding,
                 y: -minY + exportPadding,
-                zoom: 1, 
+                zoom: 1,
             };
 
             const imageCreateFn = imageCreatorMap[type];
@@ -423,7 +424,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             logoBase64,
             getNodes,
             fitView,
-            setViewport
+            setViewport,
         ]
     );
 
