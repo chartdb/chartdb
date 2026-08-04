@@ -77,7 +77,6 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 nodes.map((node) => ({ ...node, selected: false }))
             );
 
-            //
             const nodes = getNodes();
             if (nodes.length === 0) {
                 hideLoader();
