@@ -14,7 +14,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { hideLoader, showLoader } = useFullScreenLoader();
-    const { setNodes, getViewport } = useReactFlow();
+    const { getNodes, setNodes, getViewport, setViewport, fitView } =
+        useReactFlow();
     const { effectiveTheme } = useTheme();
     const { diagramName } = useChartDB();
     const [logoBase64, setLogoBase64] = useState<string>('');
@@ -76,16 +77,58 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 nodes.map((node) => ({ ...node, selected: false }))
             );
 
-            const viewport = getViewport();
-            const reactFlowBounds = document
-                .querySelector('.react-flow')
-                ?.getBoundingClientRect();
-
-            if (!reactFlowBounds) {
-                console.error('Could not find React Flow container');
+            const nodes = getNodes();
+            if (nodes.length === 0) {
                 hideLoader();
                 return;
             }
+
+            // Save the user's current viewport so we can restore it later
+            const originalViewport = getViewport();
+
+            // Force React Flow to zoom out and fit everything, bringing all off-screen nodes into the DOM
+            fitView({ duration: 0 });
+
+            // Wait a brief moment for React to render the newly visible DOM elements
+            await new Promise((resolve) => setTimeout(resolve, 200));
+
+            const exportPadding = 80;
+
+            let minX = Infinity;
+            let minY = Infinity;
+            let maxX = -Infinity;
+            let maxY = -Infinity;
+
+            nodes.forEach((node) => {
+                const width = node.measured?.width ?? node.width ?? 300;
+                const height = node.measured?.height ?? node.height ?? 200;
+
+                minX = Math.min(minX, node.position.x);
+                minY = Math.min(minY, node.position.y);
+                maxX = Math.max(maxX, node.position.x + width);
+                maxY = Math.max(maxY, node.position.y + height);
+            });
+
+            if (minX === Infinity || minX === -Infinity) {
+                minX = 0;
+                minY = 0;
+                maxX = 1920;
+                maxY = 1080;
+            }
+
+            const targetWidth = maxX - minX;
+            const targetHeight = maxY - minY;
+
+            const reactFlowBounds = {
+                width: Math.max(targetWidth + exportPadding * 2, 800),
+                height: Math.max(targetHeight + exportPadding * 2, 600),
+            };
+
+            const viewport = {
+                x: -minX + exportPadding,
+                y: -minY + exportPadding,
+                zoom: 1,
+            };
 
             const imageCreateFn = imageCreatorMap[type];
 
@@ -361,6 +404,9 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         }
                     );
                     viewportElement.removeChild(tempSvg);
+
+                    // Restore the user's viewport after the screenshot is taken
+                    setViewport(originalViewport, { duration: 0 });
                     hideLoader();
                 }
             }, 0);
@@ -375,6 +421,9 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             showLoader,
             effectiveTheme,
             logoBase64,
+            getNodes,
+            fitView,
+            setViewport,
         ]
     );
 
