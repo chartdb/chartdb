@@ -14,7 +14,6 @@ import {
 import { Button } from '@/components/button/button';
 import {
     KeyRound,
-    MessageCircleMore,
     SquareDot,
     SquareMinus,
     SquarePlus,
@@ -343,6 +342,51 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             readonly,
         ]);
 
+        const fieldIconAndName = (
+            <div
+                className={cn('flex items-center gap-1 min-w-0 text-left', {
+                    'font-semibold': field.primaryKey || field.unique,
+                })}
+            >
+                {isDiffFieldRemoved ? (
+                    <SquareMinus className="size-3.5 shrink-0 text-red-800 dark:text-red-200" />
+                ) : isDiffNewField ? (
+                    <SquarePlus className="size-3.5 shrink-0 text-green-800 dark:text-green-200" />
+                ) : isDiffFieldChanged && !isSummaryOnly ? (
+                    <SquareDot className="size-3.5 shrink-0 text-sky-800 dark:text-sky-200" />
+                ) : null}
+
+                <span
+                    className={cn('truncate min-w-0', {
+                        'text-red-800 font-normal dark:text-red-200':
+                            isDiffFieldRemoved,
+                        'text-green-800 font-normal dark:text-green-200':
+                            isDiffNewField,
+                        'text-sky-800 font-normal dark:text-sky-200':
+                            isDiffFieldChanged &&
+                            !isSummaryOnly &&
+                            !isDiffFieldRemoved &&
+                            !isDiffNewField,
+                        'text-blue-600 dark:text-blue-400':
+                            isForeignKey &&
+                            !isDiffFieldRemoved &&
+                            !isDiffNewField &&
+                            !isDiffFieldChanged,
+                    })}
+                >
+                    {fieldDiffChangedName ? (
+                        <>
+                            {fieldDiffChangedName.old}{' '}
+                            <span className="font-medium">→</span>{' '}
+                            {fieldDiffChangedName.new}
+                        </>
+                    ) : (
+                        field.name
+                    )}
+                </span>
+            </div>
+        );
+
         return (
             <div
                 className={cn(
@@ -409,60 +453,23 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         />
                     </>
                 )}
-                <div
-                    className={cn('flex items-center gap-1 min-w-0 text-left', {
-                        'font-semibold': field.primaryKey || field.unique,
-                    })}
-                >
-                    {isDiffFieldRemoved ? (
-                        <SquareMinus className="size-3.5 shrink-0 text-red-800 dark:text-red-200" />
-                    ) : isDiffNewField ? (
-                        <SquarePlus className="size-3.5 shrink-0 text-green-800 dark:text-green-200" />
-                    ) : isDiffFieldChanged && !isSummaryOnly ? (
-                        <SquareDot className="size-3.5 shrink-0 text-sky-800 dark:text-sky-200" />
-                    ) : null}
-
-                    <span
-                        className={cn('truncate min-w-0', {
-                            'text-red-800 font-normal dark:text-red-200':
-                                isDiffFieldRemoved,
-                            'text-green-800 font-normal dark:text-green-200':
-                                isDiffNewField,
-                            'text-sky-800 font-normal dark:text-sky-200':
-                                isDiffFieldChanged &&
-                                !isSummaryOnly &&
-                                !isDiffFieldRemoved &&
-                                !isDiffNewField,
-                            'text-blue-600 dark:text-blue-400':
-                                isForeignKey &&
-                                !isDiffFieldRemoved &&
-                                !isDiffNewField &&
-                                !isDiffFieldChanged,
-                        })}
-                    >
-                        {fieldDiffChangedName ? (
-                            <>
-                                {fieldDiffChangedName.old}{' '}
-                                <span className="font-medium">→</span>{' '}
-                                {fieldDiffChangedName.new}
-                            </>
-                        ) : (
-                            field.name
-                        )}
-                    </span>
-                    {field.comments ? (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <div className="shrink-0 cursor-pointer text-muted-foreground">
-                                    <MessageCircleMore size={14} />
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs whitespace-pre-wrap break-words">
-                                {field.comments}
-                            </TooltipContent>
-                        </Tooltip>
-                    ) : null}
-                </div>
+                {field.comments ? (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            {fieldIconAndName}
+                        </TooltipTrigger>
+                        <TooltipContent
+                            side="top"
+                            className="max-w-xs whitespace-pre-wrap break-words"
+                        >
+                            <b>Field: {field.name}</b>
+                            <br />
+                            {field.comments}
+                        </TooltipContent>
+                    </Tooltip>
+                ) : (
+                    fieldIconAndName
+                )}
 
                 <div
                     className={cn(
