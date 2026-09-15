@@ -102,6 +102,13 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
 ```
 
+You can also deploy ChartDB with one click using the official [Easypanel](https://easypanel.io) template:
+
+[![Deploy on Easypanel][easypanel-btn]][easypanel-deploy]
+
+[easypanel-btn]: https://easypanel.io/img/deploy-on-easypanel-40.svg
+[easypanel-deploy]: https://easypanel.io/templates/chartdb
+
 #### Build and Run locally
 
 ```bash
