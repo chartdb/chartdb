@@ -6,16 +6,26 @@ import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
+import { useConfig } from '@/hooks/use-config';
+import { getConfigAssetUrl } from '@/lib/domain/config';
 
 export interface TopNavbarProps {}
 
 export const TopNavbar: React.FC<TopNavbarProps> = () => {
     const { effectiveTheme } = useTheme();
+    const { config } = useConfig();
+
+    const appName = config?.appName?.trim() || 'ChartDB';
+    const customLogoUrl = getConfigAssetUrl(config?.appLogo);
+    const hideSocialLinks = config?.hideSocialLinks ?? false;
+    const logoSrc =
+        customLogoUrl ??
+        (effectiveTheme === 'light' ? ChartDBLogo : ChartDBDarkLogo);
 
     const renderStars = useCallback(() => {
         return (
             <iframe
-                src={`https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=large&text=false`}
+                src={`https://ghbtns.com/github-btn.html?user=derDeno&repo=chartdb&type=star&size=large&text=false`}
                 width="40"
                 height="30"
                 title="GitHub"
@@ -33,12 +43,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         rel="noreferrer"
                     >
                         <img
-                            src={
-                                effectiveTheme === 'light'
-                                    ? ChartDBLogo
-                                    : ChartDBDarkLogo
-                            }
-                            alt="chartDB"
+                            src={logoSrc}
+                            alt={appName}
                             className="h-4 max-w-fit"
                         />
                     </a>
@@ -48,7 +54,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             <DiagramName />
             <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                 <LastSaved />
-                {renderStars()}
+                {hideSocialLinks ? null : renderStars()}
                 <LanguageNav />
             </div>
         </nav>

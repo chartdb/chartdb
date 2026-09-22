@@ -42,6 +42,35 @@
   <img width='700px' src="./public/chartdb.png">
 </p>
 
+
+## Custom Fork
+This fork introduces a docker volume bind for storing and loading persistent diagrams from a volume.
+It also introduces many customization functions like custom logo, name and colors.
+
+Other features:
+- clean mode support with the url param clean=true
+- single table embedding
+- hiding social links
+- better table color picker
+
+Mount a Docker volume to `/data`. Set `CHARTDB_API_TOKEN` to protect the
+persistent storage API; the token is sent by the frontend for same-origin API
+requests. If it is unset, authentication is disabled for local development.
+
+In the mounted volume you will find a `config.json` file. This file allows you to perform custom configs. The possible options are:
+
+```json
+{
+  "defaultDiagramId": "default id of diagram - will be auto generated",
+  "appName": "App Name",
+  "appLogo": "relative Path to logo file",
+  "primaryColor": "#ffffff",
+  "hideSocialLinks": true
+}
+```
+
+__
+
 ### 🎉 ChartDB
 
 ChartDB is a powerful, web-based database diagramming editor.
@@ -99,33 +128,72 @@ VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ### Run the Docker Container
 
 ```bash
-docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 ghcr.io/chartdb/chartdb:latest
+docker run \
+  -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> \
+  -e CHARTDB_API_TOKEN=<A_LONG_RANDOM_TOKEN> \
+  -v chartdb-data:/data \
+  -p 8080:80 \
+  ghcr.io/derdeno/chartdb:latest
 ```
 
 #### Build and Run locally
 
 ```bash
 docker build -t chartdb .
-docker run -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> -p 8080:80 chartdb
+docker run \
+  -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> \
+  -e CHARTDB_API_TOKEN=<A_LONG_RANDOM_TOKEN> \
+  -v chartdb-data:/data \
+  -p 8080:80 \
+  chartdb
 ```
 
 #### Using Custom Inference Server
 
-```bash
-# Build
-docker build \
-  --build-arg VITE_OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
-  --build-arg VITE_LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
-  -t chartdb .
+Runtime configuration is supplied when the container starts; rebuilding the
+image is not necessary when changing the endpoint or model:
 
-# Run
+```bash
 docker run \
   -e OPENAI_API_ENDPOINT=<YOUR_ENDPOINT> \
   -e LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
   -p 8080:80 chartdb
 ```
 
-> **Privacy Note:** ChartDB includes privacy-focused analytics via Fathom Analytics. You can disable this by adding `-e DISABLE_ANALYTICS=true` to the run command or `--build-arg VITE_DISABLE_ANALYTICS=true` when building.
+#### Docker environment variables
+
+The Docker image reads the following variables when the container starts. The
+values are exposed to the frontend through the runtime `/config.js` endpoint,
+so you can change them without rebuilding the image.
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | empty | API key for OpenAI-compatible AI features. |
+| `OPENAI_API_ENDPOINT` | empty | Custom OpenAI-compatible API endpoint, for example `http://host.docker.internal:8000/v1`. |
+| `LLM_MODEL_NAME` | empty | Model name sent to the configured AI endpoint. |
+| `CHARTDB_API_TOKEN` | empty | Optional Bearer token protecting the persistence API. Authentication is disabled when unset. |
+| `CHARTDB_DATA_DIR` | `/data` | Directory for persisted diagrams, filters, configuration, and uploaded assets. Mount a volume here. |
+| `HIDE_CHARTDB_CLOUD` | empty | Set to `true` to hide ChartDB Cloud-related UI. |
+| `DISABLE_ANALYTICS` | empty | Set to `true` to disable analytics. |
+| `PORT` | `80` | HTTP port used by the Node server inside the container. |
+| `CHARTDB_STATIC_DIR` | `/usr/src/app/dist` | Advanced: directory containing the built frontend files. |
+
+Example with the commonly used runtime options:
+
+```bash
+docker run \
+  -e OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> \
+  -e OPENAI_API_ENDPOINT=https://api.openai.com/v1 \
+  -e LLM_MODEL_NAME=<YOUR_MODEL_NAME> \
+  -e CHARTDB_API_TOKEN=<A_LONG_RANDOM_TOKEN> \
+  -e HIDE_CHARTDB_CLOUD=true \
+  -e DISABLE_ANALYTICS=true \
+  -v chartdb-data:/data \
+  -p 8080:80 \
+  ghcr.io/derdeno/chartdb:latest
+```
+
+> **Privacy Note:** ChartDB includes privacy-focused analytics via Fathom Analytics. You can disable this by adding `-e DISABLE_ANALYTICS=true` to the run command.
 
 > **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
 

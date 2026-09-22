@@ -30,6 +30,8 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
+import { useConfig } from '@/hooks/use-config';
+import { getConfigAssetUrl } from '@/lib/domain/config';
 
 export interface SidebarItem {
     title: string;
@@ -53,6 +55,13 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { effectiveTheme } = useTheme();
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
+    const { config } = useConfig();
+    const appName = config?.appName?.trim() || 'ChartDB';
+    const customLogoUrl = getConfigAssetUrl(config?.appLogo);
+    const hideSocialLinks = config?.hideSocialLinks ?? false;
+    const logoSrc =
+        customLogoUrl ??
+        (effectiveTheme === 'light' ? ChartDBLogo : ChartDBDarkLogo);
 
     const diagramItems: SidebarItem[] = useMemo(
         () => [
@@ -139,8 +148,12 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
         ]
     );
 
-    const footerItems: SidebarItem[] = useMemo(
-        () => [
+    const footerItems: SidebarItem[] = useMemo(() => {
+        if (hideSocialLinks) {
+            return [];
+        }
+
+        return [
             {
                 title: 'Discord',
                 icon: DiscordLogoIcon,
@@ -164,9 +177,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 onClick: () => window.open('https://docs.chartdb.io', '_blank'),
                 active: false,
             },
-        ],
-        []
-    );
+        ];
+    }, [hideSocialLinks]);
 
     return (
         <Sidebar
@@ -183,12 +195,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                         rel="noreferrer"
                     >
                         <img
-                            src={
-                                effectiveTheme === 'light'
-                                    ? ChartDBLogo
-                                    : ChartDBDarkLogo
-                            }
-                            alt="chartDB"
+                            src={logoSrc}
+                            alt={appName}
                             className="h-4 max-w-fit"
                         />
                     </a>
@@ -251,29 +259,31 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 </SidebarGroup>
             </SidebarContent>
 
-            <SidebarFooter>
-                <SidebarMenu>
-                    {footerItems.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                            {item.badge && (
-                                <span className="absolute -right-1 -top-1 rounded-full bg-pink-500 px-[3px] py-px text-[8px] font-semibold text-white">
-                                    {item.badge}
-                                </span>
-                            )}
-                            <SidebarMenuButton
-                                className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
-                                isActive={item.active}
-                                asChild
-                            >
-                                <button onClick={item.onClick}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                </button>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    ))}
-                </SidebarMenu>
-            </SidebarFooter>
+            {footerItems.length ? (
+                <SidebarFooter>
+                    <SidebarMenu>
+                        {footerItems.map((item) => (
+                            <SidebarMenuItem key={item.title}>
+                                {item.badge && (
+                                    <span className="absolute -right-1 -top-1 rounded-full bg-pink-500 px-[3px] py-px text-[8px] font-semibold text-white">
+                                        {item.badge}
+                                    </span>
+                                )}
+                                <SidebarMenuButton
+                                    className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
+                                    isActive={item.active}
+                                    asChild
+                                >
+                                    <button onClick={item.onClick}>
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </button>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarFooter>
+            ) : null}
         </Sidebar>
     );
 };

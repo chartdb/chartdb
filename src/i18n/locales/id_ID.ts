@@ -44,6 +44,8 @@ export const id_ID: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                expand_all_tables: 'Expand All Tables',
+                collapse_all_tables: 'Collapse All Tables',
             },
             backup: {
                 backup: 'Cadangan',
@@ -439,7 +441,12 @@ export const id_ID: LanguageTranslation = {
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
         },
-
+        share_table_dialog: {
+            title: 'Share Table',
+            description: 'Copy the following link to share this table.',
+            close: 'Close',
+            copy_aria_label: 'Copy share URL',
+        },
         new_table_schema_dialog: {
             title: 'Pilih Skema',
             description:

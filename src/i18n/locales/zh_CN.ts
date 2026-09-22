@@ -44,6 +44,8 @@ export const zh_CN: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                expand_all_tables: 'Expand All Tables',
+                collapse_all_tables: 'Collapse All Tables',
             },
             backup: {
                 backup: '备份',
@@ -433,7 +435,12 @@ export const zh_CN: LanguageTranslation = {
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
         },
-
+        share_table_dialog: {
+            title: 'Share Table',
+            description: 'Copy the following link to share this table.',
+            close: 'Close',
+            copy_aria_label: 'Copy share URL',
+        },
         new_table_schema_dialog: {
             title: '选择模式',
             description: '当前显示多个模式。请选择一个用于新表。',

@@ -271,9 +271,15 @@ const noteToNoteNode = (note: Note): NoteNodeType => {
 
 export interface CanvasProps {
     initialTables: DBTable[];
+    cleanMode?: boolean;
+    cleanTableId?: string;
 }
 
-export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
+export const Canvas: React.FC<CanvasProps> = ({
+    initialTables,
+    cleanMode = false,
+    cleanTableId,
+}) => {
     const { getEdge, getInternalNode, getNode } = useReactFlow();
     const updateNodeInternals = useUpdateNodeInternals();
     const [selectedTableIds, setSelectedTableIds] = useState<string[]>([]);
@@ -332,6 +338,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         resetFilter,
     } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
+    const normalizedCleanTableId = cleanTableId?.trim();
+    const isCleanTableFocus = cleanMode && !!normalizedCleanTableId;
+    const lockViewport = isCleanTableFocus;
+    const lockInteractions = isCleanTableFocus;
 
     const shouldForceShowTable = useCallback(
         (tableId: string) => {
@@ -342,14 +352,24 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
+    const initialTablesForRender = useMemo(
+        () =>
+            isCleanTableFocus
+                ? initialTables.filter(
+                      (table) => table.id === normalizedCleanTableId
+                  )
+                : initialTables,
+        [initialTables, isCleanTableFocus, normalizedCleanTableId]
+    );
+
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
-        initialTables.map((table) =>
+        initialTablesForRender.map((table) =>
             tableToTableNode(table, {
                 filter,
                 databaseType,
                 filterLoading,
                 showDBViews,
-                forceShow: shouldForceShowTable(table.id),
+                forceShow: isCleanTableFocus || shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget: false,
             })
         )
@@ -366,16 +386,16 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     useEffect(() => {
         setIsInitialLoadingNodes(true);
-    }, [initialTables]);
+    }, [initialTablesForRender]);
 
     useEffect(() => {
-        const initialNodes = initialTables.map((table) =>
+        const initialNodes = initialTablesForRender.map((table) =>
             tableToTableNode(table, {
                 filter,
                 databaseType,
                 filterLoading,
                 showDBViews,
-                forceShow: shouldForceShowTable(table.id),
+                forceShow: isCleanTableFocus || shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget: false,
             })
         );
@@ -383,13 +403,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             setIsInitialLoadingNodes(false);
         }
     }, [
-        initialTables,
+        initialTablesForRender,
         nodes,
         filter,
         databaseType,
         filterLoading,
         showDBViews,
         shouldForceShowTable,
+        isCleanTableFocus,
     ]);
 
     useEffect(() => {
@@ -405,14 +426,35 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [isInitialLoadingNodes, fitView]);
 
     useEffect(() => {
-        // Force React Flow to re-register handles for all table nodes
-        // This ensures handles exist before edges reference them
-        const tableNodeIds = tables.map((t) => t.id);
+        if (
+            !cleanMode ||
+            filterLoading ||
+            initialTablesForRender.length === 0
+        ) {
+            return;
+        }
+
+        debounce(() => {
+            fitView({
+                duration: 200,
+                padding: 0.1,
+                maxZoom: 0.8,
+            });
+        }, 200)();
+    }, [cleanMode, filterLoading, initialTablesForRender.length, fitView]);
+
+    useEffect(() => {
+        if (isCleanTableFocus) {
+            setEdges([]);
+            return;
+        }
+
+        // Force React Flow to re-register handles before edges reference them.
+        const tableNodeIds = tables.map((table) => table.id);
         if (tableNodeIds.length > 0) {
             updateNodeInternals(tableNodeIds);
         }
 
-        // Delay edge creation to ensure handles are registered
         const timeoutId = setTimeout(() => {
             const targetIndexes: Record<string, number> = relationships.reduce(
                 (acc, relationship) => {
@@ -423,7 +465,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 },
                 {} as Record<string, number>
             );
-
             const targetDepIndexes: Record<string, number> =
                 dependencies.reduce(
                     (acc, dep) => {
@@ -434,7 +475,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
 
             setEdges((prevEdges) => {
-                // Create a map of previous edge states to preserve selection
                 const prevEdgeStates = new Map(
                     prevEdges.map((edge) => [
                         edge.id,
@@ -478,7 +518,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     }),
                 ];
             });
-        }, 100); // Delay to let handles register after updateNodeInternals
+        }, 100);
 
         return () => clearTimeout(timeoutId);
     }, [
@@ -488,6 +528,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showDBViews,
         tables,
         updateNodeInternals,
+        isCleanTableFocus,
     ]);
 
     useEffect(() => {
@@ -584,22 +625,28 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [selectedRelationshipIds, selectedTableIds, setEdges]);
 
     useEffect(() => {
-        // Compute target edge counts per field (same logic as edge creation)
-        // This ensures handle creation is synchronized with edge indices
+        // Compute target edge counts per field so handle creation stays
+        // synchronized with the edge indices.
         const targetEdgeCountsByField: Record<string, number> = {};
-        relationships.forEach((rel) => {
-            const fieldId = rel.targetFieldId;
+        relationships.forEach((relationship) => {
+            const fieldId = relationship.targetFieldId;
             targetEdgeCountsByField[fieldId] =
                 (targetEdgeCountsByField[fieldId] || 0) + 1;
         });
 
+        const visibleTables = isCleanTableFocus
+            ? tables.filter((table) => table.id === normalizedCleanTableId)
+            : tables;
+        const visibleAreas = isCleanTableFocus ? [] : areas;
+        const visibleNotes = isCleanTableFocus ? [] : notes;
+
         setNodes((prevNodes) => {
             const newNodes = [
-                ...tables.map((table) => {
-                    const isOverlapping =
-                        (overlapGraph.graph.get(table.id) ?? []).length > 0;
+                ...visibleTables.map((table) => {
+                    const isOverlapping = isCleanTableFocus
+                        ? false
+                        : (overlapGraph.graph.get(table.id) ?? []).length > 0;
 
-                    // Get target edge counts for this table's fields
                     const tableTargetEdgeCounts: Record<string, number> = {};
                     table.fields.forEach((field) => {
                         if (targetEdgeCountsByField[field.id]) {
@@ -613,7 +660,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         databaseType,
                         filterLoading,
                         showDBViews,
-                        forceShow: shouldForceShowTable(table.id),
+                        forceShow:
+                            isCleanTableFocus || shouldForceShowTable(table.id),
                         isRelationshipCreatingTarget: false,
                         targetEdgeCounts: tableTargetEdgeCounts,
                     });
@@ -637,15 +685,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         },
                     };
                 }),
-                ...areas.map((area) =>
+                ...visibleAreas.map((area) =>
                     areaToAreaNode(area, {
-                        tables,
+                        tables: visibleTables,
                         filter,
                         databaseType,
                         filterLoading,
                     })
                 ),
-                ...notes.map((note) => noteToNoteNode(note)),
+                ...visibleNotes.map((note) => noteToNoteNode(note)),
                 ...prevNodes.filter(
                     (n) =>
                         n.type === 'temp-cursor' ||
@@ -674,6 +722,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
+        isCleanTableFocus,
+        normalizedCleanTableId,
         relationships,
     ]);
 
@@ -711,6 +761,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const prevFilter = useRef<DiagramFilter | undefined>(undefined);
     const prevShowDBViews = useRef<boolean>(showDBViews);
     useEffect(() => {
+        if (isCleanTableFocus) {
+            return;
+        }
+
         if (
             !equal(filter, prevFilter.current) ||
             showDBViews !== prevShowDBViews.current
@@ -741,7 +795,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             prevFilter.current = filter;
             prevShowDBViews.current = showDBViews;
         }
-    }, [filter, fitView, tables, setOverlapGraph, databaseType, showDBViews]);
+    }, [
+        filter,
+        fitView,
+        tables,
+        setOverlapGraph,
+        databaseType,
+        showDBViews,
+        isCleanTableFocus,
+    ]);
 
     useEffect(() => {
         const checkParentAreas = debounce(() => {
@@ -795,8 +857,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             }
         }, 300);
 
+        if (isCleanTableFocus) {
+            return;
+        }
+
         checkParentAreas();
-    }, [nodes, updateTablesState]);
+    }, [nodes, updateTablesState, isCleanTableFocus]);
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
@@ -1479,6 +1545,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     // Check if all tables are hidden due to filtering
     // Derived from filter state directly (not nodes) for better performance
     const allTablesHiddenByFilter = useMemo(() => {
+        if (isCleanTableFocus) {
+            return false;
+        }
+
         if (!hasActiveFilter || tables.length === 0 || filterLoading) {
             return false;
         }
@@ -1491,7 +1561,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             })
         ).length;
         return visibleTableCount === 0;
-    }, [hasActiveFilter, tables, filter, databaseType, filterLoading]);
+    }, [
+        hasActiveFilter,
+        tables,
+        filter,
+        databaseType,
+        filterLoading,
+        isCleanTableFocus,
+    ]);
 
     const pulseOverlappingTables = useCallback(() => {
         setHighlightOverlappingTables(true);
@@ -1517,8 +1594,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         {
             preventDefault: true,
             enableOnFormTags: true,
+            enabled: !cleanMode,
         },
-        []
+        [cleanMode, setShowFilter]
     );
 
     // Handle mouse move to update cursor position for floating edge
@@ -1556,6 +1634,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     // Handle escape key to cancel floating edge creation, close relationship node, and close relationship popover
     useEffect(() => {
+        if (cleanMode) {
+            return;
+        }
+
         const handleEscape = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 if (tempFloatingEdge) {
@@ -1573,6 +1655,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
     }, [
+        cleanMode,
         tempFloatingEdge,
         endFloatingEdgeCreation,
         hideCreateRelationshipNode,
@@ -1599,6 +1682,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [nodes, tempFloatingEdge, cursorPosition]);
 
     const edgesWithFloating = useMemo(() => {
+        if (isCleanTableFocus) {
+            return [];
+        }
+
         if (!tempFloatingEdge || !cursorPosition) return edges;
 
         let target = TEMP_CURSOR_NODE_ID;
@@ -1625,7 +1712,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         };
 
         return [...edges, tempEdge];
-    }, [edges, tempFloatingEdge, cursorPosition, hoveringTableId]);
+    }, [
+        edges,
+        tempFloatingEdge,
+        cursorPosition,
+        hoveringTableId,
+        isCleanTableFocus,
+    ]);
 
     const onPaneClickHandler = useCallback(
         (event: React.MouseEvent<Element, MouseEvent>) => {
@@ -1661,10 +1754,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         ]
     );
 
+    const effectiveShiftPressed = lockInteractions ? false : shiftPressed;
+
     return (
         <CanvasContextMenu>
             <div
-                className="relative flex h-full"
+                className="relative flex size-full min-w-0 flex-1"
                 id="canvas"
                 ref={containerRef}
                 onMouseMove={handleMouseMove}
@@ -1673,16 +1768,20 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     onlyRenderVisibleElements
                     colorMode={effectiveTheme}
                     className={cn('nodes-animated', {
-                        'canvas-cursor-multi-select': shiftPressed,
-                        'canvas-cursor-default': !shiftPressed,
+                        'canvas-cursor-multi-select': effectiveShiftPressed,
+                        'canvas-cursor-default': !effectiveShiftPressed,
                     })}
                     nodes={nodesWithCursor}
                     edges={edgesWithFloating}
-                    onNodesChange={onNodesChangeHandler}
-                    onEdgesChange={onEdgesChangeHandler}
+                    onNodesChange={
+                        lockInteractions ? undefined : onNodesChangeHandler
+                    }
+                    onEdgesChange={
+                        lockInteractions ? undefined : onEdgesChangeHandler
+                    }
                     maxZoom={5}
                     minZoom={0.1}
-                    onConnect={onConnectHandler}
+                    onConnect={lockInteractions ? undefined : onConnectHandler}
                     proOptions={{
                         hideAttribution: true,
                     }}
@@ -1693,116 +1792,136 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         animated: false,
                         type: 'relationship-edge',
                     }}
-                    panOnScroll={scrollAction === 'pan'}
-                    snapToGrid={shiftPressed || snapToGridEnabled}
+                    panOnScroll={!lockViewport && scrollAction === 'pan'}
+                    panOnDrag={!lockViewport}
+                    zoomOnScroll={!lockViewport}
+                    zoomOnPinch={!lockViewport}
+                    zoomOnDoubleClick={!lockViewport}
+                    snapToGrid={
+                        !lockInteractions &&
+                        (effectiveShiftPressed || snapToGridEnabled)
+                    }
                     snapGrid={[20, 20]}
                     selectionMode={SelectionMode.Full}
                     onPaneClick={onPaneClickHandler}
                     connectionLineComponent={ConnectionLine}
-                    deleteKeyCode={['Backspace', 'Delete']}
-                    multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
+                    deleteKeyCode={
+                        lockInteractions ? null : ['Backspace', 'Delete']
+                    }
+                    multiSelectionKeyCode={
+                        lockInteractions ? null : ['Shift', 'Meta', 'Control']
+                    }
+                    nodesDraggable={!lockInteractions}
+                    nodesConnectable={!lockInteractions}
+                    elementsSelectable={!lockInteractions}
+                    selectionOnDrag={!lockInteractions}
                 >
-                    <Controls
-                        position="top-left"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <div className="flex flex-col items-center gap-2 md:flex-row">
-                            {!readonly ? (
-                                <>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <span>
-                                                <Button
-                                                    variant="secondary"
-                                                    className={cn(
-                                                        'size-8 p-1 shadow-none',
-                                                        snapToGridEnabled ||
-                                                            shiftPressed
-                                                            ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
-                                                            : ''
-                                                    )}
-                                                    onClick={() =>
-                                                        setSnapToGridEnabled(
-                                                            (prev) => !prev
-                                                        )
-                                                    }
-                                                >
-                                                    <Magnet className="size-4" />
-                                                </Button>
-                                            </span>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            {t('snap_to_grid_tooltip', {
-                                                key:
-                                                    operatingSystem === 'mac'
-                                                        ? '⇧'
-                                                        : 'Shift',
-                                            })}
-                                        </TooltipContent>
-                                    </Tooltip>
-                                    {highlightedCustomType ? (
+                    {!cleanMode ? (
+                        <Controls
+                            position="top-left"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <div className="flex flex-col items-center gap-2 md:flex-row">
+                                {!readonly ? (
+                                    <>
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <span>
                                                     <Button
                                                         variant="secondary"
-                                                        className="size-8 border border-yellow-400 bg-yellow-200 p-1 shadow-none hover:bg-yellow-300 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700"
+                                                        className={cn(
+                                                            'size-8 p-1 shadow-none',
+                                                            snapToGridEnabled ||
+                                                                effectiveShiftPressed
+                                                                ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
+                                                                : ''
+                                                        )}
                                                         onClick={() =>
-                                                            highlightCustomTypeId(
-                                                                undefined
+                                                            setSnapToGridEnabled(
+                                                                (prev) => !prev
                                                             )
                                                         }
                                                     >
-                                                        <Highlighter className="size-4" />
+                                                        <Magnet className="size-4" />
                                                     </Button>
                                                 </span>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                {t(
-                                                    'toolbar.custom_type_highlight_tooltip',
-                                                    {
-                                                        typeName:
-                                                            highlightedCustomType.name,
-                                                    }
-                                                )}
+                                                {t('snap_to_grid_tooltip', {
+                                                    key:
+                                                        operatingSystem ===
+                                                        'mac'
+                                                            ? '⇧'
+                                                            : 'Shift',
+                                                })}
                                             </TooltipContent>
                                         </Tooltip>
-                                    ) : null}
-                                </>
-                            ) : null}
+                                        {highlightedCustomType ? (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span>
+                                                        <Button
+                                                            variant="secondary"
+                                                            className="size-8 border border-yellow-400 bg-yellow-200 p-1 shadow-none hover:bg-yellow-300 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700"
+                                                            onClick={() =>
+                                                                highlightCustomTypeId(
+                                                                    undefined
+                                                                )
+                                                            }
+                                                        >
+                                                            <Highlighter className="size-4" />
+                                                        </Button>
+                                                    </span>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {t(
+                                                        'toolbar.custom_type_highlight_tooltip',
+                                                        {
+                                                            typeName:
+                                                                highlightedCustomType.name,
+                                                        }
+                                                    )}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        ) : null}
+                                    </>
+                                ) : null}
 
-                            <div
-                                className={`transition-opacity duration-300 ease-in-out ${
-                                    hasOverlappingTables
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                }`}
-                            >
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <span>
-                                            <Button
-                                                variant="default"
-                                                className="size-8 p-1 shadow-none"
-                                                onClick={pulseOverlappingTables}
-                                            >
-                                                <AlertTriangle className="size-4 text-white" />
-                                            </Button>
-                                        </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {t(
-                                            'toolbar.highlight_overlapping_tables'
-                                        )}
-                                    </TooltipContent>
-                                </Tooltip>
+                                <div
+                                    className={`transition-opacity duration-300 ease-in-out ${
+                                        hasOverlappingTables
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                    }`}
+                                >
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>
+                                                <Button
+                                                    variant="default"
+                                                    className="size-8 p-1 shadow-none"
+                                                    onClick={
+                                                        pulseOverlappingTables
+                                                    }
+                                                >
+                                                    <AlertTriangle className="size-4 text-white" />
+                                                </Button>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t(
+                                                'toolbar.highlight_overlapping_tables'
+                                            )}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </div>
                             </div>
-                        </div>
-                    </Controls>
-                    {isLoadingDOM ? (
+                        </Controls>
+                    ) : null}
+                    {!cleanMode && isLoadingDOM ? (
                         <Controls
                             position="top-center"
                             orientation="horizontal"
@@ -1820,7 +1939,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         </Controls>
                     ) : null}
 
-                    {!isDesktop && !readonly ? (
+                    {!cleanMode && !isDesktop && !readonly ? (
                         <Controls
                             position="bottom-left"
                             orientation="horizontal"
@@ -1837,7 +1956,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             </Button>
                         </Controls>
                     ) : null}
-                    {isLostInCanvas ? (
+                    {!cleanMode && isLostInCanvas ? (
                         <Controls
                             position={
                                 isDesktop ? 'bottom-center' : 'top-center'
@@ -1856,17 +1975,21 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             <ShowAllButton />
                         </Controls>
                     ) : null}
-                    <Controls
-                        position={isDesktop ? 'bottom-center' : 'top-center'}
-                        orientation="horizontal"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <Toolbar readonly={readonly} />
-                    </Controls>
-                    {showMiniMapOnCanvas && (
+                    {!cleanMode ? (
+                        <Controls
+                            position={
+                                isDesktop ? 'bottom-center' : 'top-center'
+                            }
+                            orientation="horizontal"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <Toolbar readonly={readonly} />
+                        </Controls>
+                    ) : null}
+                    {!cleanMode && showMiniMapOnCanvas && (
                         <MiniMap
                             style={{
                                 width: isDesktop ? 100 : 60,
@@ -1880,7 +2003,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         size={1}
                     />
                     {/* Empty state when all tables are hidden by filter */}
-                    {allTablesHiddenByFilter && (
+                    {!cleanMode && allTablesHiddenByFilter && (
                         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
                             <div className="pointer-events-auto flex items-center gap-3 rounded-lg border bg-background/90 px-4 py-3 shadow-sm backdrop-blur-sm">
                                 <EyeOff className="size-5 text-muted-foreground" />
@@ -1897,7 +2020,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             </div>
                         </div>
                     )}
-                    {showFilter ? (
+                    {!cleanMode && showFilter ? (
                         <CanvasFilter onClose={() => setShowFilter(false)} />
                     ) : null}
                 </ReactFlow>

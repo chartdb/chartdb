@@ -44,6 +44,8 @@ export const de: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                expand_all_tables: 'Expand All Tables',
+                collapse_all_tables: 'Collapse All Tables',
             },
             backup: {
                 backup: 'Sicherung',
@@ -443,6 +445,13 @@ export const de: LanguageTranslation = {
             pattern_description: 'Add subtle grid pattern to background.',
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
+        },
+        share_table_dialog: {
+            title: 'Teile Tabelle',
+            description:
+                'Kopieren Sie den folgenden Link, um diese Tabelle zu teilen.',
+            close: 'Schlie?en',
+            copy_aria_label: 'Freigabelink kopieren',
         },
 
         new_table_schema_dialog: {

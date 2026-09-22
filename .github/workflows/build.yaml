@@ -1,0 +1,243 @@
+name: Docker build and publish
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - 'feat/**'
+    tags:
+      - 'v*'
+      - 'docker-run-*'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-branch-platform:
+    if: github.ref_type == 'branch' && github.ref != 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            arch: amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract architecture image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=sha-,suffix=-${{ matrix.arch }}
+
+      - name: Build and push native architecture image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: ${{ matrix.platform }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=chartdb-${{ github.ref_name }}-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=chartdb-${{ github.ref_name }}-${{ matrix.arch }}
+
+  publish-branch-manifest:
+    if: github.ref_type == 'branch' && github.ref != 'refs/heads/main'
+    needs: build-branch-platform
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract branch image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
+            type=raw,value=nightly,enable=${{ startsWith(github.ref, 'refs/heads/feat/') }}
+            type=ref,event=branch
+            type=sha,prefix=sha-
+
+      - name: Publish multi-architecture manifest
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          TAGS: ${{ steps.meta.outputs.tags }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          IMAGE="$(printf '%s' "${IMAGE}" | tr '[:upper:]' '[:lower:]')"
+          SOURCE_AMD64="${IMAGE}:sha-${COMMIT_SHA:0:7}-amd64"
+          SOURCE_ARM64="${IMAGE}:sha-${COMMIT_SHA:0:7}-arm64"
+
+          while IFS= read -r tag; do
+            [ -z "${tag}" ] && continue
+            docker buildx imagetools create \
+              --tag "${tag}" \
+              "${SOURCE_AMD64}" \
+              "${SOURCE_ARM64}"
+          done <<< "${TAGS}"
+
+  retag-main-image:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract main image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=ref,event=branch
+            type=sha,prefix=sha-
+
+      - name: Find dev image from merge parent
+        id: source
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        run: |
+          set -euo pipefail
+
+          IMAGE="$(printf '%s' "${IMAGE}" | tr '[:upper:]' '[:lower:]')"
+          source_sha="$(git rev-list --parents -n1 "${GITHUB_SHA}" | awk '{print $3}')"
+          if [ -z "${source_sha}" ]; then
+            source_sha="${GITHUB_SHA}"
+          fi
+
+          source_image="${IMAGE}:sha-${source_sha:0:7}"
+          for attempt in {1..120}; do
+            if docker buildx imagetools inspect "${source_image}" >/dev/null 2>&1; then
+              echo "source_image=${source_image}" >> "${GITHUB_OUTPUT}"
+              exit 0
+            fi
+            sleep 5
+          done
+
+          echo "Could not find the dev image ${source_image}; refusing to rebuild on main." >&2
+          exit 1
+
+      - name: Retag dev image for main
+        env:
+          SOURCE_IMAGE: ${{ steps.source.outputs.source_image }}
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r tag; do
+            [ -z "${tag}" ] && continue
+            docker buildx imagetools create \
+              --tag "${tag}" \
+              "${SOURCE_IMAGE}"
+          done <<< "${TAGS}"
+
+  retag-release-image:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Retag the existing commit image
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          IMAGE="$(printf '%s' "${IMAGE}" | tr '[:upper:]' '[:lower:]')"
+          SOURCE_TAG="sha-${COMMIT_SHA:0:7}"
+          SOURCE_IMAGE="${IMAGE}:${SOURCE_TAG}"
+
+          for attempt in {1..120}; do
+            if docker buildx imagetools inspect "${SOURCE_IMAGE}" >/dev/null 2>&1; then
+              break
+            fi
+            if [ "${attempt}" -eq 120 ]; then
+              echo "Timed out waiting for ${SOURCE_IMAGE}" >&2
+              exit 1
+            fi
+            sleep 5
+          done
+
+          if [[ "${RELEASE_TAG}" == v* ]]; then
+            VERSION="${RELEASE_TAG#v}"
+            MAJOR_MINOR="$(printf '%s' "${VERSION}" | cut -d. -f1-2)"
+            docker buildx imagetools create \
+              --tag "${IMAGE}:${VERSION}" \
+              --tag "${IMAGE}:${RELEASE_TAG}" \
+              --tag "${IMAGE}:${MAJOR_MINOR}" \
+              "${SOURCE_IMAGE}"
+          else
+            docker buildx imagetools create \
+              --tag "${IMAGE}:${RELEASE_TAG}" \
+              "${SOURCE_IMAGE}"
+          fi

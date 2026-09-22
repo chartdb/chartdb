@@ -9,8 +9,13 @@ import {
     keyboardShortcutsForOS,
 } from '../keyboard-shortcuts-context/keyboard-shortcuts';
 
-export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
+export interface ThemeProviderProps extends React.PropsWithChildren {
+    disableHotkeys?: boolean;
+}
+
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     children,
+    disableHotkeys = false,
 }) => {
     const { theme, setTheme } = useLocalConfig();
     const isDarkSystemTheme = useMediaQuery({
@@ -49,6 +54,7 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
         {
             preventDefault: true,
             enableOnFormTags: true,
+            enabled: !disableHotkeys,
         },
         [handleThemeToggle]
     );

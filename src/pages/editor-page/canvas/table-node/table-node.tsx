@@ -104,6 +104,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             tempFloatingEdge,
         } = useCanvas();
 
+        useEffect(() => {
+            setExpanded(table.expanded ?? false);
+        }, [table.expanded]);
+
         // Get edit mode state directly from context
         const editTableMode = useMemo(
             () => editTableModeTable?.tableId === table.id,

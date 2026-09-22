@@ -43,6 +43,8 @@ export const fr: LanguageTranslation = {
                 hide_dependencies: 'Masquer les Dépendances',
                 show_minimap: 'Afficher la Mini Carte',
                 hide_minimap: 'Masquer la Mini Carte',
+                expand_all_tables: 'Expand All Tables',
+                collapse_all_tables: 'Collapse All Tables',
             },
             backup: {
                 backup: 'Sauvegarde',
@@ -405,7 +407,12 @@ export const fr: LanguageTranslation = {
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
         },
-
+        share_table_dialog: {
+            title: 'Share Table',
+            description: 'Copy the following link to share this table.',
+            close: 'Close',
+            copy_aria_label: 'Copy share URL',
+        },
         new_table_schema_dialog: {
             title: 'Sélectionner un Schéma',
             description:

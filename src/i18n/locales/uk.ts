@@ -43,6 +43,8 @@ export const uk: LanguageTranslation = {
                 hide_dependencies: 'Приховати залежності',
                 show_minimap: 'Показати мінімапу',
                 hide_minimap: 'Приховати мінімапу',
+                expand_all_tables: 'Expand All Tables',
+                collapse_all_tables: 'Collapse All Tables',
             },
             backup: {
                 backup: 'Резервне копіювання',
@@ -441,7 +443,12 @@ export const uk: LanguageTranslation = {
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
         },
-
+        share_table_dialog: {
+            title: 'Share Table',
+            description: 'Copy the following link to share this table.',
+            close: 'Close',
+            copy_aria_label: 'Copy share URL',
+        },
         new_table_schema_dialog: {
             title: 'Виберіть Схему',
             description:

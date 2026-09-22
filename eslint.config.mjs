@@ -72,6 +72,15 @@ export default [
             'react/no-unescaped-entities': 'off',
             'react/prop-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
+            'linebreak-style': ['error', 'unix'],
+        },
+    },
+    {
+        files: ['server/**/*.js'],
+        languageOptions: {
+            globals: {
+                ...globals.node,
+            },
         },
     },
 ];

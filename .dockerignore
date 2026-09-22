@@ -39,6 +39,7 @@ spec/
 *.DS_Store
 *.log
 *.lock
+!package-lock.json
 *.tmp
 
 # Ignore coverage output

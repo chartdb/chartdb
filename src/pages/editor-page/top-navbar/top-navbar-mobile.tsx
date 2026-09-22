@@ -6,14 +6,22 @@ import { Menu } from './menu/menu';
 import { Button } from '@/components/button/button';
 import { useSidebar } from '@/components/sidebar/use-sidebar';
 import { MenuIcon } from 'lucide-react';
+import { useConfig } from '@/hooks/use-config';
+import { getConfigAssetUrl } from '@/lib/domain/config';
 
 export interface TopNavbarMobileProps {}
 
 export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
+    const { config } = useConfig();
+    const appName = config?.appName?.trim() || 'ChartDB';
+    const customLogoUrl = getConfigAssetUrl(config?.appLogo);
+    const hideSocialLinks = config?.hideSocialLinks ?? false;
+    const logoSrc = customLogoUrl ?? ChartDBLogo;
+
     const renderStars = useCallback(() => {
         return (
             <iframe
-                src="https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=small&text=false"
+                src="https://ghbtns.com/github-btn.html?user=derDeno&repo=chartdb&type=star&size=small&text=false"
                 width="25"
                 height="20"
                 title="GitHub"
@@ -41,15 +49,15 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                             rel="noreferrer"
                         >
                             <img
-                                src={ChartDBLogo}
-                                alt="chartDB"
+                                src={logoSrc}
+                                alt={appName}
                                 className="h-4 max-w-fit"
                             />
                         </a>
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {renderStars()}
+                        {hideSocialLinks ? null : renderStars()}
                         <LanguageNav />
                     </div>
                 </div>

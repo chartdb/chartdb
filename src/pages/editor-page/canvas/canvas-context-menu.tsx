@@ -291,7 +291,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
 
     return (
         <ContextMenu>
-            <ContextMenuTrigger disabled={readonly}>
+            <ContextMenuTrigger disabled={readonly} asChild>
                 {children}
             </ContextMenuTrigger>
             <ContextMenuContent>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
     Menubar,
     MenubarCheckboxItem,
@@ -28,6 +28,8 @@ import { useTheme } from '@/hooks/use-theme';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
+import { TABLE_MINIMIZED_FIELDS } from '@/lib/domain/db-table';
+import { useConfig } from '@/hooks/use-config';
 
 export interface MenuProps {}
 
@@ -37,6 +39,8 @@ export const Menu: React.FC<MenuProps> = () => {
         deleteDiagram,
         updateDiagramUpdatedAt,
         databaseType,
+        tables,
+        updateTablesState,
     } = useChartDB();
     const {
         openCreateDiagramDialog,
@@ -66,6 +70,8 @@ export const Menu: React.FC<MenuProps> = () => {
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { exportImage } = useExportImage();
     const navigate = useNavigate();
+    const { config } = useConfig();
+    const hideSocialLinks = config?.hideSocialLinks ?? false;
 
     const handleDeleteDiagramAction = useCallback(() => {
         deleteDiagram();
@@ -144,6 +150,32 @@ export const Menu: React.FC<MenuProps> = () => {
     const showOrHideMiniMap = useCallback(() => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
     }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
+
+    const tablesWithExpandableFields = useMemo(
+        () =>
+            tables.filter(
+                (table) => table.fields.length > TABLE_MINIMIZED_FIELDS
+            ),
+        [tables]
+    );
+
+    const allExpandableTablesExpanded = useMemo(
+        () =>
+            tablesWithExpandableFields.length > 0 &&
+            tablesWithExpandableFields.every((table) => table.expanded),
+        [tablesWithExpandableFields]
+    );
+
+    const toggleExpandAllTables = useCallback(() => {
+        const shouldExpand = !allExpandableTablesExpanded;
+        updateTablesState((currentTables) =>
+            currentTables.map((table) =>
+                table.fields.length > TABLE_MINIMIZED_FIELDS
+                    ? { id: table.id, expanded: shouldExpand }
+                    : { id: table.id }
+            )
+        );
+    }, [allExpandableTablesExpanded, updateTablesState]);
 
     const emojiAI = '✨';
 
@@ -397,6 +429,14 @@ export const Menu: React.FC<MenuProps> = () => {
                             ? t('menu.view.hide_minimap')
                             : t('menu.view.show_minimap')}
                     </MenubarItem>
+                    <MenubarItem
+                        onClick={toggleExpandAllTables}
+                        disabled={tablesWithExpandableFields.length === 0}
+                    >
+                        {allExpandableTablesExpanded
+                            ? t('menu.view.collapse_all_tables')
+                            : t('menu.view.expand_all_tables')}
+                    </MenubarItem>
                     <MenubarSeparator />
                     <MenubarSub>
                         <MenubarSubTrigger>
@@ -486,17 +526,19 @@ export const Menu: React.FC<MenuProps> = () => {
                 </MenubarContent>
             </MenubarMenu>
 
-            <MenubarMenu>
-                <MenubarTrigger>{t('menu.help.help')}</MenubarTrigger>
-                <MenubarContent>
-                    <MenubarItem onClick={openChartDBDocs}>
-                        {t('menu.help.docs_website')}
-                    </MenubarItem>
-                    <MenubarItem onClick={openJoinDiscord}>
-                        {t('menu.help.join_discord')}
-                    </MenubarItem>
-                </MenubarContent>
-            </MenubarMenu>
+            {hideSocialLinks ? null : (
+                <MenubarMenu>
+                    <MenubarTrigger>{t('menu.help.help')}</MenubarTrigger>
+                    <MenubarContent>
+                        <MenubarItem onClick={openChartDBDocs}>
+                            {t('menu.help.docs_website')}
+                        </MenubarItem>
+                        <MenubarItem onClick={openJoinDiscord}>
+                            {t('menu.help.join_discord')}
+                        </MenubarItem>
+                    </MenubarContent>
+                </MenubarMenu>
+            )}
         </Menubar>
     );
 };

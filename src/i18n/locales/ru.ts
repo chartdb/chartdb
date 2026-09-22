@@ -43,6 +43,8 @@ export const ru: LanguageTranslation = {
                 hide_dependencies: 'Скрыть зависимости',
                 show_minimap: 'Показать мини-карту',
                 hide_minimap: 'Скрыть мини-карту',
+                expand_all_tables: 'Expand All Tables',
+                collapse_all_tables: 'Collapse All Tables',
             },
             backup: {
                 backup: 'Бэкап',
@@ -440,7 +442,12 @@ export const ru: LanguageTranslation = {
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
         },
-
+        share_table_dialog: {
+            title: 'Share Table',
+            description: 'Copy the following link to share this table.',
+            close: 'Close',
+            copy_aria_label: 'Copy share URL',
+        },
         new_table_schema_dialog: {
             title: 'Выбрать схему',
             description:

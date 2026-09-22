@@ -43,6 +43,8 @@ export const hr: LanguageTranslation = {
                 hide_dependencies: 'Sakrij ovisnosti',
                 show_minimap: 'Prikaži mini kartu',
                 hide_minimap: 'Sakrij mini kartu',
+                expand_all_tables: 'Expand All Tables',
+                collapse_all_tables: 'Collapse All Tables',
             },
             backup: {
                 backup: 'Sigurnosna kopija',
@@ -435,7 +437,12 @@ export const hr: LanguageTranslation = {
             transparent: 'Prozirna pozadina',
             transparent_description: 'Ukloni boju pozadine iz slike.',
         },
-
+        share_table_dialog: {
+            title: 'Share Table',
+            description: 'Copy the following link to share this table.',
+            close: 'Close',
+            copy_aria_label: 'Copy share URL',
+        },
         new_table_schema_dialog: {
             title: 'Odaberi shemu',
             description:

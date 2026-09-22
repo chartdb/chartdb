@@ -11,9 +11,14 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { useReactFlow } from '@xyflow/react';
 
-export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
-    children,
-}) => {
+export interface KeyboardShortcutsProviderProps
+    extends React.PropsWithChildren {
+    enabled?: boolean;
+}
+
+export const KeyboardShortcutsProvider: React.FC<
+    KeyboardShortcutsProviderProps
+> = ({ children, enabled = true }) => {
     const { redo, undo } = useHistory();
     const { openOpenDiagramDialog } = useDialog();
     const { updateDiagramUpdatedAt } = useChartDB();
@@ -25,6 +30,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
         redo,
         {
             preventDefault: true,
+            enabled,
         },
         [redo]
     );
@@ -33,6 +39,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
         undo,
         {
             preventDefault: true,
+            enabled,
         },
         [undo]
     );
@@ -42,6 +49,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
         () => openOpenDiagramDialog(),
         {
             preventDefault: true,
+            enabled,
         },
         [openOpenDiagramDialog]
     );
@@ -51,6 +59,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
         updateDiagramUpdatedAt,
         {
             preventDefault: true,
+            enabled,
         },
         [updateDiagramUpdatedAt]
     );
@@ -60,6 +69,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
         toggleSidePanel,
         {
             preventDefault: true,
+            enabled,
         },
         [toggleSidePanel]
     );
@@ -74,6 +84,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
         },
         {
             preventDefault: true,
+            enabled,
         },
         [fitView]
     );

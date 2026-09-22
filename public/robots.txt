@@ -1,4 +1,3 @@
 User-agent: *
 Disallow: /
 
-Sitemap: https://app.chartdb.io/sitemap.xml
