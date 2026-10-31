@@ -2,7 +2,11 @@ import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import type { ExportImageContext, ImageType } from './export-image-context';
 import { exportImageContext } from './export-image-context';
 import { toJpeg, toPng, toSvg } from 'html-to-image';
-import { useReactFlow } from '@xyflow/react';
+import {
+    getNodesBounds,
+    getViewportForBounds,
+    useReactFlow,
+} from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useTheme } from '@/hooks/use-theme';
@@ -14,7 +18,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { hideLoader, showLoader } = useFullScreenLoader();
-    const { setNodes, getViewport } = useReactFlow();
+    const { setNodes, getViewport, getNodes } = useReactFlow();
     const { effectiveTheme } = useTheme();
     const { diagramName } = useChartDB();
     const [logoBase64, setLogoBase64] = useState<string>('');
@@ -250,13 +254,33 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 try {
                     // Handle SVG export differently
                     if (type === 'svg') {
+                        // Capture the whole diagram, not just the visible
+                        // viewport (#1083)
+                        const padding = 40;
+                        const nodesBounds = getNodesBounds(
+                            getNodes().filter((node) => !node.hidden)
+                        );
+                        const svgWidth = Math.ceil(
+                            nodesBounds.width + padding * 2
+                        );
+                        const svgHeight = Math.ceil(
+                            nodesBounds.height + padding * 2
+                        );
+                        const fitted = getViewportForBounds(
+                            nodesBounds,
+                            svgWidth,
+                            svgHeight,
+                            1,
+                            1,
+                            0
+                        );
                         const dataUrl = await imageCreateFn(viewportElement, {
-                            width: reactFlowBounds.width,
-                            height: reactFlowBounds.height,
+                            width: svgWidth,
+                            height: svgHeight,
                             style: {
-                                width: `${reactFlowBounds.width}px`,
-                                height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
+                                width: `${svgWidth}px`,
+                                height: `${svgHeight}px`,
+                                transform: `translate(${fitted.x}px, ${fitted.y}px) scale(${fitted.zoom})`,
                             },
                             quality: 1,
                             pixelRatio: scale,
@@ -369,6 +393,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             getBackgroundColor,
             downloadImage,
             getViewport,
+            getNodes,
             hideLoader,
             imageCreatorMap,
             setNodes,
