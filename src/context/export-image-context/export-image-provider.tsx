@@ -94,13 +94,14 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             // The canvas only renders visible nodes, so for SVG fit the
             // live viewport to all nodes first so every table is in the DOM
             // (#1083). The original viewport is restored afterwards.
-            if (type === 'svg') {
-                const allBounds = getNodesBounds(
-                    getNodes().filter((node) => !node.hidden)
-                );
+            // Empty diagrams fall back to exporting the current viewport.
+            const visibleNodes = getNodes().filter((node) => !node.hidden);
+            const fitWholeDiagram = type === 'svg' && visibleNodes.length > 0;
+            const nodesBounds = getNodesBounds(visibleNodes);
+            if (fitWholeDiagram) {
                 await setViewport(
                     getViewportForBounds(
-                        allBounds,
+                        nodesBounds,
                         reactFlowBounds.width,
                         reactFlowBounds.height,
                         0.01,
@@ -276,23 +277,22 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         // Capture the whole diagram, not just the visible
                         // viewport (#1083)
                         const padding = 40;
-                        const nodesBounds = getNodesBounds(
-                            getNodes().filter((node) => !node.hidden)
-                        );
-                        const svgWidth = Math.ceil(
-                            nodesBounds.width + padding * 2
-                        );
-                        const svgHeight = Math.ceil(
-                            nodesBounds.height + padding * 2
-                        );
-                        const fitted = getViewportForBounds(
-                            nodesBounds,
-                            svgWidth,
-                            svgHeight,
-                            1,
-                            1,
-                            0
-                        );
+                        const svgWidth = fitWholeDiagram
+                            ? Math.ceil(nodesBounds.width + padding * 2)
+                            : reactFlowBounds.width;
+                        const svgHeight = fitWholeDiagram
+                            ? Math.ceil(nodesBounds.height + padding * 2)
+                            : reactFlowBounds.height;
+                        const fitted = fitWholeDiagram
+                            ? getViewportForBounds(
+                                  nodesBounds,
+                                  svgWidth,
+                                  svgHeight,
+                                  1,
+                                  1,
+                                  0
+                              )
+                            : viewport;
                         const dataUrl = await imageCreateFn(viewportElement, {
                             width: svgWidth,
                             height: svgHeight,
@@ -404,7 +404,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         }
                     );
                     viewportElement.removeChild(tempSvg);
-                    if (type === 'svg') {
+                    if (fitWholeDiagram) {
                         setViewport(viewport);
                     }
                     hideLoader();
