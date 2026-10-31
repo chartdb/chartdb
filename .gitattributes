@@ -1,0 +1,4 @@
+# Shell scripts must keep LF endings or containers fail with
+# "exec /entrypoint.sh: no such file or directory" (#1126)
+*.sh text eol=lf
+default.conf.template text eol=lf
