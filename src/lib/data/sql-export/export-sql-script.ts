@@ -515,17 +515,9 @@ export const exportBaseSQL = ({
             // Never use named constraints to avoid duplicate constraint name issues
             if (field.primaryKey && !hasCompositePrimaryKey) {
                 sqlScript += ' PRIMARY KEY';
-
-                // For SQLite with DBML flow, add AUTOINCREMENT after PRIMARY KEY
-                if (
-                    isDBMLFlow &&
-                    field.increment &&
-                    targetDatabaseType === DatabaseType.SQLITE &&
-                    (typeName.toLowerCase() === 'integer' ||
-                        typeName.toLowerCase() === 'int')
-                ) {
-                    sqlScript += ' AUTOINCREMENT';
-                }
+                // No SQLite AUTOINCREMENT here: the DBML flow parses this SQL
+                // with the postgres dialect, which rejects it (#1165). The
+                // increment attribute is restored by restoreIncrementAttribute.
             }
 
             // Add a comma after each field except the last one (or before composite PK constraint)
