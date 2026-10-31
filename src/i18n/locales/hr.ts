@@ -434,6 +434,7 @@ export const hr: LanguageTranslation = {
             pattern_description: 'Dodaj suptilni mrežni uzorak u pozadinu.',
             transparent: 'Prozirna pozadina',
             transparent_description: 'Ukloni boju pozadine iz slike.',
+            large_svg_warning: 'Large diagram: SVG export may take a while.',
         },
 
         new_table_schema_dialog: {
