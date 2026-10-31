@@ -44,6 +44,8 @@ export const id_ID: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_full_tables: 'Tampilkan Tabel Lengkap',
+                hide_full_tables: 'Sembunyikan Tabel Lengkap',
             },
             backup: {
                 backup: 'Cadangan',

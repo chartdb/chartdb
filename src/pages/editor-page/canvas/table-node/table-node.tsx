@@ -53,6 +53,7 @@ import { useDiff } from '@/context/diff-context/use-diff';
 import { TableNodeStatus } from './table-node-status/table-node-status';
 import { TableEditMode } from './table-edit-mode/table-edit-mode';
 import { useCanvas } from '@/hooks/use-canvas';
+import { useLocalConfig } from '@/hooks/use-local-config';
 
 export const TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX = 'table_rel_source_';
 export const TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX = 'table_rel_target_';
@@ -95,6 +96,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         } = useLayout();
         const [expanded, setExpanded] = useState(table.expanded ?? false);
         const { t } = useTranslation();
+        const { showFullTables } = useLocalConfig();
         const [isHovering, setIsHovering] = useState(false);
         const {
             setEditTableModeTable,
@@ -282,6 +284,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         }, [relationships]);
 
         const visibleFields = useMemo(() => {
+            // If showFullTables is enabled, show all fields
+            if (showFullTables) {
+                return editTableMode && editModeInitialFieldCount !== null
+                    ? fields.slice(0, editModeInitialFieldCount)
+                    : fields;
+            }
+
             // If in edit mode, use the initial field count to keep consistent height
             const fieldsToConsider =
                 editTableMode && editModeInitialFieldCount !== null
@@ -328,6 +337,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
             return result;
         }, [
+            showFullTables,
             expanded,
             fields,
             relatedFieldIds,
@@ -609,9 +619,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     <div
                         className="transition-[max-height] duration-200 ease-in-out"
                         style={{
-                            maxHeight: expanded
-                                ? `${(editTableMode && editModeInitialFieldCount !== null ? editModeInitialFieldCount : fields.length) * 2}rem` // h-8 per field
-                                : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
+                            maxHeight:
+                                expanded || showFullTables
+                                    ? `${(editTableMode && editModeInitialFieldCount !== null ? editModeInitialFieldCount : fields.length) * 2}rem` // h-8 per field
+                                    : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
                         }}
                     >
                         {visibleFields.map((field: DBField) => (
@@ -627,26 +638,27 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                             />
                         ))}
                     </div>
-                    {(editTableMode && editModeInitialFieldCount !== null
-                        ? editModeInitialFieldCount
-                        : fields.length) > TABLE_MINIMIZED_FIELDS && (
-                        <div
-                            className="z-10 flex h-8 cursor-pointer items-center justify-center rounded-b-md border-t text-xs text-muted-foreground transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800"
-                            onClick={toggleExpand}
-                        >
-                            {expanded ? (
-                                <>
-                                    <ChevronUp className="mr-1 size-3.5" />
-                                    {t('show_less')}
-                                </>
-                            ) : (
-                                <>
-                                    <ChevronDown className="mr-1 size-3.5" />
-                                    {t('show_more')}
-                                </>
-                            )}
-                        </div>
-                    )}
+                    {!showFullTables &&
+                        (editTableMode && editModeInitialFieldCount !== null
+                            ? editModeInitialFieldCount
+                            : fields.length) > TABLE_MINIMIZED_FIELDS && (
+                            <div
+                                className="z-10 flex h-8 cursor-pointer items-center justify-center rounded-b-md border-t text-xs text-muted-foreground transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                                onClick={toggleExpand}
+                            >
+                                {expanded ? (
+                                    <>
+                                        <ChevronUp className="mr-1 size-3.5" />
+                                        {t('show_less')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <ChevronDown className="mr-1 size-3.5" />
+                                        {t('show_more')}
+                                    </>
+                                )}
+                            </div>
+                        )}
                 </div>
             </TableNodeContextMenu>
         );

@@ -61,6 +61,8 @@ export const Menu: React.FC<MenuProps> = () => {
         showMiniMapOnCanvas,
         showDBViews,
         setShowDBViews,
+        showFullTables,
+        setShowFullTables,
     } = useLocalConfig();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
@@ -144,6 +146,10 @@ export const Menu: React.FC<MenuProps> = () => {
     const showOrHideMiniMap = useCallback(() => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
     }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
+
+    const showOrHideFullTables = useCallback(() => {
+        setShowFullTables(!showFullTables);
+    }, [showFullTables, setShowFullTables]);
 
     const emojiAI = '✨';
 
@@ -396,6 +402,11 @@ export const Menu: React.FC<MenuProps> = () => {
                         {showMiniMapOnCanvas
                             ? t('menu.view.hide_minimap')
                             : t('menu.view.show_minimap')}
+                    </MenubarItem>
+                    <MenubarItem onClick={showOrHideFullTables}>
+                        {showFullTables
+                            ? t('menu.view.hide_full_tables')
+                            : t('menu.view.show_full_tables')}
                     </MenubarItem>
                     <MenubarSeparator />
                     <MenubarSub>

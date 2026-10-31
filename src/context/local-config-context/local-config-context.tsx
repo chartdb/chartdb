@@ -28,6 +28,9 @@ export interface LocalConfigContext {
 
     showMiniMapOnCanvas: boolean;
     setShowMiniMapOnCanvas: (showMiniMapOnCanvas: boolean) => void;
+
+    showFullTables: boolean;
+    setShowFullTables: (showFullTables: boolean) => void;
 }
 
 export const LocalConfigContext = createContext<LocalConfigContext>({
@@ -54,4 +57,7 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     showMiniMapOnCanvas: false,
     setShowMiniMapOnCanvas: emptyFn,
+
+    showFullTables: false,
+    setShowFullTables: emptyFn,
 });

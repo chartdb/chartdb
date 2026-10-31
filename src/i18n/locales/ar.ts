@@ -44,6 +44,8 @@ export const ar: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_full_tables: 'إظهار الجداول الكاملة',
+                hide_full_tables: 'إخفاء الجداول الكاملة',
             },
             backup: {
                 backup: 'النسخ الاحتياطي',

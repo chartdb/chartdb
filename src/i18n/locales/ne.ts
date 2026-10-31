@@ -44,6 +44,8 @@ export const ne: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_full_tables: 'पूर्ण तालिकाहरू देखाउनुहोस्',
+                hide_full_tables: 'पूर्ण तालिकाहरू लुकाउनुहोस्',
             },
             // TODO: Translate
             backup: {

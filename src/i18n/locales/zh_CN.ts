@@ -44,6 +44,8 @@ export const zh_CN: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_full_tables: '显示完整表格',
+                hide_full_tables: '隐藏完整表格',
             },
             backup: {
                 backup: '备份',
