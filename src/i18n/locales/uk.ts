@@ -440,6 +440,7 @@ export const uk: LanguageTranslation = {
             pattern_description: 'Add subtle grid pattern to background.',
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
+            large_svg_warning: 'Large diagram: SVG export may take a while.',
         },
 
         new_table_schema_dialog: {

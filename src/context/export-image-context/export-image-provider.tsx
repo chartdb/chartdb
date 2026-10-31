@@ -13,6 +13,12 @@ import { useTheme } from '@/hooks/use-theme';
 import logoDark from '@/assets/logo-dark.png';
 import logoLight from '@/assets/logo-light.png';
 import type { EffectiveTheme } from '../theme-context/theme-context';
+import { useTranslation } from 'react-i18next';
+import { useToast } from '@/components/toast/use-toast';
+import { dedupeSvgDataUrlStyles } from './dedupe-svg-styles';
+
+// Above this many tables a full-diagram SVG export can take several seconds
+const LARGE_SVG_TABLE_COUNT = 100;
 
 export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -20,6 +26,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     const { hideLoader, showLoader } = useFullScreenLoader();
     const { setNodes, getViewport, getNodes, setViewport } = useReactFlow();
     const { effectiveTheme } = useTheme();
+    const { t } = useTranslation();
+    const { toast } = useToast();
     const { diagramName } = useChartDB();
     const [logoBase64, setLogoBase64] = useState<string>('');
 
@@ -97,6 +105,22 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             // Empty diagrams fall back to exporting the current viewport.
             const visibleNodes = getNodes().filter((node) => !node.hidden);
             const fitWholeDiagram = type === 'svg' && visibleNodes.length > 0;
+            if (
+                fitWholeDiagram &&
+                visibleNodes.filter((node) => node.type === 'table').length >
+                    LARGE_SVG_TABLE_COUNT
+            ) {
+                toast({
+                    description: t('export_image_dialog.large_svg_warning'),
+                });
+            }
+            if (fitWholeDiagram) {
+                // Let the loader and warning paint before the capture work
+                // blocks the main thread
+                await new Promise((resolve) =>
+                    requestAnimationFrame(() => setTimeout(resolve, 50))
+                );
+            }
             const nodesBounds = getNodesBounds(visibleNodes);
             if (fitWholeDiagram) {
                 await setViewport(
@@ -305,7 +329,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                             pixelRatio: scale,
                             skipFonts: true,
                         });
-                        downloadImage(dataUrl, type);
+                        downloadImage(dedupeSvgDataUrlStyles(dataUrl), type);
                         return;
                     }
 
@@ -423,6 +447,8 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             showLoader,
             effectiveTheme,
             logoBase64,
+            t,
+            toast,
         ]
     );
 
