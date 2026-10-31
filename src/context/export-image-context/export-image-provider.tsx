@@ -18,7 +18,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { hideLoader, showLoader } = useFullScreenLoader();
-    const { setNodes, getViewport, getNodes } = useReactFlow();
+    const { setNodes, getViewport, getNodes, setViewport } = useReactFlow();
     const { effectiveTheme } = useTheme();
     const { diagramName } = useChartDB();
     const [logoBase64, setLogoBase64] = useState<string>('');
@@ -89,6 +89,25 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 console.error('Could not find React Flow container');
                 hideLoader();
                 return;
+            }
+
+            // The canvas only renders visible nodes, so for SVG fit the
+            // live viewport to all nodes first so every table is in the DOM
+            // (#1083). The original viewport is restored afterwards.
+            if (type === 'svg') {
+                const allBounds = getNodesBounds(
+                    getNodes().filter((node) => !node.hidden)
+                );
+                await setViewport(
+                    getViewportForBounds(
+                        allBounds,
+                        reactFlowBounds.width,
+                        reactFlowBounds.height,
+                        0.01,
+                        2,
+                        0.05
+                    )
+                );
             }
 
             const imageCreateFn = imageCreatorMap[type];
@@ -385,6 +404,9 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         }
                     );
                     viewportElement.removeChild(tempSvg);
+                    if (type === 'svg') {
+                        setViewport(viewport);
+                    }
                     hideLoader();
                 }
             }, 0);
@@ -394,6 +416,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
             downloadImage,
             getViewport,
             getNodes,
+            setViewport,
             hideLoader,
             imageCreatorMap,
             setNodes,
