@@ -113,6 +113,10 @@ export const fr: LanguageTranslation = {
         copy_to_clipboard: 'Copier dans le presse-papiers',
         copied: 'Copié !',
 
+        select_box: {
+            no_results: 'Aucun résultat trouvé.',
+        },
+
         side_panel: {
             view_all_options: 'Voir toutes les Options...',
             tables_section: {
@@ -432,6 +436,10 @@ export const fr: LanguageTranslation = {
             title: 'Créer un Nouveau Schéma',
             description:
                 "Aucun schéma n'existe encore. Créez votre premier schéma pour organiser vos tables.",
+            or: 'ou',
+            select_existing: 'Sélectionner un schéma existant',
+            create_new: 'Créer un nouveau schéma',
+            quick_create: 'Créer le schéma "{{schemaName}}"',
             create: 'Créer',
             cancel: 'Annuler',
         },

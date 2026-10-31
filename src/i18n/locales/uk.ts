@@ -113,6 +113,10 @@ export const uk: LanguageTranslation = {
         copy_to_clipboard: 'Копіювати в буфер обміну',
         copied: 'Скопійовано!',
 
+        select_box: {
+            no_results: 'Результатів не знайдено.',
+        },
+
         side_panel: {
             view_all_options: 'Переглянути всі параметри…',
             tables_section: {
@@ -461,6 +465,10 @@ export const uk: LanguageTranslation = {
             title: 'Створити нову схему',
             description:
                 'Поки що не існує жодної схеми. Створіть свою першу схему, щоб організувати ваші таблиці.',
+            or: 'або',
+            select_existing: 'Вибрати існуючу схему',
+            create_new: 'Створити нову схему',
+            quick_create: 'Створити схему "{{schemaName}}"',
             create: 'Створити',
             cancel: 'Скасувати',
         },

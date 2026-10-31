@@ -114,6 +114,10 @@ export const id_ID: LanguageTranslation = {
         copy_to_clipboard: 'Salin ke Clipboard',
         copied: 'Tersalin!',
 
+        select_box: {
+            no_results: 'Tidak ada hasil ditemukan.',
+        },
+
         side_panel: {
             view_all_options: 'Tampilkan Semua Pilihan...',
             tables_section: {
@@ -459,6 +463,10 @@ export const id_ID: LanguageTranslation = {
             title: 'Buat Skema Baru',
             description:
                 'Belum ada skema yang tersedia. Buat skema pertama Anda untuk mengatur tabel-tabel Anda.',
+            or: 'atau',
+            select_existing: 'Pilih skema yang sudah ada',
+            create_new: 'Buat skema baru',
+            quick_create: 'Buat skema "{{schemaName}}"',
             create: 'Buat',
             cancel: 'Batal',
         },

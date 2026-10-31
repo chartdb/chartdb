@@ -460,6 +460,10 @@ export const ru: LanguageTranslation = {
             title: 'Создать новую схему',
             description:
                 'Схемы еще не существуют. Создайте вашу первую схему, чтобы организовать таблицы.',
+            or: 'или',
+            select_existing: 'Выбрать существующую схему',
+            create_new: 'Создать новую схему',
+            quick_create: 'Создать схему «{{schemaName}}»',
             create: 'Создать',
             cancel: 'Отменить',
         },
@@ -551,6 +555,9 @@ export const ru: LanguageTranslation = {
 
         copy_to_clipboard: 'Скопировать в буфер обмена',
         copied: 'Скопировано!',
+        select_box: {
+            no_results: 'Результаты не найдены.',
+        },
         snap_to_grid_tooltip: 'Выравнивание по сетке (Удерживайте {{key}})',
         tool_tips: {
             double_click_to_edit: 'Кликните дважды, чтобы изменить',

@@ -115,6 +115,10 @@ export const ne: LanguageTranslation = {
         copy_to_clipboard: 'क्लिपबोर्डमा प्रतिलिपि गर्नुहोस्',
         copied: 'प्रतिलिपि गरियो!',
 
+        select_box: {
+            no_results: 'कुनै परिणाम भेटिएन।',
+        },
+
         side_panel: {
             view_all_options: 'सबै विकल्पहरू हेर्नुहोस्',
             tables_section: {
@@ -463,6 +467,10 @@ export const ne: LanguageTranslation = {
             title: 'नयाँ स्कीम सिर्जना गर्नुहोस्',
             description:
                 'अहिलेसम्म कुनै स्कीम अस्तित्वमा छैन। आफ्ना तालिकाहरू व्यवस्थित गर्न आफ्नो पहिलो स्कीम सिर्जना गर्नुहोस्।',
+            or: 'वा',
+            select_existing: 'अवस्थित स्किमा चयन गर्नुहोस्',
+            create_new: 'नयाँ स्किमा सिर्जना गर्नुहोस्',
+            quick_create: 'स्किमा "{{schemaName}}" सिर्जना गर्नुहोस्',
             create: 'सिर्जना गर्नुहोस्',
             cancel: 'रद्द गर्नुहोस्',
         },

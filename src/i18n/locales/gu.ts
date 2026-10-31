@@ -115,6 +115,10 @@ export const gu: LanguageTranslation = {
         copy_to_clipboard: 'ક્લિપબોર્ડમાં નકલ કરો',
         copied: 'નકલ થયું!',
 
+        select_box: {
+            no_results: 'કોઈ પરિણામ મળ્યા નથી.',
+        },
+
         side_panel: {
             view_all_options: 'બધા વિકલ્પો જુઓ...',
             tables_section: {
@@ -460,6 +464,10 @@ export const gu: LanguageTranslation = {
             title: 'નવું સ્કીમા બનાવો',
             description:
                 'હજી સુધી કોઈ સ્કીમા અસ્તિત્વમાં નથી. તમારા ટેબલ્સ ને વ્યવસ્થિત કરવા માટે તમારું પહેલું સ્કીમા બનાવો.',
+            or: 'અથવા',
+            select_existing: 'મોજૂદા સ્કીમા પસંદ કરો',
+            create_new: 'નવું સ્કીમા બનાવો',
+            quick_create: 'સ્કીમા "{{schemaName}}" બનાવો',
             create: 'બનાવો',
             cancel: 'રદ કરો',
         },

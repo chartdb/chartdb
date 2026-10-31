@@ -111,6 +111,10 @@ export const zh_TW: LanguageTranslation = {
         copy_to_clipboard: '複製到剪貼簿',
         copied: '已複製！',
 
+        select_box: {
+            no_results: '找不到結果。',
+        },
+
         side_panel: {
             view_all_options: '顯示所有選項...',
             tables_section: {
@@ -451,6 +455,7 @@ export const zh_TW: LanguageTranslation = {
             title: '建立新 Schema',
             description:
                 '尚未存在任何 Schema。建立您的第一個 Schema 來組織您的表格。',
+            quick_create: '建立 Schema「{{schemaName}}」',
             create: '建立',
             cancel: '取消',
         },

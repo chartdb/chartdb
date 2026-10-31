@@ -114,6 +114,10 @@ export const ar: LanguageTranslation = {
         copy_to_clipboard: 'نسخ إلى الحافظة',
         copied: '!تم النسخ',
 
+        select_box: {
+            no_results: 'لم يتم العثور على نتائج.',
+        },
+
         side_panel: {
             view_all_options: '...عرض جميع الخيارات',
             tables_section: {
@@ -454,6 +458,10 @@ export const ar: LanguageTranslation = {
             title: 'إنشاء مخطط جديد',
             description:
                 'لا توجد مخططات حتى الآن. قم بإنشاء أول مخطط لتنظيم جداولك.',
+            or: 'أو',
+            select_existing: 'اختر مخططًا موجودًا',
+            create_new: 'أنشئ مخططًا جديدًا',
+            quick_create: 'إنشاء مخطط "{{schemaName}}"',
             create: 'إنشاء',
             cancel: 'إلغاء',
         },

@@ -114,6 +114,10 @@ export const vi: LanguageTranslation = {
         copy_to_clipboard: 'Sao chép vào bảng tạm',
         copied: 'Đã sao chép!',
 
+        select_box: {
+            no_results: 'Không tìm thấy kết quả.',
+        },
+
         side_panel: {
             view_all_options: 'Xem tất cả tùy chọn...',
             tables_section: {
@@ -459,6 +463,10 @@ export const vi: LanguageTranslation = {
             title: 'Tạo lược đồ mới',
             description:
                 'Chưa có lược đồ nào. Tạo lược đồ đầu tiên của bạn để tổ chức các bảng.',
+            or: 'hoặc',
+            select_existing: 'Chọn lược đồ hiện có',
+            create_new: 'Tạo lược đồ mới',
+            quick_create: 'Tạo lược đồ "{{schemaName}}"',
             create: 'Tạo',
             cancel: 'Hủy',
         },

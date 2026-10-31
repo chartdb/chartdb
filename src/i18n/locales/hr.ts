@@ -113,6 +113,10 @@ export const hr: LanguageTranslation = {
         copy_to_clipboard: 'Kopiraj u međuspremnik',
         copied: 'Kopirano!',
 
+        select_box: {
+            no_results: 'Nema pronađenih rezultata.',
+        },
+
         side_panel: {
             view_all_options: 'Prikaži sve opcije...',
             tables_section: {
@@ -455,6 +459,10 @@ export const hr: LanguageTranslation = {
             title: 'Stvori novu shemu',
             description:
                 'Još ne postoje sheme. Stvorite svoju prvu shemu za organiziranje tablica.',
+            or: 'ili',
+            select_existing: 'Odaberite postojeću shemu',
+            create_new: 'Stvori novu shemu',
+            quick_create: 'Izradi shemu "{{schemaName}}"',
             create: 'Stvori',
             cancel: 'Odustani',
         },

@@ -114,6 +114,10 @@ export const es: LanguageTranslation = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        select_box: {
+            no_results: 'No se encontraron resultados.',
+        },
+
         side_panel: {
             view_all_options: 'Ver todas las opciones...',
             tables_section: {
@@ -462,6 +466,10 @@ export const es: LanguageTranslation = {
             title: 'Crear Nuevo Esquema',
             description:
                 'Aún no existen esquemas. Crea tu primer esquema para organizar tus tablas.',
+            or: 'o',
+            select_existing: 'Seleccionar esquema existente',
+            create_new: 'Crear nuevo esquema',
+            quick_create: 'Crear esquema "{{schemaName}}"',
             create: 'Crear',
             cancel: 'Cancelar',
         },

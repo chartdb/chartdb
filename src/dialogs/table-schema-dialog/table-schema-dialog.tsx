@@ -131,10 +131,12 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
                 ) : (
                     <Group className="mr-2 size-4 " />
                 )}
-                {isCreatingNew ? 'Select existing schema' : 'Create new schema'}
+                {isCreatingNew
+                    ? t('create_table_schema_dialog.select_existing')
+                    : t('create_table_schema_dialog.create_new')}
             </Button>
         ),
-        [isCreatingNew, allowSchemaSelection, allowSchemaCreation]
+        [isCreatingNew, allowSchemaSelection, allowSchemaCreation, t]
     );
 
     return (
@@ -203,7 +205,7 @@ export const TableSchemaDialog: React.FC<TableSchemaDialogProps> = ({
                                 <div className="relative">
                                     <Separator className="my-2" />
                                     <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
-                                        or
+                                        {t('create_table_schema_dialog.or')}
                                     </span>
                                 </div>
                                 {allowSchemaSelection ? (

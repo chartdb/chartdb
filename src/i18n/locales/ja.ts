@@ -117,6 +117,10 @@ export const ja: LanguageTranslation = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        select_box: {
+            no_results: '結果が見つかりません。',
+        },
+
         side_panel: {
             view_all_options: 'すべてのオプションを表示...',
             tables_section: {
@@ -464,6 +468,10 @@ export const ja: LanguageTranslation = {
             title: '新しいスキーマを作成',
             description:
                 'スキーマがまだ存在しません。テーブルを整理するために最初のスキーマを作成してください。',
+            or: 'または',
+            select_existing: '既存のスキーマを選択',
+            create_new: '新しいスキーマを作成',
+            quick_create: 'スキーマ「{{schemaName}}」を作成',
             create: '作成',
             cancel: 'キャンセル',
         },
