@@ -30,4 +30,4 @@ jobs:
           path-to-document: 'https://github.com/chartdb/chartdb/blob/main/CLA.md'
           # branch should not be protected
           branch: 'main'
-          allowlist: 
+          allowlist: dependabot[bot],github-actions[bot]
