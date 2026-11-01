@@ -43,6 +43,8 @@ export const hr: LanguageTranslation = {
                 hide_dependencies: 'Sakrij ovisnosti',
                 show_minimap: 'Prikaži mini kartu',
                 hide_minimap: 'Sakrij mini kartu',
+                show_toolbar: 'Show Toolbar',
+                hide_toolbar: 'Hide Toolbar',
             },
             backup: {
                 backup: 'Sigurnosna kopija',
