@@ -24,6 +24,7 @@ import { gu, guMetadata } from './locales/gu';
 import { vi, viMetadata } from './locales/vi';
 import { ar, arMetadata } from './locales/ar';
 import { hr, hrMetadata } from './locales/hr';
+import { fa, faMetadata } from './locales/fa';
 
 export const languages: LanguageMetadata[] = [
     enMetadata,
@@ -48,6 +49,7 @@ export const languages: LanguageMetadata[] = [
     guMetadata,
     viMetadata,
     arMetadata,
+    faMetadata,
 ];
 
 const resources = {
@@ -73,6 +75,7 @@ const resources = {
     vi,
     ar,
     hr,
+    fa,
 };
 
 i18n.use(LanguageDetector)
