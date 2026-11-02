@@ -125,9 +125,26 @@ docker run \
   -p 8080:80 chartdb
 ```
 
+#### Using OpenRouter
+
+[OpenRouter](https://openrouter.ai) is OpenAI-compatible. Provide an OpenRouter API key instead of an OpenAI one; the endpoint defaults to `https://openrouter.ai/api/v1` and the model defaults to `openai/gpt-4o-mini`. Set `LLM_MODEL_NAME` to pick a different model.
+
+```bash
+# Build
+docker build \
+  --build-arg VITE_OPENROUTER_API_KEY=<YOUR_OPENROUTER_KEY> \
+  -t chartdb .
+
+# Run
+docker run \
+  -e OPENROUTER_API_KEY=<YOUR_OPENROUTER_KEY> \
+  -e LLM_MODEL_NAME=<OPTIONAL_MODEL_NAME> \
+  -p 8080:80 chartdb
+```
+
 > **Privacy Note:** ChartDB includes privacy-focused analytics via Fathom Analytics. You can disable this by adding `-e DISABLE_ANALYTICS=true` to the run command or `--build-arg VITE_DISABLE_ANALYTICS=true` when building.
 
-> **Note:** You must configure either Option 1 (OpenAI API key) OR Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the two options.
+> **Note:** You must configure one of: Option 1 (OpenAI API key), OpenRouter API key, or Option 2 (Custom endpoint and model name) for AI capabilities to work. Do not mix the options.
 
 Open your browser and navigate to `http://localhost:8080`.
 
