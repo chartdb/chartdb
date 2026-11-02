@@ -10,8 +10,8 @@ export const getMySQLQuery = (
 
     const withDefault = true;
 
-    const withDefaultExpr = `IFNULL(REPLACE(REPLACE(cols.column_default, '\\\\', ''), '"', 'ֿֿֿ\\"'), '')`;
-    const withoutDefault = `""`;
+    const withDefaultExpr = `JSON_QUOTE(IFNULL(cols.column_default, ''))`;
+    const withoutDefault = `'""'`;
 
     const newMySQLQuery = `WITH fk_info as (
 (SELECT (@fk_info:=NULL),
@@ -79,8 +79,8 @@ export const getMySQLQuery = (
            AND (0x00) IN (@cols := CONCAT_WS(',', @cols, CONCAT(
                 '{"schema":"', cols.table_schema,
                 '","table":"', cols.table_name,
-                '","name":"', REPLACE(cols.column_name, '"', '\\"'),
-                '","type":"', LOWER(cols.data_type),
+                '","name":', JSON_QUOTE(cols.column_name),
+                ',"type":"', LOWER(cols.data_type),
                 '","character_maximum_length":"', IFNULL(cols.character_maximum_length, 'null'),
                 '","precision":',
                     CASE
@@ -91,11 +91,11 @@ export const getMySQLQuery = (
                     END,
                 ',"ordinal_position":', cols.ordinal_position,
                 ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-                ',"default":"', ${withDefault ? withDefaultExpr : withoutDefault},
-                '","collation":"', IFNULL(cols.collation_name, ''),
+                ',"default":', ${withDefault ? withDefaultExpr : withoutDefault},
+                ',"collation":"', IFNULL(cols.collation_name, ''),
                 '","is_identity":', IF(cols.extra LIKE '%auto_increment%', 'true', 'false'),
-                ',"comment":"', REPLACE(REPLACE(IFNULL(cols.column_comment, ''), '"', '\\\\"'), '\\n', ' '),
-                '"}'
+                ',"comment":', JSON_QUOTE(IFNULL(cols.column_comment, '')),
+                '}'
             )))))
 ), indexes as (
   (SELECT (@indexes:=NULL),
@@ -133,7 +133,7 @@ export const getMySQLQuery = (
                                              ', "type":"', IFNULL(\`TABLE_TYPE\`, ''), '",',
                                              '"engine":"', IFNULL(\`ENGINE\`, ''), '",',
                                              '"collation":"', IFNULL(\`TABLE_COLLATION\`, ''), '",',
-                                             '"comment":"', REPLACE(REPLACE(IFNULL(\`TABLE_COMMENT\`, ''), '"', '\\\\"'), '\\\\n', ' '), '"}')))))
+                                             '"comment":', JSON_QUOTE(IFNULL(\`TABLE_COMMENT\`, '')), '}')))))
 ), views as (
 (SELECT (@views:=NULL),
               (SELECT (0)
@@ -211,8 +211,8 @@ export const getMySQLQuery = (
     IFNULL((SELECT GROUP_CONCAT(
         CONCAT('{"schema":"', cast(cols.table_schema as CHAR),
                '","table":"', cols.table_name,
-               '","name":"', REPLACE(cols.column_name, '"', '\\"'),
-               '","type":"', LOWER(cols.data_type),
+               '","name":', JSON_QUOTE(cols.column_name),
+               ',"type":"', LOWER(cols.data_type),
                '","character_maximum_length":"', IFNULL(cols.character_maximum_length, 'null'),
                '","precision":',
                IF(cols.data_type IN ('decimal', 'numeric'),
@@ -220,9 +220,9 @@ export const getMySQLQuery = (
                          ',"scale":', IFNULL(cols.numeric_scale, 'null'), '}'), 'null'),
                ',"ordinal_position":', cols.ordinal_position,
                ',"nullable":', IF(cols.is_nullable = 'YES', 'true', 'false'),
-               ',"default":"', ${withDefault ? withDefaultExpr : withoutDefault},
-               '","collation":"', IFNULL(cols.collation_name, ''),
-               '","comment":"', REPLACE(REPLACE(IFNULL(cols.column_comment, ''), '"', '\\"'), '\\n', ' '), '"}')
+               ',"default":', ${withDefault ? withDefaultExpr : withoutDefault},
+               ',"collation":"', IFNULL(cols.collation_name, ''),
+               '","comment":', JSON_QUOTE(IFNULL(cols.column_comment, '')), '}')
     ) FROM (
         SELECT cols.table_schema,
                cols.table_name,
@@ -279,7 +279,7 @@ export const getMySQLQuery = (
                ',"type":"', IFNULL(tbls.TABLE_TYPE, ''),
                '","engine":"', IFNULL(tbls.ENGINE, ''),
                '","collation":"', IFNULL(tbls.TABLE_COLLATION, ''),
-               '","comment":"', REPLACE(REPLACE(IFNULL(tbls.TABLE_COMMENT, ''), '"', '\\\\"'), '\\\\n', ' '), '"}')
+               '","comment":', JSON_QUOTE(IFNULL(tbls.TABLE_COMMENT, '')), '}')
     ) FROM (
         SELECT \`TABLE_SCHEMA\`,
                \`TABLE_NAME\`,
@@ -299,7 +299,7 @@ export const getMySQLQuery = (
     ) FROM (
         SELECT \`TABLE_SCHEMA\`,
                \`TABLE_NAME\` AS view_name,
-               null AS view_definition
+               '' AS view_definition
         FROM information_schema.views vws
         WHERE vws.table_schema = DATABASE()
     ) AS vws), ''),
