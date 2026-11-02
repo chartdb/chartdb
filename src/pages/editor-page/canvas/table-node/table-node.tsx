@@ -53,6 +53,7 @@ import { useDiff } from '@/context/diff-context/use-diff';
 import { TableNodeStatus } from './table-node-status/table-node-status';
 import { TableEditMode } from './table-edit-mode/table-edit-mode';
 import { useCanvas } from '@/hooks/use-canvas';
+import { getVisibleTableFields } from './visible-table-fields';
 
 export const TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX = 'table_rel_source_';
 export const TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX = 'table_rel_target_';
@@ -288,45 +289,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     ? fields.slice(0, editModeInitialFieldCount)
                     : fields;
 
-            if (expanded || fieldsToConsider.length <= TABLE_MINIMIZED_FIELDS) {
-                return fieldsToConsider;
-            }
-
-            const mustDisplayedFields: DBField[] = [];
-            const nonMustDisplayedFields: DBField[] = [];
-
-            for (const field of fieldsToConsider) {
-                if (relatedFieldIds.has(field.id) || field.primaryKey) {
-                    mustDisplayedFields.push(field);
-                } else {
-                    nonMustDisplayedFields.push(field);
-                }
-            }
-
-            // Take required fields up to limit
-            const visibleMustDisplayedFields = mustDisplayedFields.slice(
-                0,
-                TABLE_MINIMIZED_FIELDS
+            return getVisibleTableFields(
+                fieldsToConsider,
+                expanded,
+                relatedFieldIds
             );
-            const remainingSlots =
-                TABLE_MINIMIZED_FIELDS - visibleMustDisplayedFields.length;
-
-            // Fill remaining slots with non-required fields
-            const visibleNonMustDisplayedFields =
-                remainingSlots > 0
-                    ? nonMustDisplayedFields.slice(0, remainingSlots)
-                    : [];
-
-            // Combine and maintain original order
-            const visibleFieldsSet = new Set([
-                ...visibleMustDisplayedFields,
-                ...visibleNonMustDisplayedFields,
-            ]);
-            const result = fieldsToConsider.filter((field) =>
-                visibleFieldsSet.has(field)
-            );
-
-            return result;
         }, [
             expanded,
             fields,
@@ -611,7 +578,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         style={{
                             maxHeight: expanded
                                 ? `${(editTableMode && editModeInitialFieldCount !== null ? editModeInitialFieldCount : fields.length) * 2}rem` // h-8 per field
-                                : `${TABLE_MINIMIZED_FIELDS * 2}rem`, // h-8 per field
+                                : `${Math.max(TABLE_MINIMIZED_FIELDS, visibleFields.length) * 2}rem`, // h-8 per field
                         }}
                     >
                         {visibleFields.map((field: DBField) => (
