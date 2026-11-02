@@ -4,6 +4,9 @@ import { Button } from '@/components/button/button';
 import type { TreeNode } from '@/components/tree-view/tree';
 import { schemaNameToSchemaId } from '@/lib/domain/db-schema';
 import { useFocusOn } from '@/hooks/use-focus-on';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { ColorPicker } from '@/components/color-picker/color-picker';
+import { defaultTableColor } from '@/lib/colors';
 import type {
     AreaContext,
     NodeContext,
@@ -43,38 +46,67 @@ export const FilterItemActions: React.FC<FilterItemActionsProps> = ({
     removeTablesFromFilter,
 }) => {
     const { focusOnArea, focusOnTable } = useFocusOn();
+    const { schemaColors, updateSchemaColor, readonly } = useChartDB();
     if (node.type === 'schema') {
         const context = node.context as SchemaContext;
         const schemaVisible = context.visible;
         const schemaName = context.name;
         const schemaId = schemaNameToSchemaId(schemaName);
+        const schemaColor = schemaColors[schemaId];
 
         return (
-            <Button
-                variant="ghost"
-                size="sm"
-                className="h-fit w-6 p-0"
-                onClick={(e) => {
-                    e.stopPropagation();
+            <div className="flex h-full items-center gap-0.5">
+                {databaseWithSchemas && !readonly ? (
+                    <div
+                        className={cn(
+                            'flex h-full items-center transition-opacity',
+                            schemaColor
+                                ? 'opacity-100'
+                                : 'opacity-0 group-hover:opacity-100'
+                        )}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <ColorPicker
+                            color={schemaColor ?? defaultTableColor}
+                            onChange={(color) =>
+                                updateSchemaColor(schemaId, color)
+                            }
+                            onClear={
+                                schemaColor
+                                    ? () => updateSchemaColor(schemaId, null)
+                                    : undefined
+                            }
+                            clearLabel="Reset schema color"
+                            popoverOnClick={(e) => e.stopPropagation()}
+                        />
+                    </div>
+                ) : null}
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-fit w-6 p-0"
+                    onClick={(e) => {
+                        e.stopPropagation();
 
-                    if (databaseWithSchemas) {
-                        toggleSchemaFilter(schemaId);
-                    } else {
-                        // Toggle visibility of all tables in this schema
-                        if (schemaVisible) {
-                            setTableIdsFilterEmpty();
+                        if (databaseWithSchemas) {
+                            toggleSchemaFilter(schemaId);
                         } else {
-                            clearTableIdsFilter();
+                            // Toggle visibility of all tables in this schema
+                            if (schemaVisible) {
+                                setTableIdsFilterEmpty();
+                            } else {
+                                clearTableIdsFilter();
+                            }
                         }
-                    }
-                }}
-            >
-                {!schemaVisible ? (
-                    <EyeOff className="!size-3.5 text-muted-foreground" />
-                ) : (
-                    <Eye className="!size-3.5" />
-                )}
-            </Button>
+                    }}
+                >
+                    {!schemaVisible ? (
+                        <EyeOff className="!size-3.5 text-muted-foreground" />
+                    ) : (
+                        <Eye className="!size-3.5" />
+                    )}
+                </Button>
+            </div>
         );
     }
 

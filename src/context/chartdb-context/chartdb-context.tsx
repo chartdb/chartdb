@@ -8,7 +8,7 @@ import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
-import type { DBSchema } from '@/lib/domain/db-schema';
+import type { DBSchema, SchemaColors } from '@/lib/domain/db-schema';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import { EventEmitter } from 'ahooks/lib/useEventEmitter';
 import type { Area } from '@/lib/domain/area';
@@ -72,6 +72,11 @@ export interface ChartDBContext {
     databaseType: DatabaseType;
     tables: DBTable[];
     schemas: DBSchema[];
+    schemaColors: SchemaColors;
+    updateSchemaColor: (
+        schemaId: string,
+        color: string | null
+    ) => Promise<void>;
     relationships: DBRelationship[];
     dependencies: DBDependency[];
     areas: Area[];
@@ -341,6 +346,8 @@ export const chartDBContext = createContext<ChartDBContext>({
     customTypes: [],
     notes: [],
     schemas: [],
+    schemaColors: {},
+    updateSchemaColor: emptyFn,
     highlightCustomTypeId: emptyFn,
     currentDiagram: {
         id: '',

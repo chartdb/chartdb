@@ -12,6 +12,7 @@ import type { DBCustomType } from './db-custom-type';
 import { dbCustomTypeSchema } from './db-custom-type';
 import type { Note } from './note';
 import { noteSchema } from './note';
+import type { SchemaColors } from './db-schema';
 
 export interface Diagram {
     id: string;
@@ -24,6 +25,9 @@ export interface Diagram {
     areas?: Area[];
     customTypes?: DBCustomType[];
     notes?: Note[];
+    // Per-schema default colors (schema id -> hex). Falls back onto tables that
+    // have not been given an explicit color. See getEffectiveTableColor.
+    schemaColors?: SchemaColors;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -39,6 +43,7 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     areas: z.array(areaSchema).optional(),
     customTypes: z.array(dbCustomTypeSchema).optional(),
     notes: z.array(noteSchema).optional(),
+    schemaColors: z.record(z.string(), z.string()).optional(),
     createdAt: z.date(),
     updatedAt: z.date(),
 });

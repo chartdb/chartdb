@@ -34,6 +34,7 @@ import {
     TABLE_MINIMIZED_FIELDS,
     type DBTable,
 } from '@/lib/domain/db-table';
+import { getEffectiveTableColor } from '@/lib/domain/db-schema';
 import { TableNodeField } from './table-node-field';
 import { useLayout } from '@/hooks/use-layout';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -86,7 +87,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             targetEdgeCounts,
         },
     }) => {
-        const { updateTable, relationships, readonly } = useChartDB();
+        const { updateTable, relationships, readonly, schemaColors } =
+            useChartDB();
         const edges = useStore((store) => store.edges) as EdgeType[];
         const {
             openTableFromSidebar,
@@ -162,8 +164,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 return tableChangedColor.new;
             }
 
-            return table.color;
-        }, [tableChangedColor, table.color]);
+            return getEffectiveTableColor(table, schemaColors);
+        }, [tableChangedColor, table, schemaColors]);
 
         const [diffState, setDiffState] = useState<{
             isDiffTableChanged: boolean;
