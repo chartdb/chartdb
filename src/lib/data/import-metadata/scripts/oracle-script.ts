@@ -120,7 +120,7 @@ WITH fk_info AS (
 	SELECT JSON_OBJECT(
 	       KEY 'schema'    VALUE owner,
 	       KEY 'table'     VALUE table_name,
-	       KEY 'rows'      VALUE num_rows,
+	       KEY 'rows'      VALUE NVL(num_rows, 0),
 	       KEY 'type'      VALUE 'TABLE',
 	       KEY 'engine'    VALUE '""' FORMAT JSON,
 	       KEY 'collation' VALUE '""' FORMAT JSON
@@ -145,12 +145,12 @@ WITH fk_info AS (
 	6.  COMPOSE THE FINAL JSON DOCUMENT
 	==============================================================*/
 	SELECT JSON_OBJECT(
-	     KEY 'fk_info'       VALUE (SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM fk_info),
-	     KEY 'pk_info'       VALUE (SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM pk_info),
-	     KEY 'columns'       VALUE (SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM cols),
-	     KEY 'indexes'       VALUE (SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM indexes),
-	     KEY 'tables'        VALUE (SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM tbls),
-	     KEY 'views'         VALUE (SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM views),
+	     KEY 'fk_info'       VALUE NVL((SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM fk_info), TO_CLOB('[]')) FORMAT JSON,
+	     KEY 'pk_info'       VALUE NVL((SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM pk_info), TO_CLOB('[]')) FORMAT JSON,
+	     KEY 'columns'       VALUE NVL((SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM cols), TO_CLOB('[]')) FORMAT JSON,
+	     KEY 'indexes'       VALUE NVL((SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM indexes), TO_CLOB('[]')) FORMAT JSON,
+	     KEY 'tables'        VALUE NVL((SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM tbls), TO_CLOB('[]')) FORMAT JSON,
+	     KEY 'views'         VALUE NVL((SELECT JSON_ARRAYAGG(json_data RETURNING CLOB) FROM views), TO_CLOB('[]')) FORMAT JSON,
 	     KEY 'schema'        VALUE SYS_CONTEXT('USERENV','CURRENT_SCHEMA'),
 	     KEY 'database_name' VALUE SYS_CONTEXT('USERENV','DB_NAME'),
 	     KEY 'version' 		 VALUE SYS_CONTEXT('USERENV','DB_NAME')
