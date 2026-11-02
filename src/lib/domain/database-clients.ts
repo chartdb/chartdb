@@ -42,7 +42,8 @@ export const databaseEditionToClientsMap: Record<
     [DatabaseEdition.MYSQL_5_7]: [],
 
     // SQL Server
-    [DatabaseEdition.SQL_SERVER_2016_AND_BELOW]: [],
+    [DatabaseEdition.SQL_SERVER_2016]: [],
+    [DatabaseEdition.SQL_SERVER_2014_AND_BELOW]: [],
 
     // SQLite
     [DatabaseEdition.SQLITE_CLOUDFLARE_D1]: [DatabaseClient.SQLITE_WRANGLER],

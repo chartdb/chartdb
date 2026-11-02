@@ -14,7 +14,8 @@ export enum DatabaseEdition {
     MYSQL_5_7 = 'mysql_5_7',
 
     // SQL Server
-    SQL_SERVER_2016_AND_BELOW = 'sql_server_2016_and_below',
+    SQL_SERVER_2016 = 'sql_server_2016',
+    SQL_SERVER_2014_AND_BELOW = 'sql_server_2014_and_below',
 
     // SQLite
     SQLITE_CLOUDFLARE_D1 = 'cloudflare_d1',
@@ -29,7 +30,8 @@ export const databaseEditionToLabelMap: Record<DatabaseEdition, string> = {
     [DatabaseEdition.MYSQL_5_7]: 'V5.7',
 
     // SQL Server
-    [DatabaseEdition.SQL_SERVER_2016_AND_BELOW]: '2016 and below',
+    [DatabaseEdition.SQL_SERVER_2016]: '2016',
+    [DatabaseEdition.SQL_SERVER_2014_AND_BELOW]: '2014 and below',
 
     // SQLite
     [DatabaseEdition.SQLITE_CLOUDFLARE_D1]: 'Cloudflare D1',
@@ -44,7 +46,8 @@ export const databaseEditionToImageMap: Record<DatabaseEdition, string> = {
     [DatabaseEdition.MYSQL_5_7]: MySql5_7Image,
 
     // SQL Server
-    [DatabaseEdition.SQL_SERVER_2016_AND_BELOW]: SqlServerImage,
+    [DatabaseEdition.SQL_SERVER_2016]: SqlServerImage,
+    [DatabaseEdition.SQL_SERVER_2014_AND_BELOW]: SqlServerImage,
 
     // SQLite
     [DatabaseEdition.SQLITE_CLOUDFLARE_D1]: CloudflareD1Image,
@@ -57,7 +60,10 @@ export const databaseTypeToEditionMap: Record<DatabaseType, DatabaseEdition[]> =
             DatabaseEdition.POSTGRESQL_TIMESCALE,
         ],
         [DatabaseType.MYSQL]: [DatabaseEdition.MYSQL_5_7],
-        [DatabaseType.SQL_SERVER]: [DatabaseEdition.SQL_SERVER_2016_AND_BELOW],
+        [DatabaseType.SQL_SERVER]: [
+            DatabaseEdition.SQL_SERVER_2016,
+            DatabaseEdition.SQL_SERVER_2014_AND_BELOW,
+        ],
         [DatabaseType.SQLITE]: [DatabaseEdition.SQLITE_CLOUDFLARE_D1],
         [DatabaseType.GENERIC]: [],
         [DatabaseType.MARIADB]: [],
