@@ -113,6 +113,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         ? createViewWithLocation
                         : createTableWithLocation,
                     schemas: schemasDisplayed,
+                    allowSchemaCreation: true,
                 });
             } else {
                 const schema =
