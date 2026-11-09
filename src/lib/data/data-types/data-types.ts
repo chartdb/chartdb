@@ -98,7 +98,7 @@ export const sortedDataTypeMap: Record<DatabaseType, readonly DataTypeData[]> =
 
 const compatibleTypes: Record<DatabaseType, Record<string, string[]>> = {
     [DatabaseType.POSTGRESQL]: {
-        serial: ['integer'],
+        serial: ['integer', 'int'],
         smallserial: ['smallint'],
         bigserial: ['bigint'],
     },
