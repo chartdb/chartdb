@@ -44,6 +44,8 @@ export const te: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: 'సంబంధాలను చూపించు',
+                hide_relationships: 'సంబంధాలను దాచు',
             },
             // TODO: Translate
             backup: {

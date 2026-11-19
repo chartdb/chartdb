@@ -45,6 +45,8 @@ export const ja: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: 'リレーションを表示',
+                hide_relationships: 'リレーションを非表示',
             },
             backup: {
                 backup: 'バックアップ',

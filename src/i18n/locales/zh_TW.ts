@@ -44,6 +44,8 @@ export const zh_TW: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: '顯示關聯',
+                hide_relationships: '隱藏關聯',
             },
             backup: {
                 backup: '備份',

@@ -44,6 +44,8 @@ export const vi: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: 'Hiện quan hệ',
+                hide_relationships: 'Ẩn quan hệ',
             },
             backup: {
                 backup: 'Hỗ trợ',

@@ -44,6 +44,8 @@ export const hi: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: 'रिश्ते दिखाएँ',
+                hide_relationships: 'रिश्ते छिपाएँ',
             },
             backup: {
                 backup: 'बैकअप',

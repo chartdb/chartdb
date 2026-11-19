@@ -43,6 +43,8 @@ export const en = {
                 hide_dependencies: 'Hide Dependencies',
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: 'Show Relationships',
+                hide_relationships: 'Hide Relationships',
             },
             backup: {
                 backup: 'Backup',

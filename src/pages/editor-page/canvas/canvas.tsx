@@ -307,7 +307,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     } = useChartDB();
     const { showSidePanel } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction, showDBViews, showMiniMapOnCanvas } = useLocalConfig();
+    const {
+        scrollAction,
+        showDBViews,
+        showMiniMapOnCanvas,
+        showRelationships,
+    } = useLocalConfig();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
@@ -443,24 +448,26 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
 
                 return [
-                    ...relationships.map(
-                        (relationship): RelationshipEdgeType => {
-                            const prevState = prevEdgeStates.get(
-                                relationship.id
-                            );
-                            return {
-                                id: relationship.id,
-                                source: relationship.sourceTableId,
-                                target: relationship.targetTableId,
-                                sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
-                                targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
-                                type: 'relationship-edge',
-                                data: { relationship },
-                                selected: prevState?.selected ?? false,
-                                animated: prevState?.animated ?? false,
-                            };
-                        }
-                    ),
+                    ...(showRelationships
+                        ? relationships.map(
+                              (relationship): RelationshipEdgeType => {
+                                  const prevState = prevEdgeStates.get(
+                                      relationship.id
+                                  );
+                                  return {
+                                      id: relationship.id,
+                                      source: relationship.sourceTableId,
+                                      target: relationship.targetTableId,
+                                      sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
+                                      targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
+                                      type: 'relationship-edge',
+                                      data: { relationship },
+                                      selected: prevState?.selected ?? false,
+                                      animated: prevState?.animated ?? false,
+                                  };
+                              }
+                          )
+                        : []),
                     ...dependencies.map((dep): DependencyEdgeType => {
                         const prevState = prevEdgeStates.get(dep.id);
                         return {
@@ -486,6 +493,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         dependencies,
         setEdges,
         showDBViews,
+        showRelationships,
         tables,
         updateNodeInternals,
     ]);
