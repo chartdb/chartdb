@@ -44,6 +44,8 @@ export const ko_KR: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: '관계 표시',
+                hide_relationships: '관계 숨기기',
             },
             backup: {
                 backup: '백업',

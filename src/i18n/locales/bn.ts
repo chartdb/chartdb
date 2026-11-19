@@ -44,6 +44,8 @@ export const bn: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: 'সম্পর্ক দেখান',
+                hide_relationships: 'সম্পর্ক লুকান',
             },
 
             backup: {

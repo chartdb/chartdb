@@ -44,6 +44,8 @@ export const pt_BR: LanguageTranslation = {
                 // TODO: Translate
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
+                show_relationships: 'Mostrar relacionamentos',
+                hide_relationships: 'Ocultar relacionamentos',
             },
             // TODO: Translate
             backup: {
