@@ -12,12 +12,19 @@ const starUsDialogLastOpenKey = 'star_us_dialog_last_open';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
 const showDBViewsKey = 'show_db_views';
 
+const validThemes: Theme[] = ['light', 'dark', 'system'];
+
+// Guard against stale/foreign localStorage values, which crash Monaco with
+// "illegal theme name" (#1071)
+const readStoredTheme = (): Theme => {
+    const stored = localStorage.getItem(themeKey) as Theme | null;
+    return stored && validThemes.includes(stored) ? stored : 'system';
+};
+
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const [theme, setTheme] = React.useState<Theme>(
-        (localStorage.getItem(themeKey) as Theme) || 'system'
-    );
+    const [theme, setTheme] = React.useState<Theme>(readStoredTheme);
 
     const [scrollAction, setScrollAction] = React.useState<ScrollAction>(
         (localStorage.getItem(scrollActionKey) as ScrollAction) || 'pan'

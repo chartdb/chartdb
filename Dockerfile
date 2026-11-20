@@ -27,7 +27,8 @@ FROM nginx:stable-alpine AS production
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 COPY ./default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Strip CRLF in case the repo was checked out on Windows (#1126)
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 EXPOSE 80
 

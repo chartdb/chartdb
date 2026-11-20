@@ -17,11 +17,11 @@
         <script>
             // Load analytics only if not disabled
             (function () {
+                // %VITE_DISABLE_ANALYTICS% is replaced by Vite at dev/build time
+                // (process.env does not exist in the browser, see #910)
                 const disableAnalytics =
                     (window.env && window.env.DISABLE_ANALYTICS === 'true') ||
-                    (typeof process !== 'undefined' &&
-                        process.env &&
-                        process.env.VITE_DISABLE_ANALYTICS === 'true');
+                    '%VITE_DISABLE_ANALYTICS%' === 'true';
 
                 if (!disableAnalytics) {
                     const script = document.createElement('script');

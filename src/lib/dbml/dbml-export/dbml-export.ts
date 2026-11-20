@@ -245,7 +245,8 @@ export const sanitizeSQLforDBML = (sql: string): string => {
         'UUID',
     ]);
     sanitized = sanitized.replace(
-        /DEFAULT\s+([a-zA-Z_]\w*)(?=[\s,);]|$)/gi,
+        // \b prevents matching inside identifiers like idx_is_default (#1127)
+        /\bDEFAULT\s+([a-zA-Z_]\w*)(?=[\s,);]|$)/gi,
         (match, identifier) => {
             if (sqlDefaultKeywords.has(identifier.toUpperCase())) {
                 return match;
@@ -256,7 +257,7 @@ export const sanitizeSQLforDBML = (sql: string): string => {
 
     // Fix DEFAULT NOW by replacing with NOW()
     sanitized = sanitized.replace(
-        /DEFAULT\s+NOW(?=[\s,);]|$)/gi,
+        /\bDEFAULT\s+NOW(?=[\s,);]|$)/gi,
         'DEFAULT NOW()'
     );
 

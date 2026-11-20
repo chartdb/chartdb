@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.21.0](https://github.com/chartdb/chartdb/compare/v1.20.1...v1.21.0) (2026-11-01)
+
+
+### Features
+
+* add move-to-area and auto-arrange-area context menu options ([#1120](https://github.com/chartdb/chartdb/issues/1120)) ([c24936a](https://github.com/chartdb/chartdb/commit/c24936a402bb3e24b4858f05282d69a04fcfe25b))
+
+
+### Bug Fixes
+
+* **dbml:** don't corrupt index names containing 'default' ([#1127](https://github.com/chartdb/chartdb/issues/1127)) and fix SQLite autoincrement DBML generation ([#1165](https://github.com/chartdb/chartdb/issues/1165)) ([#1170](https://github.com/chartdb/chartdb/issues/1170)) ([ff65341](https://github.com/chartdb/chartdb/commit/ff65341df107c181aed6875dc8dfeae88b993318))
+* **docker:** enforce LF line endings for entrypoint.sh ([#1126](https://github.com/chartdb/chartdb/issues/1126)) ([#1172](https://github.com/chartdb/chartdb/issues/1172)) ([8299484](https://github.com/chartdb/chartdb/commit/8299484dfb5a131cdbe071a6add2b38f649a36d5))
+* **export:** SVG export captures the whole diagram instead of the visible viewport ([#1174](https://github.com/chartdb/chartdb/issues/1174)) ([e84a3f0](https://github.com/chartdb/chartdb/commit/e84a3f0a0cb4614605993bf1433a63bb787bafe1))
+* fall back to system theme when stored theme is invalid ([#1071](https://github.com/chartdb/chartdb/issues/1071)) ([#1173](https://github.com/chartdb/chartdb/issues/1173)) ([a810b41](https://github.com/chartdb/chartdb/commit/a810b4180b0a9d599bb9a04c6d5a26f6c71b7190))
+* make VITE_DISABLE_ANALYTICS actually disable analytics ([#910](https://github.com/chartdb/chartdb/issues/910)) ([#1171](https://github.com/chartdb/chartdb/issues/1171)) ([880b4c4](https://github.com/chartdb/chartdb/commit/880b4c46cedcd72de5ab1ef65f3cc0cd30cbd841))
+
 ## [1.20.1](https://github.com/chartdb/chartdb/compare/v1.20.0...v1.20.1) (2026-04-07)
 
 
