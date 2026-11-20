@@ -8,6 +8,7 @@ import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { labelVariants } from '@/components/label/label-variants';
+import { LocalSchemaPackagePath } from '@/components/local-schema-package-path/local-schema-package-path';
 import {
     Tooltip,
     TooltipContent,
@@ -142,6 +143,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                                     className="!size-3.5 text-slate-600 dark:text-slate-400"
                                 />
                             </Button>
+                            <LocalSchemaPackagePath diagramName={diagramName} />
                         </>
                     )}
                 </div>
