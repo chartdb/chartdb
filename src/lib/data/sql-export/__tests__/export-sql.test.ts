@@ -91,6 +91,43 @@ describe('SQL Export Tests', () => {
         return { diagram, fieldId };
     };
 
+    it('exports distinct PostgreSQL index names and comments for long table names', () => {
+        const tables = ['a', 'b'].map((suffix) => {
+            const status = createField({ name: 'status' });
+            return createTable({
+                name: `${'t'.repeat(54)}${suffix}`,
+                schema: 'public',
+                fields: [status],
+                indexes: [
+                    {
+                        id: testId(),
+                        name: 'status_idx',
+                        unique: false,
+                        fieldIds: [status.id],
+                        createdAt: testTime,
+                        comments: `Status for table ${suffix}`,
+                    },
+                ],
+            });
+        });
+        const sql = exportPostgreSQL({
+            diagram: createDiagram({ tables }),
+        });
+        const names = Array.from(
+            sql.matchAll(/CREATE INDEX "([^"]+)"/g),
+            (match) => match[1]
+        );
+
+        expect(names).toHaveLength(2);
+        expect(new Set(names).size).toBe(2);
+        names.forEach((name, index) => {
+            expect(name.length).toBeLessThanOrEqual(63);
+            expect(sql).toContain(
+                `COMMENT ON INDEX "public"."${name}" IS '${tables[index].indexes[0].comments}';`
+            );
+        });
+    });
+
     describe('Primary Key Index Export', () => {
         describe('exportBaseSQL', () => {
             it('should export PRIMARY KEY without CONSTRAINT for PostgreSQL', () => {
