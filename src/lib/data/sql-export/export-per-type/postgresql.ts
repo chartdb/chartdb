@@ -13,19 +13,24 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 
-// Build a unique, safe index name from table and index names,
-// respecting PostgreSQL's 63-character identifier limit
-function buildIndexName(tableName: string, indexName: string): string {
+// Keep existing names when available and leave room for a collision suffix.
+function buildIndexName(
+    tableName: string,
+    indexName: string,
+    usedNames: Set<string>
+): string {
     const safeTableName = tableName.replace(/[^a-zA-Z0-9_]/g, '_');
     const safeIndexName = indexName.replace(/[^a-zA-Z0-9_]/g, '_');
-    let combinedName = `${safeTableName}_${safeIndexName}`;
-    if (combinedName.length > 60) {
-        combinedName =
-            safeIndexName.length > 60
-                ? safeIndexName.substring(0, 60)
-                : safeIndexName;
+    const combinedName = `${safeTableName}_${safeIndexName}`;
+    const baseName =
+        combinedName.length <= 60 ? combinedName : safeIndexName.slice(0, 60);
+    let name = baseName;
+    for (let counter = 2; usedNames.has(name); counter++) {
+        const suffix = `_${counter}`;
+        name = baseName.slice(0, 63 - suffix.length) + suffix;
     }
-    return combinedName;
+    usedNames.add(name);
+    return name;
 }
 
 function parsePostgresDefault(field: DBField): string {
@@ -228,6 +233,8 @@ export function exportPostgreSQL({
             sqlScript += '\n';
         }
 
+        const indexNamesBySchema = new Map<string, Set<string>>();
+
         // Generate table creation SQL
         sqlScript += tables
             .map((table: DBTable) => {
@@ -381,6 +388,11 @@ export function exportPostgreSQL({
                     // Add indexes only for non-primary key fields or composite indexes
                     // This avoids duplicate indexes on primary key columns
                     (() => {
+                        const schema = table.schema || 'public';
+                        const usedNames =
+                            indexNamesBySchema.get(schema) ?? new Set<string>();
+                        indexNamesBySchema.set(schema, usedNames);
+                        const indexComments: string[] = [];
                         const validIndexes = table.indexes
                             .map((index) => {
                                 // Get the list of fields for this index
@@ -418,36 +430,34 @@ export function exportPostgreSQL({
                                     return '';
                                 }
 
-                                const combinedName = buildIndexName(
-                                    table.name,
-                                    index.name
-                                );
-                                const indexName = `"${combinedName}"`;
-
-                                // Get the properly quoted field names
                                 const indexFieldNames = indexFields
                                     .map((field) =>
                                         field ? `"${field.name}"` : ''
                                     )
                                     .filter(Boolean);
 
-                                return indexFieldNames.length > 0
-                                    ? `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName}${index.type && index.type !== 'btree' ? ` USING ${index.type.toUpperCase()}` : ''} (${indexFieldNames.join(', ')});`
-                                    : '';
+                                if (indexFieldNames.length === 0) {
+                                    return '';
+                                }
+
+                                const indexName = `"${buildIndexName(
+                                    table.name,
+                                    index.name,
+                                    usedNames
+                                )}"`;
+                                if (index.comments) {
+                                    const qualifiedIndexName = table.schema
+                                        ? `"${table.schema}".${indexName}`
+                                        : indexName;
+                                    indexComments.push(
+                                        `COMMENT ON INDEX ${qualifiedIndexName} IS '${escapeSQLComment(index.comments)}';`
+                                    );
+                                }
+
+                                return `CREATE ${index.unique ? 'UNIQUE ' : ''}INDEX ${indexName} ON ${tableName}${index.type && index.type !== 'btree' ? ` USING ${index.type.toUpperCase()}` : ''} (${indexFieldNames.join(', ')});`;
                             })
                             .filter(Boolean)
                             .sort((a, b) => a.localeCompare(b)); // Sort for consistent output
-
-                        const indexComments = table.indexes
-                            .filter((index) => index.comments)
-                            .map((index) => {
-                                const combinedName = buildIndexName(
-                                    table.name,
-                                    index.name
-                                );
-                                return `COMMENT ON INDEX "${combinedName}" IS '${escapeSQLComment(index.comments!)}';`;
-                            })
-                            .filter(Boolean);
 
                         const indexSection =
                             validIndexes.length > 0
